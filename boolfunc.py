@@ -367,59 +367,53 @@ class BoolFunc :
         fout.write('|{:1}|\n'.format(self.__tv_list[0]))
         fout.write('+-+\n')
 
-    ## @brief 1変数のカルノー図を出力する．
+    ### @brief 1変数のカルノー図を出力する．
     def __karnaugh1(self, var_map, fout) :
         fout.write('---+-+\n')
         fout.write(' 0 |{:1}|\n'.format(self.__tv_list[0]))
-        print('---+-+', file=fout)
-        print(' 1 |{:1}|'.format(self.__tv_list[1]), file=fout)
-        print('---+-+', file=fout)
+        fout.write('---+-+\n')
+        fout.write(' 1 |{:1}|\n'.format(self.__tv_list[1]))
+        fout.write('---+-+\n')
 
-    ## @brief 2変数のカルノー図を出力する．
+    ### @brief 2変数のカルノー図を出力する．
     def __karnaugh2(self, var_map, fout) :
-        print(' {:3}|0|1|'.format(var_map[1]), file=fout)
-        print(' \  | | |', file=fout)
-        print(' {:3}| | |'.format(var_map[0]), file=fout)
-        print('----+-+-+', file=fout)
-        print('  0 |{:1}|{:1}'.format(self.__tv_list[0], self.__tv_list[1]), file=fout)
-        print('----+-+-+', file=fout)
-        print('  1 |{:1}|{:1}'.format(self.__tv_list[2], self.__tv_list[3]), file=fout)
+        fout.write(' {:3}|0|1|\n'.format(var_map[1]))
+        fout.write(' \  | | |\n')
+        fout.write(' {:3}| | |\n'.format(var_map[0]))
+        fout.write('----+-+-+\n')
+        fout.write('  0 |{:1}|{:1}\n'.format(self.__tv_list[0], self.__tv_list[1]))
+        fout.write('----+-+-+\n')
+        fout.write('  1 |{:1}|{:1}\n'.format(self.__tv_list[2], self.__tv_list[3]))
 
-    ## @brief 3変数のカルノー図を出力する．
+    ### @brief 3変数のカルノー図を出力する．
     def __karnaugh3(self, var_map, fout) :
-        print(' {:3}{:3}|00|01|11|10|'.format(var_map[1], var_map[2]), file=fout)
-        print('   \   |  |  |  |  |', file=fout)
-        print('   {:3} |  |  |  |  |'.format(var_map[0]), file=fout)
-        print('-------+--+--+--+--+', file=fout)
-        print('   0   | {:1}| {:1}| {:1}| {:1}|'.format(self.__tv_list[0], self.__tv_list[1], \
-                                                        self.__tv_list[3], self.__tv_list[2]), \
-              file=fout)
-        print('-------+--+--+--+--+', file=fout)
-        print('   1   | {:1}| {:1}| {:1}| {:1}|'.format(self.__tv_list[4], self.__tv_list[5], \
-                                                        self.__tv_list[7], self.__tv_list[6]), \
-              file=fout)
+        fout.write(' {:3}{:3}|00|01|11|10|\n'.format(var_map[1], var_map[2]))
+        fout.write('   \   |  |  |  |  |\n')
+        fout.write('   {:3} |  |  |  |  |\n'.format(var_map[0]))
+        fout.write('-------+--+--+--+--+\n')
+        fout.write('   0   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[0], self.__tv_list[1], \
+                                                        self.__tv_list[3], self.__tv_list[2]))
+        fout.write('-------+--+--+--+--+\n')
+        fout.write('   1   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[4], self.__tv_list[5], \
+                                                        self.__tv_list[7], self.__tv_list[6]))
 
-    ## @brief 4変数のカルノー図を出力する．
+    ### @brief 4変数のカルノー図を出力する．
     def __karnaugh4(self, var_map, fout) :
-        print(' {:3}{:3}|00|01|11|10|'.format(var_map[2], var_map[3]), file=fout)
-        print('   \   |  |  |  |  |', file=fout)
-        print(' {:3}{:3}|  |  |  |  |'.format(var_map[0], var_map[1]), file=fout)
-        print('-------+--+--+--+--+', file=fout)
-        print('  00   | {:1}| {:1}| {:1}| {:1}|'.format(self.__tv_list[0], self.__tv_list[1], \
-                                                        self.__tv_list[3], self.__tv_list[2]), \
-              file=fout)
-        print('-------+--+--+--+--+', file=fout)
-        print('  01   | {:1}| {:1}| {:1}| {:1}|'.format(self.__tv_list[4], self.__tv_list[5], \
-                                                        self.__tv_list[7], self.__tv_list[6]), \
-              file=fout)
-        print('-------+--+--+--+--+', file=fout)
-        print('  11   | {:1}| {:1}| {:1}| {:1}|'.format(self.__tv_list[12], self.__tv_list[13], \
-                                                        self.__tv_list[15], self.__tv_list[14]), \
-              file=fout)
-        print('-------+--+--+--+--+', file=fout)
-        print('  10   | {:1}| {:1}| {:1}| {:1}|'.format(self.__tv_list[8], self.__tv_list[9], \
-                                                        self.__tv_list[11], self.__tv_list[10]), \
-              file=fout)
+        fout.write(' {:3}{:3}|00|01|11|10|\n'.format(var_map[2], var_map[3]))
+        fout.write('   \   |  |  |  |  |\n')
+        fout.write(' {:3}{:3}|  |  |  |  |\n'.format(var_map[0], var_map[1]))
+        fout.write('-------+--+--+--+--+\n')
+        fout.write('  00   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[0], self.__tv_list[1], \
+                                                               self.__tv_list[3], self.__tv_list[2]))
+        fout.write('-------+--+--+--+--+\n')
+        fout.write('  01   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[4], self.__tv_list[5], \
+                                                               self.__tv_list[7], self.__tv_list[6]))
+        fout.write('-------+--+--+--+--+\n')
+        fout.write('  11   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[12], self.__tv_list[13], \
+                                                               self.__tv_list[15], self.__tv_list[14]))
+        fout.write('-------+--+--+--+--+\n')
+        fout.write('  10   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[8], self.__tv_list[9], \
+                                                               self.__tv_list[11], self.__tv_list[10]))
 
 
 if __name__ == '__main__' :
