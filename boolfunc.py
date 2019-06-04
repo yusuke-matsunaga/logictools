@@ -528,6 +528,77 @@ class BoolFunc :
         fout.write('\\hline\n')
         fout.write('\\end{tabular}\n')
 
+    ### @brief 複数の関数を表す真理値表を LaTeX 形式で出力する．
+    ### @param[in] func_list 関数のリスト
+    ### @param[in] fname_list 関数名のリスト
+    ### @param[in] var_map 変数名の辞書
+    ### @param[in] fout 出力先のファイルオブジェクト
+    ###
+    ### * func_list は最低1つは要素を持たなければならない．
+    ### * fname_list の要素数は func_list の要素数と同じでなければならない．
+    @staticmethod
+    def gen_latex_tables(func_list, fname_list, *, var_map = None, fout = None) :
+        nf = len(func_list)
+        assert nf > 0
+        assert len(fname_list) == nf
+
+        if var_map == None :
+            var_map = func_list[0].__var_map
+
+        if fout == None :
+            fout = sys.stdout
+
+        ni = func_list[0].input_num
+        nexp = 1 << ni
+
+        for f in func_list :
+            assert f.input_num == ni
+
+        # ヘッダの出力
+        fout.write('\\begin{tabular}{|')
+        fout.write('c' * ni)
+        fout.write('|')
+        fout.write('c' * nf)
+        fout.write('|}\n')
+        fout.write('\\hline\n')
+        for i in range(0, ni) :
+            fout.write('{} & '.format(var_map[i]))
+        for i in range(0, nf) :
+            fout.write(' {}'.format(fname_list[i]))
+            if i < (nf - 1) :
+                fout.write(' & ')
+        fout.write('\\\\\n')
+        fout.write('\\hline \\hline\n')
+
+        def oval_str(val) :
+            if val == Bool3._1 :
+                return '1'
+            elif v == Bool3._0 :
+                return '0'
+            elif v == Bool3._d :
+                return '$\\ast$'
+            else :
+                assert False
+            return None
+
+        # 中身の出力
+        for p in range(0, nexp) :
+            for i in range(0, ni) :
+                ival = '1' if p & (1 << (ni - i - 1)) else '0'
+                fout.write('{} & '.format(ival))
+            for i in range(0, nf) :
+                v = func_list[i].__tv_list[p]
+                oval = oval_str(v)
+                fout.write('{}'.format(oval))
+                if i < (nf - 1) :
+                    fout.write(' & ')
+            fout.write('\\\\\n')
+
+        # フッタの出力
+        fout.write('\\hline\n')
+        fout.write('\\end{tabular}\n')
+
+
     ### @brief カルノー図をLaTex形式で出力する．
     ### @param[in] var_map 変数名の辞書
     ### @param[in] fout 出力先のファイルオブジェクト
@@ -645,3 +716,5 @@ if __name__ == '__main__' :
 
     f13 = ~f3
     print_func(f13, 'f13', '~f3')
+
+    BoolFunc.gen_latex_tables([f10, f11, f12], ['f10', 'f11', 'f12'])
