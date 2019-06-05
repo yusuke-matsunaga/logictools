@@ -24,11 +24,48 @@ class MinCov :
         return self.__nelem
 
     ### @brief 条件を追加する．
-    def add_clause(elem_list) :
-        self.__clause_list.append(elem_list)
+    def add_clause(self, *args ) :
+        self.__clause_list.append( args )
+
+    ### @brief 被覆解をすべて求める．
+    def solve(self) :
+        def key(clause) :
+            return len(clause)
+        self.__clause_list.sort(key = key)
+        self.print()
+        ans_list = []
+        selected = [ False for i in range(self.__nelem) ]
+        self.__solve_sub(0, selected, ans_list)
+        return ans_list
+
+    def __solve_sub(self, pos, selected, ans_list) :
+        if pos >= len(self.__clause_list) :
+            # 現在の選択を解に追加する．
+            tmp = []
+            for i in range(self.__nelem) :
+                if selected[i] :
+                    tmp.append(i)
+            ans_list.append(tmp)
+            return
+
+        clause = self.__clause_list[pos]
+        sat = False
+        for elem in clause :
+            if selected[elem] :
+                sat = True
+                break
+        if sat :
+            # この clause は被覆されている．
+            self.__solve_sub(pos + 1, selected, ans_list)
+        else :
+            for elem in clause :
+                selected1 = list(selected)
+                selected1[elem] = True
+                self.__solve_sub(pos + 1, selected1, ans_list)
+
 
     ### @brief 内容を表示する．
-    def print(fout = None) :
+    def print(self, fout = None) :
         if fout == None :
             fout = sys.stdout
         for clause in self.__clause_list :
@@ -38,9 +75,12 @@ class MinCov :
 
 
 if __name__ == '__main__' :
-    m = MinCov(10)
-    m.add_clause( [0, 1, 2] )
-    m.add_clause( [0, 4] )
-    m.add_clause( [1, 3] )
+    m = MinCov(5)
+    m.add_clause( 0, 1, 2 )
+    m.add_clause( 0, 4 )
+    m.add_clause( 1, 3 )
 
-    m.print()
+    ans_list = m.solve()
+
+    for ans in ans_list :
+        print(ans)
