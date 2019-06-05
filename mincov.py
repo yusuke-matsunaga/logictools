@@ -24,15 +24,14 @@ class MinCov :
         return self.__nelem
 
     ### @brief 条件を追加する．
-    def add_clause(self, *args ) :
-        self.__clause_list.append( args )
+    def add_clause(self, clause ) :
+        self.__clause_list.append( clause )
 
     ### @brief 被覆解をすべて求める．
     def solve(self) :
         def key(clause) :
             return len(clause)
         self.__clause_list.sort(key = key)
-        self.print()
         ans_list = []
         selected = [ False for i in range(self.__nelem) ]
         self.__solve_sub(0, selected, ans_list)
@@ -76,9 +75,9 @@ class MinCov :
 
 if __name__ == '__main__' :
     m = MinCov(5)
-    m.add_clause( 0, 1, 2 )
-    m.add_clause( 0, 4 )
-    m.add_clause( 1, 3 )
+    m.add_clause( (0, 1, 2) )
+    m.add_clause( (0, 4) )
+    m.add_clause( (1, 3) )
 
     ans_list = m.solve()
 

@@ -600,9 +600,10 @@ class BoolFunc :
 
 
     ### @brief カルノー図をLaTex形式で出力する．
+    ### @param[in] implicant_list インプリカントのリスト
     ### @param[in] var_map 変数名の辞書
     ### @param[in] fout 出力先のファイルオブジェクト
-    def gen_latex_karnaugh(self, *, var_map = None, fout = None) :
+    def gen_latex_karnaugh(self, *, implicant_list = None, var_map = None, fout = None) :
         if var_map == None :
             var_map = self.__var_map
 
@@ -650,7 +651,211 @@ class BoolFunc :
         fout.write('}\n')
 
         fout.write('\\autoterms[$\\ast$]\n')
+
+        if implicant_list :
+            for cube in implicant_list :
+                impl_str = self.gen_implicant_str(cube)
+                fout.write(impl_str)
+                fout.write('\n')
+
         fout.write('\end{karnaugh-map}\n')
+
+    def gen_implicant_str(self, cube) :
+        if self.input_num == 0 :
+            # 無条件で決まる．
+            return '\\implicant{0}'
+        elif self.input_num == 1 :
+            if cube[0] == Bool3._d :
+                return '\\implicant{0}{1}'
+            elif cube[0] == Bool3._1 :
+                return '\\implicant{1}{1}'
+            elif cube[0] == Bool3._0 :
+                return '\\implicant{0}{0}'
+        elif self.input_num == 2 :
+            if cube[0] == Bool3._d :
+                pat0 = 0b1111
+            elif cube[0] == Bool3._1 :
+                pat0 = 0b1100
+            elif cube[0] == Bool3._0 :
+                pat0 = 0b0011
+            else :
+                assert False
+
+            if cube[1] == Bool3._d :
+                pat1 = 0b1111
+            elif cube[1] == Bool3._1 :
+                pat1 = 0b1010
+            elif cube[1] == Bool3._0 :
+                pat1 = 0b0101
+            else :
+                assert False
+
+            pat = pat0 & pat1
+
+            for i in (0, 1, 2, 3) :
+                if pat & (0b0001 << i) :
+                    ul = i
+                    break
+            else :
+                assert False
+
+            for i in (3, 2, 1, 0) :
+                if pat & (0b0001 << i) :
+                    dr = i
+                    break
+            else :
+                assert False
+
+            return '\\implicant{{{}}}{{{}}}'.format(ul, dr)
+        elif self.input_num == 3 :
+            if cube[0] == Bool3._d :
+                pat0 = 0b11111111
+            elif cube[0] == Bool3._1 :
+                pat0 = 0b11110000
+            elif cube[0] == Bool3._0 :
+                pat0 = 0b00001111
+            else :
+                assert False
+
+            if cube[1] == Bool3._d :
+                pat1 = 0b11111111
+            elif cube[1] == Bool3._1 :
+                pat1 = 0b11001100
+            elif cube[1] == Bool3._0 :
+                pat1 = 0b00110011
+            else :
+                assert False
+
+            if cube[2] == Bool3._d :
+                pat2 = 0b11111111
+            elif cube[2] == Bool3._1 :
+                pat2 = 0b10101010
+            elif cube[2] == Bool3._0 :
+                pat2 = 0b01010101
+            else :
+                assert False
+
+            pat = pat0 & pat1 & pat2
+
+            # implicantedge タイプの特例
+            if pat == 0b00000101 :
+                return '\\implicantedge{0}{0}{2}{2}'
+            if pat == 0b01010101 :
+                return '\\implicantedge{0}{4}{2}{6}'
+            if pat == 0b01010000 :
+                return '\\implicantedge{4}{4}{6}{6}'
+
+            # 一般形
+            for i in (0, 1, 3, 2, 4, 5, 7, 6) :
+                if pat & (0b00000001 << i) :
+                    ul = i
+                    break
+            else :
+                assert False
+
+            for i in (6, 7, 5, 4, 2, 3, 1, 0) :
+                if pat & (0b00000001 << i) :
+                    dr = i
+                    break
+            else :
+                assert False
+
+            return '\\implicant{{{}}}{{{}}}'.format(ul, dr)
+
+        elif self.input_num == 4 :
+            if cube[0] == Bool3._d :
+                pat0 = 0b1111111111111111
+            elif cube[0] == Bool3._1 :
+                pat0 = 0b1111111100000000
+            elif cube[0] == Bool3._0 :
+                pat0 = 0b0000000011111111
+            else :
+                assert False
+
+            if cube[1] == Bool3._d :
+                pat1 = 0b1111111111111111
+            elif cube[1] == Bool3._1 :
+                pat1 = 0b1111000011110000
+            elif cube[1] == Bool3._0 :
+                pat1 = 0b0000111100001111
+            else :
+                assert False
+
+            if cube[2] == Bool3._d :
+                pat2 = 0b1111111111111111
+            elif cube[2] == Bool3._1 :
+                pat2 = 0b1100110011001100
+            elif cube[2] == Bool3._0 :
+                pat2 = 0b0011001100110011
+            else :
+                assert False
+
+            if cube[3] == Bool3._d :
+                pat3 = 0b1111111111111111
+            elif cube[3] == Bool3._1 :
+                pat3 = 0b1010101010101010
+            elif cube[3] == Bool3._0 :
+                pat3 = 0b0101010101010101
+            else :
+                assert False
+
+            pat = pat0 & pat1 & pat2 & pat3
+
+            # implicantcorer の特例
+            if pat == 0b0000010100000101 :
+                return '\\implicantcorer'
+
+            # implicantedge の特例
+            if pat == 0b0000000000000101 :
+                return '\\implicantedge{0}{0}{2}{2}'
+            if pat == 0b0000000001010000 :
+                return '\\implicantedge{4}{4}{6}{6}'
+            if pat == 0b0000010100000000 :
+                return '\\implicantedge{8}{8}{10}{10}'
+            if pat == 0b0101000000000000 :
+                return '\\implicantedge{12}{12}{14}{14}'
+            if pat == 0b0000000001010101 :
+                return '\\implicantedge{0}{4}{2}{6}'
+            if pat == 0b0101000001010000 :
+                return '\\implicantedge{4}{12}{6}{14}'
+            if pat == 0b0101010100000000 :
+                return '\\implicantedge{12}{8}{14}{10}'
+            if pat == 0b0101010101010101 :
+                return '\\implicantedge{0}{12}{2}{10}'
+            if pat == 0b0000000100000001 :
+                return '\\implicantedge{0}{0}{8}{8}'
+            if pat == 0b0000001000000010 :
+                return '\\implicantedge{1}{1}{9}{9}'
+            if pat == 0b0000100000001000 :
+                return '\\implicantedge{3}{3}{11}{11}'
+            if pat == 0b0000010000000100 :
+                return '\\implicantedge{2}{2}{10}{10}'
+            if pat == 0b0000001100000011 :
+                return '\\implicantedge{0}{1}{8}{9}'
+            if pat == 0b0000101000001010 :
+                return '\\implicantedge{1}{3}{9}{11}'
+            if pat == 0b0000110000001100 :
+                return '\\implicantedge{3}{2}{11}{10}'
+            if pat == 0b0000111100001111 :
+                return '\\implicantedge{0}{2}{8}{10}'
+
+            # 一般形
+            for i in (0, 1, 3, 2, 4, 5, 7, 6, 12, 13, 15, 14, 8, 9, 11, 10) :
+                if pat & (0b0000000000000001 << i) :
+                    ul = i
+                    break
+            else :
+                assert False
+
+            for i in (10, 11, 9, 8, 14, 15, 13, 12, 6, 7, 5, 4, 2, 3, 1, 0) :
+                if pat & (0b0000000000000001 << i) :
+                    dr = i
+                    break
+            else :
+                assert False
+
+            return '\\implicant{{{}}}{{{}}}'.format(ul, dr)
+
 
 
 if __name__ == '__main__' :

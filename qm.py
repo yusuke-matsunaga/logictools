@@ -10,6 +10,7 @@
 from bool3 import Bool3
 from boolfunc import BoolFunc
 from cube import Cube
+from mincov import MinCov
 
 ### @brief BoolFunc から onset, dcset, offset のリストを作る．
 ### @param[in] func 対象の関数
@@ -64,6 +65,7 @@ def gen_primes(onset, dcset) :
 
     primes = [ cube for cube in all_cubes if cube not in used_cubes ]
     primes.sort()
+
     return primes
 
 
@@ -89,31 +91,48 @@ def gen_minimum_cover(func) :
                 minterm_list[i].append(j)
                 cover_list[j].append(i)
 
-    # 必須主項を求める．
-    essential_primes = []
+    # 被覆解を求める．
+    mincov = MinCov(np)
     for j in range(no) :
-        if len(cover_list[i]) == 1 :
-            i = cover_list[i][0]
-            if i not in essential_primes :
-                essential_primes.append(i)
-
-    # 被覆表
-    for i in range(np) :
-        prime = prime_list[i]
-        print('{}:'.format(prime), end = '')
-        for j in minterm_list[i] :
-            print(' {}'.format(j), end = '')
-        print('')
-
-    for j in range(no) :
-        print('m{}:'.format(j), end = '')
         for i in cover_list[j] :
-            print(' {}'.format(i), end = '')
-        print('')
+            mincov.add_clause(cover_list[j])
+
+    ans_list = mincov.solve()
+    cover_list = []
+    for ans in ans_list :
+        cover = []
+        for i in ans :
+            cube = prime_list[i]
+            cover.append(cube)
+        cover_list.append(cover)
+
+    return cover_list
 
 
 if __name__ == '__main__' :
 
     f = BoolFunc(4, val_str = "10*1*****0100*01")
 
-    gen_minimum_cover(f)
+    f.gen_latex_table('$f$')
+
+    # onset, dcset, offset の最小項を作る．
+    onset, dcset, offset = gen_minterm_list(f)
+
+    # 主項を求める．
+    prime_list = gen_primes(onset, dcset)
+
+    print('all primes')
+    f.gen_latex_karnaugh(implicant_list = prime_list)
+
+    cover_list = gen_minimum_cover(f)
+
+    for cover in cover_list :
+        cover_str = ''
+        plus = ''
+        for cube in cover :
+            cover_str += plus + cube.latex_str()
+            plus = ' + '
+        print(cover_str)
+
+        print('minimum cover')
+        f.gen_latex_karnaugh(implicant_list = cover)
