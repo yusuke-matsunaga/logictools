@@ -58,6 +58,14 @@ class Cover :
             ans += cube.latex_str(var_map = var_map)
         return ans
 
+    ### De Morgan の法則で否定した和積形論理式を表す LaTeX 文字列を返す．
+    ### @param[in] var_map 変数名の辞書
+    def DeMorgan_latex_str(self, *, var_map = None) :
+        ans = ''
+        for cube in self.__cube_list :
+            ans += cube.DeMorgan_latex_str(var_map = var_map)
+        return ans
+
     ### @brief 内容を出力する．
     def print(self, *, fout = None) :
         if fout == None :

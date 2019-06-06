@@ -235,6 +235,28 @@ class Cube :
             cube_str = '1'
         return cube_str
 
+    ### @brief DeMorgan の法則で否定した和積形論理式を表すLaTex文字列を作る．
+    ### @param[in] var_map 変数名の辞書
+    def DeMorgan_latex_str(self, *, var_map = None) :
+        if var_map == None :
+            var_map = {}
+            for i in range(self.input_num) :
+                var_map[i] = 'x_{}'.format(i + 1)
+        cube_str = '('
+        plus = ''
+        for i in range(self.input_num) :
+            val = self[i]
+            if val == Bool3._1 :
+                cube_str += plus
+                plus = ' + '
+                cube_str += '\\bar{{{}}}'.format(var_map[i])
+            elif val == Bool3._0 :
+                cube_str += plus
+                plus = ' + '
+                cube_str += '{}'.format(var_map[i])
+        cube_str += ')'
+        return cube_str
+
     ### @brief 内容を表す文字列を作る．
     def __str__(self) :
         ans = ""
@@ -263,6 +285,8 @@ if __name__ == '__main__' :
 
     var_map = {0:'a', 1:'b', 2:'c', 3:'d'}
     print('c2\' = {}'.format(c2.latex_str(var_map = var_map)))
+
+    print('\\bar{{c2}} = {}'.format(c2.DeMorgan_latex_str()))
 
     c3 = Cube(pat_str = '-1--')
     c23 = c2 | c3

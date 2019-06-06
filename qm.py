@@ -98,9 +98,11 @@ def gen_minimum_cover(onset, prime_list) :
 
 if __name__ == '__main__' :
 
+    from lctools.boolfunc import BoolFunc
+
     f = BoolFunc(4, val_str = "10*1*****0100*01")
 
-    f.gen_latex_table('$f$')
+    f.gen_latex_table('f')
 
     # onset, dcset, offset の最小項を作る．
     onset, dcset, offset = f.gen_minterm_list()

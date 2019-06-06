@@ -531,8 +531,8 @@ class BoolFunc :
         fout.write('|c|}\n')
         fout.write('\\hline\n')
         for i in range(0, self.input_num) :
-            fout.write('{} & '.format(var_map[i]))
-        fout.write(' {}\\\\\n'.format(fname))
+            fout.write('${}$ & '.format(var_map[i]))
+        fout.write(' ${}$\\\\\n'.format(fname))
         fout.write('\\hline \\hline\n')
 
         # 中身の出力
@@ -589,9 +589,9 @@ class BoolFunc :
         fout.write('|}\n')
         fout.write('\\hline\n')
         for i in range(0, ni) :
-            fout.write('{} & '.format(var_map[i]))
+            fout.write('${}$ & '.format(var_map[i]))
         for i in range(0, nf) :
-            fout.write(' {}'.format(fname_list[i]))
+            fout.write(' ${}$'.format(fname_list[i]))
             if i < (nf - 1) :
                 fout.write(' & ')
         fout.write('\\\\\n')
@@ -644,13 +644,13 @@ class BoolFunc :
         if self.input_num == 0 :
             fout.write('[1][1][1][][]\n')
         elif self.input_num == 1 :
-            fout.write('[1][2][1][][{}]\n'.format(var_map[0]))
+            fout.write('[1][2][1][][${}$]\n'.format(var_map[0]))
         elif self.input_num == 2 :
-            fout.write('[2][2][1][{}][{}]\n'.format(var_map[0], var_map[1]))
+            fout.write('[2][2][1][${}$][${}$]\n'.format(var_map[0], var_map[1]))
         elif self.input_num == 3 :
-            fout.write('[2][4][1][{}][{}{}]\n'.format(var_map[0], var_map[1], var_map[2]))
+            fout.write('[2][4][1][${}$][${}{}$]\n'.format(var_map[0], var_map[1], var_map[2]))
         elif self.input_num == 4 :
-            fout.write('[4][4][1][{}{}][{}{}]\n'.format(var_map[0], var_map[1], var_map[2], var_map[3]))
+            fout.write('[4][4][1][${}{}$][${}{}$]\n'.format(var_map[0], var_map[1], var_map[2], var_map[3]))
         elif self.input_num == 5 :
             fout.write('Too many inputs.\n')
             return
@@ -833,38 +833,71 @@ class BoolFunc :
                 return '\\implicantcorer'
 
             # implicantedge の特例
-            if pat == 0b0000000000000101 :
-                return '\\implicantedge{0}{0}{2}{2}'
-            if pat == 0b0000000001010000 :
-                return '\\implicantedge{4}{4}{6}{6}'
-            if pat == 0b0000010100000000 :
-                return '\\implicantedge{8}{8}{10}{10}'
-            if pat == 0b0101000000000000 :
-                return '\\implicantedge{12}{12}{14}{14}'
-            if pat == 0b0000000001010101 :
+            if pat & 0b0000000000001111 == 0b0000000000000101 :
+                r0 = True
+            else :
+                r0 = False
+            if pat & 0b0000000011110000 == 0b0000000001010000 :
+                r1 = True
+            else :
+                r1 = False
+            if pat & 0b0000111100000000 == 0b0000010100000000 :
+                r3 = True
+            else :
+                r3 = False
+            if pat & 0b1111000000000000 == 0b0101000000000000 :
+                r2 = True
+            else :
+                r2 = False
+            if r0 and r1 and r2 and r3 :
+                return '\\implicantedge{0}{8}{2}{10}'
+            elif r0 and r1 :
                 return '\\implicantedge{0}{4}{2}{6}'
-            if pat == 0b0101000001010000 :
+            elif r1 and r2 :
                 return '\\implicantedge{4}{12}{6}{14}'
-            if pat == 0b0101010100000000 :
+            elif r2 and r3 :
                 return '\\implicantedge{12}{8}{14}{10}'
-            if pat == 0b0101010101010101 :
-                return '\\implicantedge{0}{12}{2}{10}'
-            if pat == 0b0000000100000001 :
-                return '\\implicantedge{0}{0}{8}{8}'
-            if pat == 0b0000001000000010 :
-                return '\\implicantedge{1}{1}{9}{9}'
-            if pat == 0b0000100000001000 :
-                return '\\implicantedge{3}{3}{11}{11}'
-            if pat == 0b0000010000000100 :
-                return '\\implicantedge{2}{2}{10}{10}'
-            if pat == 0b0000001100000011 :
-                return '\\implicantedge{0}{1}{8}{9}'
-            if pat == 0b0000101000001010 :
-                return '\\implicantedge{1}{3}{9}{11}'
-            if pat == 0b0000110000001100 :
-                return '\\implicantedge{3}{2}{11}{10}'
-            if pat == 0b0000111100001111 :
+            elif r0 :
+                return '\\implicantedge{0}{0}{2}{2}'
+            elif r1 :
+                return '\\implicantedge{4}{4}{6}{6}'
+            elif r2 :
+                return '\\implicantedge{12}{12}{14}{14}'
+            elif r3 :
+                return '\\implicantedge{8}{8}{10}{10}'
+
+            if pat & 0b0000111100001111 == 0b0000000100000001 :
+                c0 = True
+            else :
+                c0 = False
+            if pat & 0b0000111100001111 == 0b0000001000000010 :
+                c1 = True
+            else :
+                c1 = False
+            if pat & 0b0000111100001111 == 0b0000100000001000 :
+                c2 = True
+            else :
+                c2 = False
+            if pat & 0b0000111100001111 == 0b0000010000000100 :
+                c3 = True
+            else :
+                c3 = False
+            if c0 and c1 and c2 and c3 :
                 return '\\implicantedge{0}{2}{8}{10}'
+            elif c0 and c1 :
+                return '\\implicantedge{0}{1}{8}{9}'
+            elif c1 and c2 :
+                return '\\implicantedge{1}{3}{9}{11}'
+            elif c2 and c3 :
+                return '\\implicantedge{3}{2}{11}{12}'
+            elif c0 :
+                return '\\implicantedge{0}{0}{8}{8}'
+            elif c1 :
+                return '\\implicantedge{1}{1}{9}{9}'
+            elif c2 :
+                return '\\implicantedge{3}{3}{11}{11}'
+            elif c3 :
+                return '\\implicantedge{2}{2}{10}{10}'
 
             # 一般形
             for i in (0, 1, 3, 2, 4, 5, 7, 6, 12, 13, 15, 14, 8, 9, 11, 10) :
@@ -888,10 +921,10 @@ class BoolFunc :
 if __name__ == '__main__' :
 
     def print_func(f, f_name, f_desc) :
-        var_map = { 0: '$x_0$',
-                    1: '$x_1$',
-                    2: '$x_2$',
-                    3: '$x_3$' }
+        var_map = { 0: 'x_0',
+                    1: 'x_1',
+                    2: 'x_2',
+                    3: 'x_3' }
         print('{} = {}'.format(f_name, f_desc))
         print('')
         print('{}.print_table()'.format(f_name))
