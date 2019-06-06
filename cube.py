@@ -83,6 +83,15 @@ class Cube :
     def input_num(self) :
         return self.__input_num
 
+    ### @brief リテラル数を返す．
+    @property
+    def literal_num(self) :
+        n = 0
+        for i in range(self.input_num) :
+            if self[i] != Bool3._d :
+                n += 1
+        return n
+
     ### @brief input_num の別名
     def __len__(self) :
         return self.__input_num

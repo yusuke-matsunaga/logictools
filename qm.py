@@ -45,6 +45,8 @@ def gen_primes(onset, dcset) :
     all_cubes = set()
     used_cubes = set()
     src_list = onset + dcset
+    for cube in src_list :
+        all_cubes.add(cube)
     while True :
         n = len(src_list)
         dst_list = []
@@ -70,13 +72,7 @@ def gen_primes(onset, dcset) :
 
 
 ### @brief 最簡積和形論理式を求める．
-def gen_minimum_cover(func) :
-    # onset, dcset, offset の最小項を作る．
-    onset, dcset, offset = gen_minterm_list(func)
-
-    # 主項を求める．
-    prime_list = gen_primes(onset, dcset)
-
+def gen_minimum_cover(onset, prime_list) :
     # 各主項がカバーする最小項を求める．
     np = len(prime_list)
     minterm_list = [ [] for i in range(np) ]
@@ -97,14 +93,35 @@ def gen_minimum_cover(func) :
         for i in cover_list[j] :
             mincov.add_clause(cover_list[j])
 
+    def cost(cover) :
+        n1 = len(cover)
+        n2 = 0
+        for cube in cover :
+            n2 += cube.literal_num
+        return n1, n2
+
     ans_list = mincov.solve()
     cover_list = []
+    min_n1 = np + 1
+    min_n2 = 0
     for ans in ans_list :
         cover = []
         for i in ans :
             cube = prime_list[i]
             cover.append(cube)
-        cover_list.append(cover)
+        n1, n2 = cost(cover)
+        if min_n1 > n1 :
+            min_n1 = n1
+            min_n2 = n2
+            cover_list = []
+            cover_list.append(cover)
+        elif min_n1 == n1 :
+            if min_n2 > n2 :
+                min_n2 = n2
+                cover_list = []
+                cover_list.append(cover)
+            elif min_n2 == n2 :
+                cover_list.append(cover)
 
     return cover_list
 
@@ -124,7 +141,7 @@ if __name__ == '__main__' :
     print('all primes')
     f.gen_latex_karnaugh(implicant_list = prime_list)
 
-    cover_list = gen_minimum_cover(f)
+    cover_list = gen_minimum_cover(onset, prime_list)
 
     for cover in cover_list :
         cover_str = ''
