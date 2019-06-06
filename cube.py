@@ -7,8 +7,7 @@
 ### Copyright (C) 2017, 2019 Yusuke Matsunaga
 ### All rights reserved.
 
-import sys
-from bool3 import Bool3
+from lctools.bool3 import Bool3
 
 ### @class Cube
 ### @brief キューブを表すクラス

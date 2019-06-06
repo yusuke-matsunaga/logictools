@@ -8,7 +8,8 @@
 ### All rights reserved.
 
 import sys
-from bool3 import Bool3
+from lctools.bool3 import Bool3
+from lctools.cube import Cube
 
 ### @class BoolFunc
 ### @brief Boolean Function を表すクラス
@@ -377,6 +378,32 @@ class BoolFunc :
             if self.__tv_list[p] != other.__tv_list[p] :
                 return False
         return True
+
+    ### @brief BoolFunc から onset, dcset, offset のリストを作る．
+    def gen_minterm_list(self) :
+        nexp = 1 << self.input_num
+        onset = []
+        dcset = []
+        offset = []
+        for p in range(0, nexp) :
+            minterm = Cube(input_num = self.input_num)
+            ival_list = []
+            for i in range(self.input_num) :
+                if p & (1 << i) :
+                    ival = Bool3._1
+                else :
+                    ival = Bool3._0
+                minterm[i] = ival
+                ival_list.append(ival)
+            oval = self.val(ival_list)
+            if oval == Bool3._1 :
+                onset.append(minterm)
+            elif oval == Bool3._d :
+                dcset.append(minterm)
+            elif oval == Bool3._0 :
+                offset.append(minterm)
+
+        return onset, dcset, offset
 
     ### @brief 真理値表の形式で出力する．
     ### @param[in] var_map 変数名の辞書

@@ -34,10 +34,11 @@ class MinCov :
         self.__clause_list.sort(key = key)
         ans_list = []
         selected = [ False for i in range(self.__nelem) ]
-        self.__solve_sub(0, selected, ans_list)
+        unselected = [ False for i in range(self.__nelem) ]
+        self.__solve_sub(0, selected, unselected, ans_list)
         return ans_list
 
-    def __solve_sub(self, pos, selected, ans_list) :
+    def __solve_sub(self, pos, selected, unselected, ans_list) :
         if pos >= len(self.__clause_list) :
             # 現在の選択を解に追加する．
             tmp = []
@@ -55,12 +56,16 @@ class MinCov :
                 break
         if sat :
             # この clause は被覆されている．
-            self.__solve_sub(pos + 1, selected, ans_list)
+            self.__solve_sub(pos + 1, selected, unselected, ans_list)
         else :
+            unselected1 = list(unselected)
             for elem in clause :
+                if unselected[elem] :
+                    continue
                 selected1 = list(selected)
                 selected1[elem] = True
-                self.__solve_sub(pos + 1, selected1, ans_list)
+                self.__solve_sub(pos + 1, selected1, unselected1, ans_list)
+                unselected1[elem] = True
 
 
     ### @brief 内容を表示する．
