@@ -234,7 +234,7 @@ class BoolFunc :
             self.__var_map = {i : var_map[i] for i in range(0, input_num)}
         else :
             # デフォルトの変数名マップを作る．
-            self.__var_map = {i : 'v{}'.format(i) for i in range(0, input_num)}
+            self.__var_map = {i : 'x_{}'.format(i + 1) for i in range(0, input_num)}
 
     ### @brief 入力数を返す．
     @property
