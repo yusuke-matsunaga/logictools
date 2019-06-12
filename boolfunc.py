@@ -257,6 +257,11 @@ class BoolFunc :
                 pos += (1 << (self.input_num - i - 1))
         return self.__tv_list[pos]
 
+    ### @brief 変数名の辞書を返す．
+    @property
+    def var_map(self) :
+        return self.__var_map
+
     ### @brief 自身の否定を返す単項演算子
     ###
     ### @code
