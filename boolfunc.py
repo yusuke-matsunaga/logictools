@@ -512,6 +512,34 @@ class BoolFunc :
         fout.write('  10   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[8], self.__tv_list[9], \
                                                                self.__tv_list[11], self.__tv_list[10]))
 
+    ### @brief 積和標準形をLaTex形式で出力する．
+    ### @param[in] varmap 変数名の辞書
+    ### @param[in] fout 出力先のファイルオブジェクト
+    def gen_latex_minterm_sop(self, *, var_map = None, fout = None) :
+        if var_map == None :
+            var_map = self.__var_map
+
+        if fout == None :
+            fout = sys.stdout
+
+        nexp = 1 << self.input_num
+
+        sop = "$"
+        plus = ""
+        for p in range(0, nexp) :
+            if self.__tv_list[p] == Bool3._1 :
+                term = ""
+                for i in range(0, self.input_num) :
+                    if p & (1 << i) :
+                        term += "{}".format(var_map[i])
+                    else :
+                        term += "\\bar{{{}}}".format(var_map[i])
+                sop += plus + term
+                plus = " + "
+        sop += "$\n"
+        fout.write(sop)
+
+
     ### @brief 真理値表をLaTex形式で出力する．
     ### @param[in] fname 関数名
     ### @param[in] var_map 変数名の辞書
@@ -915,6 +943,29 @@ class BoolFunc :
                 assert False
 
             return '\\implicant{{{}}}{{{}}}'.format(ul, dr)
+
+
+    ### @brief 幾何学表現（ハイパーキューブ）用のdpicソースを出力する．
+    ### @param[in] fout 出力先のファイルオブジェクト
+    def gen_dpic_hypercube(self, *, fout = None) :
+        if fout == None :
+            fout = sys.stdout
+
+        nexp = 1 << self.input_num
+
+        for p in range(0, nexp) :
+            cube_pat = ''
+            for i in range(0, self.input_num) :
+                if p & (1 << (self.input_num - i - 1)) :
+                    pat = '1'
+                else :
+                    pat = '0'
+                cube_pat += pat
+            if self.__tv_list[p] == Bool3._1 :
+                color = "black"
+            else :
+                color = "white"
+            fout.write('HC_VERTEX({}, "{}")\n'.format(cube_pat, color))
 
 
 
