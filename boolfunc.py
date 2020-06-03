@@ -30,6 +30,7 @@ class BoolFunc :
     def make_const0(input_num) :
         return BoolFunc(input_num)
 
+
     ### @brief 恒真関数を作る．
     ### @param[in] input_num 入力数
     ### @param[in] var_map 変数名の辞書
@@ -44,6 +45,7 @@ class BoolFunc :
         return BoolFunc(input_num,
                         val_list = [ Bool3._1 for i in range(0, nexp)],
                         var_map = var_map)
+
 
     ### @brief リテラル関数を作る．
     ### @param[in] input_num
@@ -65,6 +67,7 @@ class BoolFunc :
                         val_list = [ val(p, var_id) for p in range(0, nexp)],
                         var_map = var_map)
 
+
     ### @brief AND関数を作る．
     ### @param[in] input_num 入力数
     ### @param[in] var_map 変数名の辞書
@@ -84,6 +87,7 @@ class BoolFunc :
         return BoolFunc(input_num,
                         val_list = [ val(p, nexp) for p in range(0, nexp)],
                         var_map = var_map)
+
 
     ### @brief NAND関数を作る．
     ### @param[in] input_num 入力数
@@ -105,6 +109,7 @@ class BoolFunc :
                         val_list = [ val(p, nexp - 1) for p in range(0, nexp)],
                         var_map = var_map)
 
+
     ### @brief OR関数を作る．
     ### @param[in] input_num 入力数
     ### @param[in] var_map 変数名の辞書
@@ -125,6 +130,7 @@ class BoolFunc :
                         val_list = [ val(p, nexp) for p in range(0, nexp)],
                         var_map = var_map)
 
+
     ### @brief NOR関数を作る．
     ### @param[in] input_num 入力数
     ### @param[in] var_map 変数名の辞書
@@ -144,6 +150,7 @@ class BoolFunc :
         return BoolFunc(input_num,
                         val_list = [ val(p, nexp) for p in range(0, nexp)],
                         var_map = var_map)
+
 
     ### @brief XOR関数を作る．
     ### @param[in] input_num 入力数
@@ -169,6 +176,7 @@ class BoolFunc :
                         val_list = [ parity(p, input_num) for p in range(0, nexp) ],
                         var_map = var_map)
 
+
     ### @brief XNOR関数を作る．
     ### @param[in] input_num 入力数
     ### @param[in] var_map 変数名の辞書
@@ -192,6 +200,7 @@ class BoolFunc :
         return BoolFunc(input_num,
                         val_list = [ parity(p, input_num) for p in range(0, nexp) ],
                         var_map = var_map)
+
 
     ### @brief 初期化
     ### @param[in] input_num 入力数
@@ -236,16 +245,19 @@ class BoolFunc :
             # デフォルトの変数名マップを作る．
             self.__var_map = {i : 'x_{}'.format(i + 1) for i in range(0, input_num)}
 
+
     ### @brief 入力数を返す．
     @property
     def input_num(self) :
         return self.__input_num
+
 
     ### @brief 入力変数名を返す
     ### @param[in] pos 変数番号 ( 0 <= pos < input_num )．
     def input_var(self, pos) :
         assert 0 <= pos < self.input_num
         return self.__var_map[pos]
+
 
     ### @brief 入力値に対する出力値を返す．
     ### @param[in] ival_list 入力値のリスト
@@ -257,10 +269,12 @@ class BoolFunc :
                 pos += (1 << (self.input_num - i - 1))
         return self.__tv_list[pos]
 
+
     ### @brief 変数名の辞書を返す．
     @property
     def var_map(self) :
         return self.__var_map
+
 
     ### @brief 自身の否定を返す単項演算子
     ###
@@ -274,6 +288,7 @@ class BoolFunc :
         return BoolFunc(self.input_num,
                         val_list = [ ~v for v in self.__tv_list],
                         var_map = self.__var_map)
+
 
     ### @brief AND演算子
     ###
@@ -294,6 +309,7 @@ class BoolFunc :
                         val_list = [ val(self, other, p) for p in range(0, nexp)],
                         var_map = self.__var_map)
 
+
     ### @brief OR演算子
     ###
     ### @code
@@ -313,6 +329,7 @@ class BoolFunc :
                         val_list = [ val(self, other, p) for p in range(0, nexp)],
                         var_map = self.__var_map)
 
+
     ### @brief XOR演算子
     ###
     ### @code
@@ -331,6 +348,7 @@ class BoolFunc :
         return BoolFunc(self.input_num,
                         val_list = [ val(self, other, p) for p in range(0, nexp)],
                         var_map = self.__var_map)
+
 
     ### @brief compose 演算
     ### @param[in] ifunc_list 入力関数のリスト
@@ -366,6 +384,7 @@ class BoolFunc :
                 ans |= p_func
         return ans
 
+
     ### @brief 等価比較演算子
     ###
     ### @code
@@ -383,6 +402,7 @@ class BoolFunc :
             if self.__tv_list[p] != other.__tv_list[p] :
                 return False
         return True
+
 
     ### @brief BoolFunc から onset, dcset, offset のリストを作る．
     def gen_minterm_list(self) :
@@ -409,6 +429,7 @@ class BoolFunc :
                 offset.append(minterm)
 
         return onset, dcset, offset
+
 
     ### @brief 真理値表の形式で出力する．
     ### @param[in] var_map 変数名の辞書
@@ -438,12 +459,15 @@ class BoolFunc :
             oval = self.__tv_list[p]
             fout.write('| {:1}\n'.format(oval))
 
+
     ### @brief カルノー図の形式で出力する．
     ### @param[in] var_map 変数名の辞書
     ### @param[in] fout 出力先のファイルオブジェクト
     ###
     ### 4入力関数まで対応している．
     def print_karnaugh(self, *, var_map = None, fout = None) :
+        from lctools.karnaugh import karnaugh0, karnaugh1, karnaugh2, karnaugh3, karnaugh4
+
         if var_map == None :
             var_map = self.__var_map
 
@@ -451,71 +475,18 @@ class BoolFunc :
             fout = sys.stdout
 
         if self.input_num == 0 :
-            self.__karnaugh0(var_map, fout)
+            karnaugh0(self, var_map, fout)
         elif self.input_num == 1 :
-            self.__karnaugh1(var_map, fout)
+            karnaugh1(self, var_map, fout)
         elif self.input_num == 2 :
-            self.__karnaugh2(var_map, fout)
+            karnaugh2(self, var_map, fout)
         elif self.input_num == 3 :
-            self.__karnaugh3(var_map, fout)
+            karnaugh3(self, var_map, fout)
         elif self.input_num == 4 :
-            self.__karnaugh4(var_map, fout)
+            karnaugh4(self, var_map, fout)
         else :
             fout.write('Too many inputs.\n')
 
-    ### @brief 0変数のカルノー図を出力する．
-    def __karnaugh0(self, var_map, fout) :
-        fout.write('+-+\n')
-        fout.write('|{:1}|\n'.format(self.__tv_list[0]))
-        fout.write('+-+\n')
-
-    ### @brief 1変数のカルノー図を出力する．
-    def __karnaugh1(self, var_map, fout) :
-        fout.write('---+-+\n')
-        fout.write(' 0 |{:1}|\n'.format(self.__tv_list[0]))
-        fout.write('---+-+\n')
-        fout.write(' 1 |{:1}|\n'.format(self.__tv_list[1]))
-        fout.write('---+-+\n')
-
-    ### @brief 2変数のカルノー図を出力する．
-    def __karnaugh2(self, var_map, fout) :
-        fout.write(' {:3}|0|1|\n'.format(var_map[1]))
-        fout.write(' \  | | |\n')
-        fout.write(' {:3}| | |\n'.format(var_map[0]))
-        fout.write('----+-+-+\n')
-        fout.write('  0 |{:1}|{:1}\n'.format(self.__tv_list[0], self.__tv_list[1]))
-        fout.write('----+-+-+\n')
-        fout.write('  1 |{:1}|{:1}\n'.format(self.__tv_list[2], self.__tv_list[3]))
-
-    ### @brief 3変数のカルノー図を出力する．
-    def __karnaugh3(self, var_map, fout) :
-        fout.write(' {:3}{:3}|00|01|11|10|\n'.format(var_map[1], var_map[2]))
-        fout.write('   \   |  |  |  |  |\n')
-        fout.write('   {:3} |  |  |  |  |\n'.format(var_map[0]))
-        fout.write('-------+--+--+--+--+\n')
-        fout.write('   0   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[0], self.__tv_list[1], \
-                                                        self.__tv_list[3], self.__tv_list[2]))
-        fout.write('-------+--+--+--+--+\n')
-        fout.write('   1   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[4], self.__tv_list[5], \
-                                                        self.__tv_list[7], self.__tv_list[6]))
-
-    ### @brief 4変数のカルノー図を出力する．
-    def __karnaugh4(self, var_map, fout) :
-        fout.write(' {:3}{:3}|00|01|11|10|\n'.format(var_map[2], var_map[3]))
-        fout.write('   \   |  |  |  |  |\n')
-        fout.write(' {:3}{:3}|  |  |  |  |\n'.format(var_map[0], var_map[1]))
-        fout.write('-------+--+--+--+--+\n')
-        fout.write('  00   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[0], self.__tv_list[1], \
-                                                               self.__tv_list[3], self.__tv_list[2]))
-        fout.write('-------+--+--+--+--+\n')
-        fout.write('  01   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[4], self.__tv_list[5], \
-                                                               self.__tv_list[7], self.__tv_list[6]))
-        fout.write('-------+--+--+--+--+\n')
-        fout.write('  11   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[12], self.__tv_list[13], \
-                                                               self.__tv_list[15], self.__tv_list[14]))
-        fout.write('-------+--+--+--+--+\n')
-        fout.write('  10   | {:1}| {:1}| {:1}| {:1}|\n'.format(self.__tv_list[8], self.__tv_list[9], \
-                                                               self.__tv_list[11], self.__tv_list[10]))
 
     ### @brief 積和標準形をLaTex形式で出力する．
     ### @param[in] varmap 変数名の辞書
@@ -529,20 +500,49 @@ class BoolFunc :
 
         nexp = 1 << self.input_num
 
-        sop = "$"
+        sop = ""
         plus = ""
         for p in range(0, nexp) :
             if self.__tv_list[p] == Bool3._1 :
                 term = ""
                 for i in range(0, self.input_num) :
-                    if p & (1 << i) :
+                    if p & (1 << (self.input_num - i - 1)) :
                         term += "{}".format(var_map[i])
                     else :
                         term += "\\bar{{{}}}".format(var_map[i])
                 sop += plus + term
                 plus = " + "
-        sop += "$\n"
+        sop += "\n"
         fout.write(sop)
+
+
+    ### @brief 和積標準形をLaTex形式で出力する．
+    ### @param[in] varmap 変数名の辞書
+    ### @param[in] fout 出力先のファイルオブジェクト
+    def gen_latex_maxterm_pos(self, *, var_map = None, fout = None) :
+        if var_map == None :
+            var_map = self.__var_map
+
+        if fout == None :
+            fout = sys.stdout
+
+        nexp = 1 << self.input_num
+
+        pos = ""
+        for p in range(0, nexp) :
+            if self.__tv_list[p] == Bool3._0 :
+                term = "("
+                plus = ""
+                for i in range(0, self.input_num) :
+                    if p & (1 << (self.input_num - i - 1)) :
+                        term += plus + "\\bar{{{}}}".format(var_map[i])
+                    else :
+                        term += plus + "{}".format(var_map[i])
+                    plus = " + "
+                term += ")"
+                pos += term
+        pos += "\n"
+        fout.write(pos)
 
 
     ### @brief 真理値表をLaTex形式で出力する．
@@ -587,6 +587,7 @@ class BoolFunc :
         # フッタの出力
         fout.write('\\hline\n')
         fout.write('\\end{tabular}\n')
+
 
     ### @brief 複数の関数を表す真理値表を LaTeX 形式で出力する．
     ### @param[in] func_list 関数のリスト
@@ -664,314 +665,25 @@ class BoolFunc :
     ### @param[in] var_map 変数名の辞書
     ### @param[in] fout 出力先のファイルオブジェクト
     def gen_latex_karnaugh(self, *, implicant_list = None, var_map = None, fout = None) :
+        from lctools.latex_karnaugh import latex_karnaugh
+
         if var_map == None :
             var_map = self.__var_map
 
         if fout == None :
             fout = sys.stdout
 
-        nexp = 1 << self.input_num
-
-        # ヘッダの出力
-        fout.write('\\begin{karnaugh-map}')
-        if self.input_num == 0 :
-            fout.write('[1][1][1][][]\n')
-        elif self.input_num == 1 :
-            fout.write('[1][2][1][][${}$]\n'.format(var_map[0]))
-        elif self.input_num == 2 :
-            fout.write('[2][2][1][${}$][${}$]\n'.format(var_map[0], var_map[1]))
-        elif self.input_num == 3 :
-            fout.write('[2][4][1][${}$][${}{}$]\n'.format(var_map[0], var_map[1], var_map[2]))
-        elif self.input_num == 4 :
-            fout.write('[4][4][1][${}{}$][${}{}$]\n'.format(var_map[0], var_map[1], var_map[2], var_map[3]))
-        elif self.input_num == 5 :
-            fout.write('Too many inputs.\n')
-            return
-        elif self.input_num == 6 :
-            fout.write('Too many inputs.\n')
-            return
-        else :
-            fout.write('Too many inputs.\n')
-            return
-
-        minterm_list = [ p for p in range(0, nexp) if self.__tv_list[p] == Bool3._1 ]
-        fout.write('\\minterms{')
-        comma = ''
-        for p in minterm_list :
-            fout.write('{}{}'.format(comma, p))
-            comma = ','
-        fout.write('}\n')
-
-        maxterm_list = [ p for p in range(0, nexp) if self.__tv_list[p] == Bool3._0 ]
-        fout.write('\\maxterms{')
-        comma = ''
-        for p in maxterm_list :
-            fout.write('{}{}'.format(comma, p))
-            comma = ','
-        fout.write('}\n')
-
-        fout.write('\\autoterms[$\\ast$]\n')
-
-        if implicant_list :
-            for cube in implicant_list :
-                impl_str = self.gen_implicant_str(cube)
-                fout.write(impl_str)
-                fout.write('\n')
-
-        fout.write('\end{karnaugh-map}\n')
-
-    def gen_implicant_str(self, cube) :
-        if self.input_num == 0 :
-            # 無条件で決まる．
-            return '\\implicant{0}'
-        elif self.input_num == 1 :
-            if cube[0] == Bool3._d :
-                return '\\implicant{0}{1}'
-            elif cube[0] == Bool3._1 :
-                return '\\implicant{1}{1}'
-            elif cube[0] == Bool3._0 :
-                return '\\implicant{0}{0}'
-        elif self.input_num == 2 :
-            if cube[0] == Bool3._d :
-                pat0 = 0b1111
-            elif cube[0] == Bool3._1 :
-                pat0 = 0b1100
-            elif cube[0] == Bool3._0 :
-                pat0 = 0b0011
-            else :
-                assert False
-
-            if cube[1] == Bool3._d :
-                pat1 = 0b1111
-            elif cube[1] == Bool3._1 :
-                pat1 = 0b1010
-            elif cube[1] == Bool3._0 :
-                pat1 = 0b0101
-            else :
-                assert False
-
-            pat = pat0 & pat1
-
-            for i in (0, 1, 2, 3) :
-                if pat & (0b0001 << i) :
-                    ul = i
-                    break
-            else :
-                assert False
-
-            for i in (3, 2, 1, 0) :
-                if pat & (0b0001 << i) :
-                    dr = i
-                    break
-            else :
-                assert False
-
-            return '\\implicant{{{}}}{{{}}}'.format(ul, dr)
-        elif self.input_num == 3 :
-            if cube[0] == Bool3._d :
-                pat0 = 0b11111111
-            elif cube[0] == Bool3._1 :
-                pat0 = 0b11110000
-            elif cube[0] == Bool3._0 :
-                pat0 = 0b00001111
-            else :
-                assert False
-
-            if cube[1] == Bool3._d :
-                pat1 = 0b11111111
-            elif cube[1] == Bool3._1 :
-                pat1 = 0b11001100
-            elif cube[1] == Bool3._0 :
-                pat1 = 0b00110011
-            else :
-                assert False
-
-            if cube[2] == Bool3._d :
-                pat2 = 0b11111111
-            elif cube[2] == Bool3._1 :
-                pat2 = 0b10101010
-            elif cube[2] == Bool3._0 :
-                pat2 = 0b01010101
-            else :
-                assert False
-
-            pat = pat0 & pat1 & pat2
-
-            # implicantedge タイプの特例
-            if pat == 0b00000101 :
-                return '\\implicantedge{0}{0}{2}{2}'
-            if pat == 0b01010101 :
-                return '\\implicantedge{0}{4}{2}{6}'
-            if pat == 0b01010000 :
-                return '\\implicantedge{4}{4}{6}{6}'
-
-            # 一般形
-            for i in (0, 1, 3, 2, 4, 5, 7, 6) :
-                if pat & (0b00000001 << i) :
-                    ul = i
-                    break
-            else :
-                assert False
-
-            for i in (6, 7, 5, 4, 2, 3, 1, 0) :
-                if pat & (0b00000001 << i) :
-                    dr = i
-                    break
-            else :
-                assert False
-
-            return '\\implicant{{{}}}{{{}}}'.format(ul, dr)
-
-        elif self.input_num == 4 :
-            if cube[0] == Bool3._d :
-                pat0 = 0b1111111111111111
-            elif cube[0] == Bool3._1 :
-                pat0 = 0b1111111100000000
-            elif cube[0] == Bool3._0 :
-                pat0 = 0b0000000011111111
-            else :
-                assert False
-
-            if cube[1] == Bool3._d :
-                pat1 = 0b1111111111111111
-            elif cube[1] == Bool3._1 :
-                pat1 = 0b1111000011110000
-            elif cube[1] == Bool3._0 :
-                pat1 = 0b0000111100001111
-            else :
-                assert False
-
-            if cube[2] == Bool3._d :
-                pat2 = 0b1111111111111111
-            elif cube[2] == Bool3._1 :
-                pat2 = 0b1100110011001100
-            elif cube[2] == Bool3._0 :
-                pat2 = 0b0011001100110011
-            else :
-                assert False
-
-            if cube[3] == Bool3._d :
-                pat3 = 0b1111111111111111
-            elif cube[3] == Bool3._1 :
-                pat3 = 0b1010101010101010
-            elif cube[3] == Bool3._0 :
-                pat3 = 0b0101010101010101
-            else :
-                assert False
-
-            pat = pat0 & pat1 & pat2 & pat3
-
-            # implicantcorer の特例
-            if pat == 0b0000010100000101 :
-                return '\\implicantcorer'
-
-            # implicantedge の特例
-            if pat & 0b0000000000001111 == 0b0000000000000101 :
-                r0 = True
-            else :
-                r0 = False
-            if pat & 0b0000000011110000 == 0b0000000001010000 :
-                r1 = True
-            else :
-                r1 = False
-            if pat & 0b0000111100000000 == 0b0000010100000000 :
-                r3 = True
-            else :
-                r3 = False
-            if pat & 0b1111000000000000 == 0b0101000000000000 :
-                r2 = True
-            else :
-                r2 = False
-            if r0 and r1 and r2 and r3 :
-                return '\\implicantedge{0}{8}{2}{10}'
-            elif r0 and r1 :
-                return '\\implicantedge{0}{4}{2}{6}'
-            elif r1 and r2 :
-                return '\\implicantedge{4}{12}{6}{14}'
-            elif r2 and r3 :
-                return '\\implicantedge{12}{8}{14}{10}'
-            elif r0 :
-                return '\\implicantedge{0}{0}{2}{2}'
-            elif r1 :
-                return '\\implicantedge{4}{4}{6}{6}'
-            elif r2 :
-                return '\\implicantedge{12}{12}{14}{14}'
-            elif r3 :
-                return '\\implicantedge{8}{8}{10}{10}'
-
-            if pat & 0b0000111100001111 == 0b0000000100000001 :
-                c0 = True
-            else :
-                c0 = False
-            if pat & 0b0000111100001111 == 0b0000001000000010 :
-                c1 = True
-            else :
-                c1 = False
-            if pat & 0b0000111100001111 == 0b0000100000001000 :
-                c2 = True
-            else :
-                c2 = False
-            if pat & 0b0000111100001111 == 0b0000010000000100 :
-                c3 = True
-            else :
-                c3 = False
-            if c0 and c1 and c2 and c3 :
-                return '\\implicantedge{0}{2}{8}{10}'
-            elif c0 and c1 :
-                return '\\implicantedge{0}{1}{8}{9}'
-            elif c1 and c2 :
-                return '\\implicantedge{1}{3}{9}{11}'
-            elif c2 and c3 :
-                return '\\implicantedge{3}{2}{11}{12}'
-            elif c0 :
-                return '\\implicantedge{0}{0}{8}{8}'
-            elif c1 :
-                return '\\implicantedge{1}{1}{9}{9}'
-            elif c2 :
-                return '\\implicantedge{3}{3}{11}{11}'
-            elif c3 :
-                return '\\implicantedge{2}{2}{10}{10}'
-
-            # 一般形
-            for i in (0, 1, 3, 2, 4, 5, 7, 6, 12, 13, 15, 14, 8, 9, 11, 10) :
-                if pat & (0b0000000000000001 << i) :
-                    ul = i
-                    break
-            else :
-                assert False
-
-            for i in (10, 11, 9, 8, 14, 15, 13, 12, 6, 7, 5, 4, 2, 3, 1, 0) :
-                if pat & (0b0000000000000001 << i) :
-                    dr = i
-                    break
-            else :
-                assert False
-
-            return '\\implicant{{{}}}{{{}}}'.format(ul, dr)
+        latex_karnaugh(self, implicant_list, var_map, fout)
 
 
     ### @brief 幾何学表現（ハイパーキューブ）用のdpicソースを出力する．
     ### @param[in] fout 出力先のファイルオブジェクト
     def gen_dpic_hypercube(self, *, fout = None) :
+        from lctools.dpic_hc import dpic_hc
         if fout == None :
             fout = sys.stdout
 
-        nexp = 1 << self.input_num
-
-        for p in range(0, nexp) :
-            cube_pat = ''
-            for i in range(0, self.input_num) :
-                if p & (1 << (self.input_num - i - 1)) :
-                    pat = '1'
-                else :
-                    pat = '0'
-                cube_pat += pat
-            if self.__tv_list[p] == Bool3._1 :
-                color = "black"
-            else :
-                color = "white"
-            fout.write('HC_VERTEX({}, "{}")\n'.format(cube_pat, color))
-
+        dpic_hc(self, fout)
 
 
 if __name__ == '__main__' :
