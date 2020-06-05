@@ -9,7 +9,7 @@
 
 from lctools.bool3 import Bool3
 
-head = """.PS
+head = R""".PS
 
 dnl 単位長
 define(`HC_UNIT', `30 * L_unit')dnl
@@ -44,23 +44,23 @@ G1111: G0000 + HC_D0100 + HC_D0010 + HC_D1000 + HC_D0001
 
 ZERO: G0000 + HC_vect(-1.2, 0.2)
 move to ZERO
-arrow up thickness 1.5
-"\Large{z}" above
-move to ZERO
 arrow right thickness 1.5
-"\Large{x}" ljust
+"\Large{{{v0}}}" ljust
 move to ZERO
 arrow up right thickness 1.5
-"\Large{y}" above
+"\Large{{{v1}}}" above
+move to ZERO
+arrow up thickness 1.5
+"\Large{{{v2}}}" above
 move to ZERO
 arrow up right 1.5 dashed thickness 1.5
-"\Large{w}" ljust
+"\Large{{{v3}}}" ljust
 
 define(`HC_VERTEX',`dnl
 define(`m4p', $1)dnl
 define(`m4col', `ifelse(`$2',,"black",`$2')')dnl
 circle shaded m4col outlined "black" radius HC_scalar(0.05) at G`'m4p
-"\Large{$1}" at G`'m4p + HC_vect(0.2, -0.1)
+"\Large{{$1}}" at G`'m4p + HC_vect(0.2, -0.1)
 ')
 
 define(`HC_LINE', `dnl
@@ -116,8 +116,8 @@ HC_LINE(1101, 1111)
 HC_LINE(1110, 1111, dashed)
 """
 
-def dpic_hc(func, fout) :
-    fout.write(head)
+def dpic_hc(func, var_map, fout) :
+    fout.write(head.format(v0 = var_map[0], v1 = var_map[1], v2 = var_map[2], v3 = var_map[3]))
     input_num = func.input_num
     nexp = 1 << input_num
     for p in range(0, nexp) :

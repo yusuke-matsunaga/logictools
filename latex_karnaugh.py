@@ -256,11 +256,11 @@ def latex_karnaugh(func, implicant_list, var_map, fout) :
         elif func.input_num == 1 :
             fout.write('[1][2][1][][${}$]\n'.format(var_map[0]))
         elif func.input_num == 2 :
-            fout.write('[2][2][1][${}$][${}$]\n'.format(var_map[0], var_map[1]))
+            fout.write('[2][2][1][${}$][${}$]\n'.format(var_map[1], var_map[0]))
         elif func.input_num == 3 :
-            fout.write('[2][4][1][${}$][${}{}$]\n'.format(var_map[0], var_map[1], var_map[2]))
+            fout.write('[2][4][1][${}$][${}{}$]\n'.format(var_map[1], var_map[2], var_map[0]))
         elif func.input_num == 4 :
-            fout.write('[4][4][1][${}{}$][${}{}$]\n'.format(var_map[0], var_map[1], var_map[2], var_map[3]))
+            fout.write('[4][4][1][${}{}$][${}{}$]\n'.format(var_map[2], var_map[3], var_map[0], var_map[1]))
         elif func.input_num == 5 :
             fout.write('Too many inputs.\n')
             return
@@ -272,7 +272,7 @@ def latex_karnaugh(func, implicant_list, var_map, fout) :
             return
 
         def make_val_list(p, input_num) :
-            return [ Bool3._1 if p & (1 << i) else Bool3._0 for i in range(input_num) ]
+            return [ Bool3._1 if p & (1 << (input_num - i - 1)) else Bool3._0 for i in range(input_num) ]
         minterm_list = [ p for p in range(0, nexp) if func.val(make_val_list(p, func.input_num)) == Bool3._1 ]
         fout.write('\\minterms{')
         comma = ''

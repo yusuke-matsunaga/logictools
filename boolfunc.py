@@ -4,36 +4,39 @@
 ### @brief BoolFunc の実装ファイル
 ### @author Yusuke Matsunaga (松永 裕介)
 ###
-### Copyright (C) 2017, 2019 Yusuke Matsunaga
+### Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga
 ### All rights reserved.
 
 import sys
 from lctools.bool3 import Bool3
 from lctools.cube import Cube
 
+
 ### @class BoolFunc
 ### @brief Boolean Function を表すクラス
 ###
 ### * 実際には不完全指定論理関数を表すので出力値は Bool3 型となる．
 ### * 入力数が高々10程度と仮定して真理値表で表す．
+### * 真理値表は x0, x1, x2, ... の順に並べる．
 ### * 変数名のリストを持つ．
 class BoolFunc :
 
     ### @brief 恒偽関数を作る．
     ### @param[in] input_num 入力数
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 4入力の恒偽関数を作るコード
     ### @code
     ### f = BoolFunc.make_const0(4)
     ### @endcode
     @staticmethod
-    def make_const0(input_num) :
-        return BoolFunc(input_num)
+    def make_const0(input_num, *, var_map = None) :
+        return BoolFunc(input_num, var_map = var_map)
 
 
     ### @brief 恒真関数を作る．
     ### @param[in] input_num 入力数
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 3入力の恒真関数を作るコード
     ### @code
@@ -50,7 +53,7 @@ class BoolFunc :
     ### @brief リテラル関数を作る．
     ### @param[in] input_num
     ### @param[in] var_id 変数番号 ( 0 <= var_id < input_num )
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 5入力の0番目の変数のりテラル関数を作るコード
     ### @code
@@ -70,7 +73,7 @@ class BoolFunc :
 
     ### @brief AND関数を作る．
     ### @param[in] input_num 入力数
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 4入力のAND関数を作るコード
     ### @code
@@ -91,7 +94,7 @@ class BoolFunc :
 
     ### @brief NAND関数を作る．
     ### @param[in] input_num 入力数
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 4入力のNAND関数を作るコード
     ### @code
@@ -112,7 +115,7 @@ class BoolFunc :
 
     ### @brief OR関数を作る．
     ### @param[in] input_num 入力数
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 4入力のOR関数を作るコード
     ### @code
@@ -133,7 +136,7 @@ class BoolFunc :
 
     ### @brief NOR関数を作る．
     ### @param[in] input_num 入力数
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 4入力のNOR関数を作るコード
     ### @code
@@ -154,7 +157,7 @@ class BoolFunc :
 
     ### @brief XOR関数を作る．
     ### @param[in] input_num 入力数
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 4入力のXOR関数を作るコード
     ### @code
@@ -179,7 +182,7 @@ class BoolFunc :
 
     ### @brief XNOR関数を作る．
     ### @param[in] input_num 入力数
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### 4入力のXNOR関数を作るコード
     ### @code
@@ -202,11 +205,23 @@ class BoolFunc :
                         var_map = var_map)
 
 
+    ### @brief 論理式を表す文字列から関数を作る．
+    ### @param[in] expr_string 論理式を表す文字列
+    ### @param[in] input_numm 入力数
+    ### @param[in] var_map 変数名の辞書
+    @staticmethod
+    def make_from_string(expr_string, input_num, var_map) :
+        from lctools.parser import Parser
+
+        parser = Parser(input_num, var_map)
+        return parser(expr_string)
+
+
     ### @brief 初期化
     ### @param[in] input_num 入力数
-    ### @param[in] val_list 値のリスト
-    ### @param[in] val_str 値のリストを表す文字列
-    ### @param[in] var_map 変数名の辞書
+    ### @param[in] val_list 値のリスト(名前付きパラメータ)
+    ### @param[in] val_str 値のリストを表す文字列(名前付きパラメータ)
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
     ###
     ### * val_list と val_str はどちらか一方しか指定できない．
     ### * val_list と val_str が両方とも省略された場合には恒偽関数となる．
@@ -432,8 +447,8 @@ class BoolFunc :
 
 
     ### @brief 真理値表の形式で出力する．
-    ### @param[in] var_map 変数名の辞書
-    ### @param[in] fout 出力先のファイルオブジェクト
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
+    ### @param[in] fout 出力先のファイルオブジェクト(名前付きパラメータ)
     def print_table(self, *, var_map = None, fout = None) :
         if var_map == None :
             var_map = self.__var_map
@@ -547,8 +562,8 @@ class BoolFunc :
 
     ### @brief 真理値表をLaTex形式で出力する．
     ### @param[in] fname 関数名
-    ### @param[in] var_map 変数名の辞書
-    ### @param[in] fout 出力先のファイルオブジェクト
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
+    ### @param[in] fout 出力先のファイルオブジェクト(名前付きパラメータ)
     def gen_latex_table(self, fname, *, var_map = None, fout = None) :
         if var_map == None :
             var_map = self.__var_map
@@ -592,8 +607,8 @@ class BoolFunc :
     ### @brief 複数の関数を表す真理値表を LaTeX 形式で出力する．
     ### @param[in] func_list 関数のリスト
     ### @param[in] fname_list 関数名のリスト
-    ### @param[in] var_map 変数名の辞書
-    ### @param[in] fout 出力先のファイルオブジェクト
+    ### @param[in] var_map 変数名の辞書(名前付きパラメータ)
+    ### @param[in] fout 出力先のファイルオブジェクト(名前付きパラメータ)
     ###
     ### * func_list は最低1つは要素を持たなければならない．
     ### * fname_list の要素数は func_list の要素数と同じでなければならない．
@@ -678,12 +693,16 @@ class BoolFunc :
 
     ### @brief 幾何学表現（ハイパーキューブ）用のdpicソースを出力する．
     ### @param[in] fout 出力先のファイルオブジェクト
-    def gen_dpic_hypercube(self, *, fout = None) :
+    def gen_dpic_hypercube(self, *, var_map = None, fout = None) :
         from lctools.dpic_hc import dpic_hc
+
+        if var_map == None :
+            var_map = self.__var_map
+
         if fout == None :
             fout = sys.stdout
 
-        dpic_hc(self, fout)
+        dpic_hc(self, var_map, fout)
 
 
 if __name__ == '__main__' :
