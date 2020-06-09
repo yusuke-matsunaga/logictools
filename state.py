@@ -14,8 +14,10 @@
 class State :
 
     ### @brief 初期化
+    ### @param[in] id ID番号
     ### @param[in] name 状態名
-    def __init__(self, name) :
+    def __init__(self, id, name) :
+        self.__id = id
         self.__name = name
         self.__next_func = {}
 
@@ -25,6 +27,11 @@ class State :
     ### @param[in] output_val 出力記号
     def set_next(self, input_val, next_state, output_val) :
         self.__next_func[input_val] = (next_state, output_val)
+
+    ### @brief ID番号を返す．
+    @property
+    def id(self) :
+        return self.__id
 
     ### @brief 名前を返す．
     @property
