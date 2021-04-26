@@ -1,11 +1,12 @@
 #! /usr/bin/env python3
 
-### @file __init__.py
-### @brief lctools パッケージ
-### @author Yusuke Matsunaga (松永 裕介)
-###
-### Copyright (C) 2019 Yusuke Matsunaga
-### All rights reserved.
+"""
+lctools パッケージ
+
+:file: __init__.py
+:author: Yusuke Matsunaga (松永 裕介)
+:copyright: Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.
+"""
 
 from lctools.bool3 import Bool3
 from lctools.boolfunc import BoolFunc
