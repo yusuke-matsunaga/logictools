@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-カルノー図を作るスクリプト
+"""カルノー図を作るスクリプト
 
 :file: karnaugh.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -12,8 +11,7 @@ from lctools.bool3 import Bool3
 
 
 def karnaugh0(func, var_map, fout):
-    """
-    0変数のカルノー図を出力する．
+    """0変数のカルノー図を出力する．
 
     :param func: 対象の関数
     :param var_ma: 変数名の辞書
@@ -25,8 +23,7 @@ def karnaugh0(func, var_map, fout):
 
 
 def karnaugh1(func, var_map, fout):
-    """
-    1変数のカルノー図を出力する．
+    """1変数のカルノー図を出力する．
 
     :param func: 対象の関数
     :param var_ma: 変数名の辞書
@@ -40,8 +37,7 @@ def karnaugh1(func, var_map, fout):
 
 
 def karnaugh2(func, var_map, fout):
-    """
-    2変数のカルノー図を出力する．
+    """2変数のカルノー図を出力する．
 
     :param func: 対象の関数
     :param var_ma: 変数名の辞書
@@ -59,8 +55,7 @@ def karnaugh2(func, var_map, fout):
 
 
 def karnaugh3(func, var_map, fout):
-    """
-    3変数のカルノー図を出力する．
+    """3変数のカルノー図を出力する．
 
     :param func: 対象の関数
     :param var_ma: 変数名の辞書
@@ -82,8 +77,7 @@ def karnaugh3(func, var_map, fout):
 
 
 def karnaugh4(func, var_map, fout):
-    """
-    4変数のカルノー図を出力する．
+    """4変数のカルノー図を出力する．
 
     :param func: 対象の関数
     :param var_ma: 変数名の辞書

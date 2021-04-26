@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-Fsm の実装ファイル
+"""Fsm の実装ファイル
 
 :file: fsm.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -13,22 +12,21 @@ from lctools.state import State
 
 
 class Fsm:
-    """
-    有限状態機械を表すクラス
+    """有限状態機械を表すクラス
 
     :param input_list: 入力記号のリスト
     :param output_list: 出力記号のリスト
 
     この時点では状態をもたない．
     """
+
     def __init__(self, input_list, output_list):
         self.__input_list = tuple(input_list)
         self.__output_list = tuple(output_list)
         self.__state_list = list()
 
     def new_state(self, name):
-        """
-        状態を追加する．
+        """状態を追加する．
 
         :param name: 追加する状態名
         :return: 追加した状態を返す．
@@ -97,8 +95,7 @@ class Fsm:
         self.__max_phase = phase + 1
 
     def print_table(self, *, fout=sys.stdout):
-        """
-        状態遷移表を出力する．
+        """状態遷移表を出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
@@ -160,8 +157,7 @@ class Fsm:
             fout.write('\n')
 
     def gen_latex_table(self, fout=sys.stdout):
-        """
-        状態遷移表を LaTeX 形式で出力する．
+        """状態遷移表を LaTeX 形式で出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
@@ -185,8 +181,7 @@ class Fsm:
         fout.write('\\end{tabular}\n')
 
     def gen_latex_compatible_table(self, fout=sys.stdout):
-        """
-        最小化のための両立テーブルを LaTeX 形式で出力する．
+        """最小化のための両立テーブルを LaTeX 形式で出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
@@ -226,8 +221,7 @@ class Fsm:
             fout.write('\\end{tabular}\n')
 
     def encode(self, input_map, output_map, state_map):
-        """
-        符号化を行う．
+        """符号化を行う．
 
         :param input_map: 入力の符号割当
         :param output_map: 出力の符号割当

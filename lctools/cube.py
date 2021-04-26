@@ -1,11 +1,9 @@
 #! /usr/bin/env python3
 
-"""
-Cube の定義ファイル
+"""Cube の定義ファイル
 
 :file: cube.py
 :author: Yusuke Matsunaga (松永 裕介)
-
 :Copyright: (C) 2017, 2019 Yusuke Matsunaga, All rights reserved.
 """
 
@@ -13,14 +11,13 @@ from lctools.bool3 import Bool3
 
 
 class Cube:
-    """
-    キューブを表すクラス
-
-    意味的には Bool3 の列(シーケンス)
-    入力数が高々10程度と仮定して符号なし整数１語で表す．
+    """キューブを表すクラス
 
     :param input_num: 入力数
     :param pat_str: パタン文字列
+
+    意味的には Bool3 の列(シーケンス)
+    入力数が高々10程度と仮定して符号なし整数１語で表す．
 
     * input_num と pat_str のどちらか一方は指定されなければならない．
     * input_num と pat_str の両方が指定された場合，pat_str の長さは
@@ -51,24 +48,21 @@ class Cube:
                     assert False
 
     def set_posliteral(self, pos):
-        """
-        i 番目の変数を正のリテラルに設定する．
+        """pos 番目の変数を正のリテラルに設定する．
 
         :param pos: 変数番号 ( 0 <= pos < input_num )
         """
         self[pos] = Bool3._1
 
     def set_negliteral(self, pos):
-        """
-        i 番目の変数を負のリテラルに設定する．
+        """pos 番目の変数を負のリテラルに設定する．
 
         :param pos: 変数番号 ( 0 <= pos < input_num )
         """
         self[pos] = Bool3._0
 
     def clr_literal(self, pos):
-        """
-        i 番目の変数をドントケアに設定する．
+        """pos 番目の変数をドントケアに設定する．
 
         :param pos: 変数番号 ( 0 <= pos < input_num )
         """
@@ -107,8 +101,7 @@ class Cube:
         return self.__input_num
 
     def __getitem__(self, pos):
-        """
-        pos番目の位置のパタンを返す．
+        """pos番目の位置のパタンを返す．
 
         :param pos: 位置 ( 0 <= pos < input_num )
         :retrun: Bool3._d ドントケア
@@ -126,8 +119,7 @@ class Cube:
             return Bool3._0
 
     def __setitem__(self, pos, val):
-        """
-        i 番目の変数のリテラルを設定する．
+        """pos 番目の変数のリテラルを設定する．
 
         :param pos: 変数番号 ( 0 <= pos < input_num )
         :param val: 値 ( Bool3 )
@@ -146,12 +138,12 @@ class Cube:
             assert False
 
     def __or__(self, other):
-        """
-        隣接したキューブをマージする．
+        """隣接したキューブをマージする．
 
         :return: 結果のキューブを返す．
 
         2つのキューブが隣接していなかった場合，None を返す．
+        純粋な論理和ではないので注意
         """
         assert isinstance(self, Cube)
         assert isinstance(other, Cube)
@@ -191,8 +183,7 @@ class Cube:
         return True
 
     def __lt__(self, other):
-        """
-        小なり比較演算子
+        """小なり比較演算子
 
         各入力について Bool3._d < Bool3._1 < Bool3._0
         の順で比較を行う．
@@ -200,8 +191,7 @@ class Cube:
         return self.__comp(other) == -1
 
     def __gt__(self, other):
-        """
-        大なり比較演算子
+        """大なり比較演算子
 
         各入力について Bool3._d < Bool3._1 < Bool3._0
         の順で比較を行う．
@@ -209,8 +199,7 @@ class Cube:
         return self.__comp(other) == 1
 
     def __le__(self, other):
-        """
-        小なりイコール比較演算子
+        """小なりイコール比較演算子
 
         各入力について Bool3._d < Bool3._1 < Bool3._0
         の順で比較を行う．
@@ -218,8 +207,7 @@ class Cube:
         return self.__comp(other) <= 0
 
     def __ge__(self, other):
-        """
-        大なりイコール比較演算子
+        """大なりイコール比較演算子
 
         各入力について Bool3._d < Bool3._1 < Bool3._0
         の順で比較を行う．
@@ -245,8 +233,7 @@ class Cube:
         return self.__body
 
     def latex_str(self, *, var_map=None):
-        """
-        内容を表すLaTex文字列を作る．
+        """内容を表すLaTex文字列を作る．
 
         :param var_map: 変数名の辞書(名前つきのオプション引数)
         """
@@ -266,8 +253,7 @@ class Cube:
         return cube_str
 
     def DeMorgan_latex_str(self, *, var_map=None):
-        """
-        DeMorgan の法則で否定した和積形論理式を表すLaTex文字列を作る．
+        """DeMorgan の法則で否定した和積形論理式を表すLaTex文字列を作る．
 
         :param var_map: 変数名の辞書(名前付きのオプション引数)
         """

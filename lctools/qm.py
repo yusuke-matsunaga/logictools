@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-Quine-McCluskey 法を実装したアルゴリズム
+"""Quine-McCluskey 法を実装したアルゴリズム
 
 :file: qm.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -48,8 +47,7 @@ def gen_primes(minterm_list):
 
 
 def gen_minimum_cover(onset, prime_list):
-    """
-    最簡積和形論理式を求める．
+    """最簡積和形論理式を求める．
 
     :param onset: オンセットの最小項のリスト
     :param prime_list: プライムインプリカントのリスト

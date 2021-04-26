@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-ハイパーキューブを描く dpic ソースを出力するスクリプト
+"""ハイパーキューブを描く dpic ソースを出力するスクリプト
 
 :file: dpic_hc.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -121,8 +120,7 @@ HC_LINE(1110, 1111, dashed)
 
 
 def dpic_hc(func, *, var_map=None, fout=sys.stdout):
-    """
-    関数の幾何学的表現の図を描くための dpic ファイルを生成する．
+    """関数の幾何学的表現の図を描くための dpic ファイルを生成する．
 
     :param func: 対象の関数
     :param var_map: 変数名の辞書(名前付きのオプション引数)

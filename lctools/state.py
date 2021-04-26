@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-State の実装ファイル
+"""State の実装ファイル
 
 :file: state.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -9,8 +8,7 @@ State の実装ファイル
 """
 
 class State:
-    """
-    有限状態機械の状態を表すクラス
+    """有限状態機械の状態を表すクラス
 
     :param id: ID番号
     :param name: 状態名
@@ -25,8 +23,7 @@ class State:
         self.__next_func = {}
 
     def set_next(self, input_val, next_state, output_val):
-        """
-        次状態と出力を設定する．
+        """次状態と出力を設定する．
 
         :param input_val: 入力記号
         :param next_state: 次状態

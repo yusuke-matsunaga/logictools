@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-Cover の実装ファイル
+"""Cover の実装ファイル
 
 :file: cover.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -12,10 +11,9 @@ import sys
 
 
 class Cover:
-    """
-    カバー(キューブの集合)を表すクラス
+    """カバー(キューブの集合)を表すクラス
 
-    :param cube_list: キューブのリスト
+    :param cube_list: キューブ(Cube)のリスト
     """
 
     def __init__(self, cube_list=None):
@@ -25,10 +23,9 @@ class Cover:
             self.__cube_list = []
 
     def add_cube(self, cube):
-        """
-        キューブを追加する．
+        """キューブ(Cube)を追加する．
 
-        :param cube: 追加するキューブ(Cube)
+        :param cube: 追加するキューブ
         """
         self.__cube_list.append(cube)
 
@@ -56,8 +53,7 @@ class Cover:
         return self.__cube_list[pos]
 
     def latex_str(self, *, var_map=None):
-        """
-        積和形論理式を表す LaTeX 文字列を返す．
+        """積和形論理式を表す LaTeX 文字列を返す．
 
         :param var_map: 変数名の辞書(名前付きのオプション引数)
         """
@@ -70,8 +66,7 @@ class Cover:
         return ans
 
     def DeMorgan_latex_str(self, *, var_map=None):
-        """
-        De Morgan の法則で否定した和積形論理式を表す LaTeX 文字列を返す．
+        """De Morgan の法則で否定した和積形論理式を表す LaTeX 文字列を返す．
 
         :param[in] var_map: 変数名の辞書(名前付きのオプション引数)
         """
@@ -81,8 +76,7 @@ class Cover:
         return ans
 
     def print(self, *, fout=None):
-        """
-        内容を出力する．
+        """内容を出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きのオプション引数)
 

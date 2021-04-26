@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-論理式をパーズするクラス
+"""論理式をパーズするクラス
 
 :file: parser.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -12,8 +11,7 @@ from lctools.boolfunc import BoolFunc
 
 
 class Token:
-    """
-    トークンを表すクラス
+    """トークンを表すクラス
 
     :paramt token_id: トークンID
     :param str_rep: 文字列表現
@@ -50,8 +48,7 @@ class Token:
 
 
 class Parser:
-    """
-    論理式をパーズするためのクラス
+    """論理式をパーズするためのクラス
 
     :param input_numm: 入力数
     :param var_map: 変数の辞書
@@ -73,8 +70,7 @@ class Parser:
         self.__emsg_list = list()
 
     def __call__(self, expr_str):
-        """
-        パーズする．
+        """パーズする．
 
         :param expr_str: 論理式を表す文字列
         """
@@ -180,8 +176,7 @@ class Parser:
             if token is None or token.id == end_token:
                 return func
             if token.id != '+' and token.id != '^':
-                emsg = 'Error[parse_expr]: {}, unexpected'
-                .format(token.to_string())
+                emsg = 'Error[parse_expr]: {}, unexpected'.format(token.to_string())
                 self.__emsg_list.append(emsg)
                 return None
             func1 = self.__parse_product()
@@ -225,8 +220,7 @@ class Parser:
         if token.id == '(':
             return self.__parse_expr(')')
 
-        emsg = 'Error[parse_primary]: {}, unexpected.'
-        .format(token.to_string())
+        emsg = 'Error[parse_primary]: {}, unexpected.'.format(token.to_string())
         self.__emsg_list.append(emsg)
         return None
 

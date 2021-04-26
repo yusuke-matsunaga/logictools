@@ -1,11 +1,9 @@
 #! /usr/bin/env python3
 
-"""
-BoolFunc の実装ファイル
+"""BoolFunc の実装ファイル
 
 :file: boolfunc.py
 :author: Yusuke Matsunaga (松永 裕介)
-
 :copyright: Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga, All rights reserved.
 """
 
@@ -15,8 +13,18 @@ from lctools.cube import Cube
 
 
 class BoolFunc:
-    """
-    Boolean Function を表すクラス
+    """Boolean Function を表すクラス
+
+    :param input_num: 入力数
+    :param val_list: 値のリスト(名前付きパラメータ)
+    :param val_str: 値のリストを表す文字列(名前付きパラメータ)
+    :param var_map: 変数名の辞書(名前付きパラメータ)
+
+    * val_list と val_str はどちらか一方しか指定できない．
+    * val_list と val_str が両方とも省略された場合には恒偽関数となる．
+    * val_list の長さは 2^input_num でなければならない．
+    * val_str の長さは 2^input_num でなければならない．
+    * val_str で使える文字は'0', '1', '*', 'd', '-'
 
     * 実際には不完全指定論理関数を表すので出力値は Bool3 型となる．
     * 入力数が高々10程度と仮定して真理値表で表す．
@@ -26,31 +34,29 @@ class BoolFunc:
 
     @staticmethod
     def make_const0(input_num, *, var_map=None):
-        """
-        恒偽関数を作る．
+        """恒偽関数を作る．
 
         :param input_num: 入力数
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         4入力の恒偽関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_const0(4)
-        @endcode
         """
         return BoolFunc(input_num, var_map=var_map)
 
     @staticmethod
     def make_const1(input_num, *, var_map=None):
-        """
-        恒真関数を作る．
+        """恒真関数を作る．
 
         :param input_num: 入力数
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         3入力の恒真関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_const1(3)
-        @endcode
         """
         nexp = 1 << input_num
         return BoolFunc(input_num,
@@ -59,17 +65,16 @@ class BoolFunc:
 
     @staticmethod
     def make_literal(input_num, var_id, *, var_map=None):
-        """
-        リテラル関数を作る．
+        """リテラル関数を作る．
 
         :param input_num: 入力数
         :param var_id: 変数番号 ( 0 <= var_id < input_num )
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         5入力の0番目の変数のりテラル関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_literal(5, 0)
-        @endcode
 
         否定のリテラルは否定演算(~)で作る．
         """
@@ -83,16 +88,15 @@ class BoolFunc:
 
     @staticmethod
     def make_and(input_num, *, var_map=None):
-        """
-        AND関数を作る．
+        """AND関数を作る．
 
         param input_num: 入力数
         param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         4入力のAND関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_and(4)
-        @endcode
         """
         nexp = 1 << input_num
 
@@ -108,16 +112,15 @@ class BoolFunc:
 
     @staticmethod
     def make_nand(input_num, *, var_map=None):
-        """
-        NAND関数を作る．
+        """NAND関数を作る．
 
         :param input_num: 入力数
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         4入力のNAND関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_nand(4)
-        @endcode
         """
         nexp = 1 << input_num
 
@@ -133,16 +136,15 @@ class BoolFunc:
 
     @staticmethod
     def make_or(input_num, *, var_map=None):
-        """
-        OR関数を作る．
+        """OR関数を作る．
 
         :param input_num: 入力数
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         4入力のOR関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_or(4)
-        @endcode
         """
         nexp = 1 << input_num
 
@@ -158,16 +160,15 @@ class BoolFunc:
 
     @staticmethod
     def make_nor(input_num, *, var_map=None):
-        """
-        NOR関数を作る．
+        """NOR関数を作る．
 
         :param input_num: 入力数
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         4入力のNOR関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_nor(4)
-        @endcode
         """
         nexp = 1 << input_num
 
@@ -183,16 +184,15 @@ class BoolFunc:
 
     @staticmethod
     def make_xor(input_num, *, var_map=None):
-        """
-        XOR関数を作る．
+        """XOR関数を作る．
 
         :param input_num: 入力数
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         4入力のXOR関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_xor(4)
-        @endcode
         """
         def parity(p, input_num):
             c = 0
@@ -212,16 +212,15 @@ class BoolFunc:
 
     @staticmethod
     def make_xor(input_num, *, var_map=None):
-        """
-        XNOR関数を作る．
+        """XNOR関数を作る．
 
         :param input_num: 入力数
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
 
         4入力のXNOR関数を作るコード例
-        @code
+        ::
+
           f = BoolFunc.make_xnor(4)
-        @endcode
         """
         def parity(p, input_num):
             c = 0
@@ -241,8 +240,7 @@ class BoolFunc:
 
     @staticmethod
     def make_from_string(expr_string, input_num, var_map):
-        """
-        論理式を表す文字列から関数を作る．
+        """論理式を表す文字列から関数を作る．
 
         :param expr_string: 論理式を表す文字列
         :param input_numm: 入力数
@@ -257,20 +255,6 @@ class BoolFunc:
                  val_list=None,
                  val_str=None,
                  var_map=None):
-        """
-        初期化
-
-        :param input_num: 入力数
-        :param val_list: 値のリスト(名前付きパラメータ)
-        :param val_str: 値のリストを表す文字列(名前付きパラメータ)
-        :param var_map: 変数名の辞書(名前付きパラメータ)
-
-        * val_list と val_str はどちらか一方しか指定できない．
-        * val_list と val_str が両方とも省略された場合には恒偽関数となる．
-        * val_list の長さは 2^input_num でなければならない．
-        * val_str の長さは 2^input_num でなければならない．
-        * val_str で使える文字は'0', '1', '*', 'd', '-'
-        """
         assert val_list is None or val_str is None
         self.__input_num = input_num
         nexp = 1 << input_num
@@ -311,8 +295,7 @@ class BoolFunc:
         return self.__input_num
 
     def input_var(self, pos):
-        """
-        入力変数名を返す
+        """入力変数名を返す
 
         :param pos: 変数番号 ( 0 <= pos < input_num )．
         """
@@ -320,8 +303,7 @@ class BoolFunc:
         return self.__var_map[pos]
 
     def val(self, ival_list):
-        """
-        入力値に対する出力値を返す．
+        """入力値に対する出力値を返す．
 
         :param ival_list: 入力値のリスト
         """
@@ -338,8 +320,7 @@ class BoolFunc:
         return self.__var_map
 
     def __invert__(self):
-        """
-        自身の否定を返す単項演算子
+        """自身の否定を返す単項演算子
 
         @code
           f = BoolFunc(n) # n は入力数
@@ -353,8 +334,7 @@ class BoolFunc:
                         var_map=self.__var_map)
 
     def __and__(self, other):
-        """
-        AND演算子
+        """AND演算子
 
         @code
           f1 = BoolFunc(2)
@@ -374,8 +354,7 @@ class BoolFunc:
                         var_map=self.__var_map)
 
     def __or__(self, other):
-        """
-        OR演算子
+        """OR演算子
 
         @code
           f1 = BoolFunc(2)
@@ -395,8 +374,7 @@ class BoolFunc:
                         var_map=self.__var_map)
 
     def __xor__(self, other):
-        """
-        XOR演算子
+        """XOR演算子
 
         @code
           f1 = BoolFunc(2)
@@ -416,8 +394,7 @@ class BoolFunc:
                         var_map=self.__var_map)
 
     def compose(self, ifunc_list):
-        """
-        compose 演算
+        """compose 演算
 
         :param ifunc_list: 入力関数のリスト
 
@@ -453,8 +430,7 @@ class BoolFunc:
         return ans
 
     def __eq__(self, other):
-        """
-        等価比較演算子
+        """等価比較演算子
 
         @code
           f1 = BoolFunc(2)
@@ -498,8 +474,7 @@ class BoolFunc:
         return onset, dcset, offset
 
     def print_table(self, *, var_map=None, fout=None):
-        """
-        真理値表の形式で出力する．
+        """真理値表の形式で出力する．
 
         :param var_map: 変数名の辞書(名前付きパラメータ)
         :param fout: 出力先のファイルオブジェクト(名前付きパラメータ)
@@ -530,9 +505,8 @@ class BoolFunc:
             oval = self.__tv_list[p]
             fout.write('| {:1}\n'.format(oval))
 
-    def print_karnaugh(self, *, var_map=None, fout=None):
-        """
-        カルノー図の形式で出力する．
+    def print_karnaugh(self, *, var_map=None, fout=sys.stdout):
+        """カルノー図の形式で出力する．
 
         :param var_map: 変数名の辞書(名前付きのオプション引数)
         :param fout: 出力先のファイルオブジェクト(名前付きのオプション引数)
@@ -547,9 +521,6 @@ class BoolFunc:
         if var_map is None:
             var_map = self.__var_map
 
-        if fout is None:
-            fout = sys.stdout
-
         if self.input_num == 0:
             karnaugh0(self, var_map, fout)
         elif self.input_num == 1:
@@ -563,9 +534,8 @@ class BoolFunc:
         else:
             fout.write('Too many inputs.\n')
 
-    def gen_latex_minterm_sop(self, *, var_map=None, fout=None):
-        """
-        積和標準形をLaTex形式で出力する．
+    def gen_latex_minterm_sop(self, *, var_map=None, fout=sys.stdout):
+        """積和標準形をLaTex形式で出力する．
 
         :param varmap: 変数名の辞書(名前付きのオプション引数)
         :param fout: 出力先のファイルオブジェクト(名前付きのオプション引数)
@@ -574,9 +544,6 @@ class BoolFunc:
         """
         if var_map is None:
             var_map = self.__var_map
-
-        if fout is None:
-            fout = sys.stdout
 
         nexp = 1 << self.input_num
 
@@ -595,9 +562,8 @@ class BoolFunc:
         sop += "\n"
         fout.write(sop)
 
-    def gen_latex_maxterm_pos(self, *, var_map=None, fout=None):
-        """
-        和積標準形をLaTex形式で出力する．
+    def gen_latex_maxterm_pos(self, *, var_map=None, fout=sys.stdout):
+        """和積標準形をLaTex形式で出力する．
 
         :param varmap: 変数名の辞書(名前付きのオプション引数)
         :param fout: 出力先のファイルオブジェクト(名前付きのオプション引数)
@@ -606,9 +572,6 @@ class BoolFunc:
         """
         if var_map is None:
             var_map = self.__var_map
-
-        if fout is None:
-            fout = sys.stdout
 
         nexp = 1 << self.input_num
 
@@ -628,9 +591,8 @@ class BoolFunc:
         pos += "\n"
         fout.write(pos)
 
-    def gen_latex_table(self, fname, *, var_map=None, fout=None):
-        """
-        真理値表をLaTex形式で出力する．
+    def gen_latex_table(self, fname, *, var_map=None, fout=sys.stdout):
+        """真理値表をLaTex形式で出力する．
 
         :param fname: 関数名
         :param var_map: 変数名の辞書(名前付きオプションパラメータ)
@@ -640,9 +602,6 @@ class BoolFunc:
         """
         if var_map is None:
             var_map = self.__var_map
-
-        if fout is None:
-            fout = sys.stdout
 
         nexp = 1 << self.input_num
 
@@ -677,9 +636,8 @@ class BoolFunc:
         fout.write('\\end{tabular}\n')
 
     @staticmethod
-    def gen_latex_tables(func_list, fname_list, *, var_map=None, fout=None):
-        """
-        複数の関数を表す真理値表を LaTeX 形式で出力する．
+    def gen_latex_tables(func_list, fname_list, *, var_map=None, fout=sys.stdout):
+        """複数の関数を表す真理値表を LaTeX 形式で出力する．
 
         :param func_list: 関数のリスト
         :param fname_list: 関数名のリスト
@@ -696,9 +654,6 @@ class BoolFunc:
 
         if var_map is None:
             var_map = func_list[0].__var_map
-
-        if fout is None:
-            fout = sys.stdout
 
         ni = func_list[0].input_num
         nexp = 1 << ni
@@ -752,9 +707,8 @@ class BoolFunc:
 
     def gen_latex_karnaugh(self, *,
                            implicant_list=None,
-                           var_map=None, fout=None):
-        """
-        カルノー図をLaTex形式で出力する．
+                           var_map=None, fout=sys.stdout):
+        """カルノー図をLaTex形式で出力する．
 
         :param implicant_list: インプリカントのリスト(名前付きオプション引数)
         :param var_map: 変数名の辞書(名前付きオプション引数)
@@ -774,9 +728,8 @@ class BoolFunc:
 
     def gen_dpic_hypercube(self, *,
                            var_map=None,
-                           fout=None):
-        """
-        幾何学表現（ハイパーキューブ）用のdpicソースを出力する．
+                           fout=sys.stdout):
+        """幾何学表現（ハイパーキューブ）用のdpicソースを出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 

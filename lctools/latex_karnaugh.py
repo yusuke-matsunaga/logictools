@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-LaTeX 用のカルノー図記述を作るスクリプト
+"""LaTeX 用のカルノー図記述を作るスクリプト
 
 :file: latex_karnaugh.py
 :author: Yusuke Matsunaga (松永 裕介)

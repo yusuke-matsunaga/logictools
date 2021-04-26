@@ -1,7 +1,6 @@
 #! /usr/bin/env python3
 
-"""
-MinCov の実装ファイル
+"""MinCov の実装ファイル
 
 :file: mincov.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -36,8 +35,7 @@ class MinCov:
         return self.__nelem
 
     def add_clause(self, clause):
-        """
-        条件を追加する．
+        """被覆条件を追加する．
 
         :param clause: 追加する条件
 
@@ -46,8 +44,7 @@ class MinCov:
         self.__clause_list.append(clause)
 
     def solve(self):
-        """
-        最小被覆解をすべて求める．
+        """最小被覆解をすべて求める．
         """
         ans_list = self.all_cover()
         min_num = self.__nelem
@@ -59,8 +56,7 @@ class MinCov:
         return [ans for ans in ans_list if len(ans) == min_num]
 
     def all_cover(self):
-        """
-        被覆解をすべて求める．
+        """被覆解をすべて求める．
         """
 
         def key(clause):
@@ -103,8 +99,7 @@ class MinCov:
                 unselected1[elem] = True
 
     def print(self, fout=sys.stdout):
-        """
-        内容を表示する．
+        """内容を表示する．
 
         :param fout: 出力先のファイルオブジェクト
 
