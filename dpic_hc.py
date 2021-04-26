@@ -1,13 +1,16 @@
 #! /usr/bin/env python3
 
-### @file dpic_hc.py
-### @brief ハイパーキューブを描く dpic ソースを出力するスクリプト
-### @author Yusuke Matsunaga (松永 裕介)
-###
-### Copyright (C) 2020 Yusuke Matsunaga
-### All rights reserved.
+"""
+ハイパーキューブを描く dpic ソースを出力するスクリプト
 
+:file: dpic_hc.py
+:author: Yusuke Matsunaga (松永 裕介)
+:copyright: Copyright (C) 2020 Yusuke Matsunaga, All rights reserved.
+"""
+
+import sys
 from lctools.bool3 import Bool3
+
 
 head = R""".PS
 
@@ -116,25 +119,42 @@ HC_LINE(1101, 1111)
 HC_LINE(1110, 1111, dashed)
 """
 
-def dpic_hc(func, var_map, fout) :
-    fout.write(head.format(v0 = var_map[0], v1 = var_map[1], v2 = var_map[2], v3 = var_map[3]))
+
+def dpic_hc(func, *, var_map=None, fout=sys.stdout):
+    """
+    関数の幾何学的表現の図を描くための dpic ファイルを生成する．
+
+    :param func: 対象の関数
+    :param var_map: 変数名の辞書(名前付きのオプション引数)
+    :param fout: 出力先のファイルオブジェクト(名前付きのオプション引数)
+
+    fout が省略された場合には標準出力が用いられる．
+    """
+
+    if var_map is None:
+        # デフォルトの変数名マップを作る．
+        var_map = {i: 'x_{}'.format(i + 1)
+                   for i in range(0, input_num)}
+
+    fout.write(head.format(v0=var_map[0], v1=var_map[1],
+                           v2=var_map[2], v3=var_map[3]))
     input_num = func.input_num
     nexp = 1 << input_num
-    for p in range(0, nexp) :
+    for p in range(0, nexp):
         cube_pat = ''
         val_list = []
-        for i in range(0, input_num) :
-            if p & (1 << (input_num - i - 1)) :
+        for i in range(0, input_num):
+            if p & (1 << (input_num - i - 1)):
                 pat = '1'
                 val = Bool3._1
-            else :
+            else:
                 pat = '0'
                 val = Bool3._0
             cube_pat += pat
             val_list.append(val)
-        if func.val(val_list) == Bool3._1 :
+        if func.val(val_list) == Bool3._1:
             color = "black"
-        else :
+        else:
             color = "white"
         fout.write('HC_VERTEX({}, "{}")\n'.format(cube_pat, color))
     fout.write('.PE\n')

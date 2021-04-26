@@ -1,74 +1,94 @@
 #! /usr/bin/env python3
 
-### @file cover.py
-### @brief Cover の実装ファイル
-### @author Yusuke Matsunaga (松永 裕介)
-###
-### Copyright (C) 2019 Yusuke Matsunaga
-### All rights reserved.
+"""
+Cover の実装ファイル
+
+:file: cover.py
+:author: Yusuke Matsunaga (松永 裕介)
+:copyright: Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.
+"""
 
 import sys
 
-### @brief カバー(キューブの集合)を表すクラス
-class Cover :
 
-    ### @brief 初期化
-    ### @param[in] cube_list キューブのリスト
-    def __init__(self, cube_list = None) :
-        if cube_list :
+class Cover:
+    """
+    カバー(キューブの集合)を表すクラス
+
+    :param cube_list: キューブのリスト
+    """
+
+    def __init__(self, cube_list=None):
+        if cube_list:
             self.__cube_list = cube_list
-        else :
+        else:
             self.__cube_list = []
 
-    ### @brief キューブを追加する．
-    def add_cube(self, cube) :
+    def add_cube(self, cube):
+        """
+        キューブを追加する．
+
+        :param cube: 追加するキューブ(Cube)
+        """
         self.__cube_list.append(cube)
 
-    ### @brief キューブ数を返す．
     @property
-    def cube_num(self) :
+    def cube_num(self):
+        """キューブ数を返す．"""
         return len(self.__cube_list)
 
-    ### @brief リテラル数を返す．
     @property
-    def literal_num(self) :
+    def literal_num(self):
+        """リテラル数を返す．"""
         ans = 0
-        for cube in self.__cube_list :
+        for cube in self.__cube_list:
             ans += cube.literal_num
         return ans
 
-    ### @brief キューブのリストを返す．
     @property
-    def cube_list(self) :
+    def cube_list(self):
+        """キューブのリストを返す．"""
         return self.__cube_list
 
-    ### @brief 要素のキューブを取り出す．
-    def __getitem__(self, pos) :
+    def __getitem__(self, pos):
+        """要素のキューブを取り出す．"""
         assert 0 <= pos < self.cube_num
         return self.__cube_list[pos]
 
-    ### @brief 積和形論理式を表す LaTeX 文字列を返す．
-    ### @param[in] var_map 変数名の辞書
-    def latex_str(self, *, var_map = None) :
+    def latex_str(self, *, var_map=None):
+        """
+        積和形論理式を表す LaTeX 文字列を返す．
+
+        :param var_map: 変数名の辞書(名前付きのオプション引数)
+        """
         ans = ''
         plus = ''
-        for cube in self.__cube_list :
+        for cube in self.__cube_list:
             ans += plus
             plus = ' + '
-            ans += cube.latex_str(var_map = var_map)
+            ans += cube.latex_str(var_map=var_map)
         return ans
 
-    ### De Morgan の法則で否定した和積形論理式を表す LaTeX 文字列を返す．
-    ### @param[in] var_map 変数名の辞書
-    def DeMorgan_latex_str(self, *, var_map = None) :
+    def DeMorgan_latex_str(self, *, var_map=None):
+        """
+        De Morgan の法則で否定した和積形論理式を表す LaTeX 文字列を返す．
+
+        :param[in] var_map: 変数名の辞書(名前付きのオプション引数)
+        """
         ans = ''
-        for cube in self.__cube_list :
-            ans += cube.DeMorgan_latex_str(var_map = var_map)
+        for cube in self.__cube_list:
+            ans += cube.DeMorgan_latex_str(var_map=var_map)
         return ans
 
-    ### @brief 内容を出力する．
-    def print(self, *, fout = None) :
-        if fout == None :
+    def print(self, *, fout=None):
+        """
+        内容を出力する．
+
+        :param fout: 出力先のファイルオブジェクト(名前付きのオプション引数)
+
+        fout が省略された場合は標準出力が用いられる．
+        """
+        if fout is None:
             fout = sys.stdout
-        for cube in self.__cube_list :
-            print(cube, file = fout)
+        for cube in self.__cube_list:
+            print(cube, file=fout)
