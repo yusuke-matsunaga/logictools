@@ -13,8 +13,8 @@ from lctools.bool3 import Bool3
 class Cube:
     """キューブを表すクラス
 
-    :param input_num: 入力数
     :param pat_str: パタン文字列
+    :param input_num: 入力数(名前付きのオプション引数)
 
     意味的には Bool3 の列(シーケンス)
     入力数が高々10程度と仮定して符号なし整数１語で表す．
@@ -27,7 +27,7 @@ class Cube:
       '0'は否定，'1'は肯定のリテラル，'-' と '*' はその変数が現れな
       いことを示す．
     """
-    def __init__(self, *, input_num=None, pat_str=None):
+    def __init__(self, pat_str=None, *, input_num=None):
         assert input_num is not None or pat_str is not None
         if input_num is not None and pat_str is not None:
             assert len(pat_str) == input_num
@@ -145,7 +145,6 @@ class Cube:
         2つのキューブが隣接していなかった場合，None を返す．
         純粋な論理和ではないので注意
         """
-        assert isinstance(self, Cube)
         assert isinstance(other, Cube)
         assert self.input_num == other.input_num
         nd = 0
@@ -172,7 +171,6 @@ class Cube:
 
     def __eq__(self, other):
         """等価比較演算子"""
-        assert isinstance(self, Cube)
         assert isinstance(other, Cube)
         assert self.input_num == other.input_num
         for i in range(self.input_num):
@@ -299,7 +297,7 @@ if __name__ == '__main__':
     c1 = Cube(input_num=4)
     print('c1 = {}: {}'.format(c1, c1.latex_str()))
 
-    c2 = Cube(pat_str='01--')
+    c2 = Cube('01--')
     print('c2 = {}: {}'.format(c2, c2.latex_str()))
 
     var_map = {0: 'a', 1: 'b', 2: 'c', 3: 'd'}
@@ -307,10 +305,10 @@ if __name__ == '__main__':
 
     print('\\bar{{c2}} = {}'.format(c2.DeMorgan_latex_str()))
 
-    c3 = Cube(pat_str='-1--')
+    c3 = Cube('-1--')
     c23 = c2 | c3
     print('c2 | c3 = {}'.format(c23))
 
-    c4 = Cube(pat_str='11--')
+    c4 = Cube('11--')
     c24 = c2 | c4
     print('c2 | c4 = {}'.format(c24))

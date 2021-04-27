@@ -323,14 +323,15 @@ class BoolFunc:
         return self.__var_map
 
     def __invert__(self):
-        """自身の否定を返す単項演算子
+        """not演算子
 
-        @code
-          f = BoolFunc(n) # n は入力数
-          ...
+        :return: self の否定を表す論理関数を返す．
+
+        使用例
+        ::
+
+          # f は BoolFunc オブジェクト
           g = ~f
-        @endcode
-        という風に使う．
         """
         return BoolFunc(self.input_num,
                         val_list=[~v for v in self.__tv_list],
@@ -339,74 +340,77 @@ class BoolFunc:
     def __and__(self, other):
         """AND演算子
 
-        @code
-          f1 = BoolFunc(2)
-          f2 = BoolFunc(2)
+        :param other: 他方のオペランド
+        :return: self と other の論理積を表す関数を返す．
+
+        other.input_num は self.input_num と等しくなければならない．
+
+        使用例
+        ::
+
+          # f1, f2 は BoolFunc オブジェクト
           g = f1 & f2
-        @endcode
-        という風に使う．
         """
-        def val(f1, f2, p):
-            ival1 = f1.__tv_list[p]
-            ival2 = f2.__tv_list[p]
-            return ival1 & ival2
+        assert isinstance(other, BoolFunc)
         assert self.input_num == other.__input_num
-        nexp = 1 << self.input_num
         return BoolFunc(self.input_num,
-                        val_list=[val(self, other, p) for p in range(0, nexp)],
+                        val_list=[v1 & v2 for v1, v2 in zip(self.__tv_list,
+                                                            other.__tv_list)],
                         var_map=self.__var_map)
 
     def __or__(self, other):
         """OR演算子
 
-        @code
-          f1 = BoolFunc(2)
-          f2 = BoolFunc(2)
+        :param other: 他方のオペランド
+        :return: self と other の論理和を表す関数を返す．
+
+        other.input_num は self.input_num と等しくなければならない．
+
+        ::
+
+          # f1, f2 は BoolFunc オブジェクト
           g = f1 | f2
-        @endcode
-        という風に使う．
         """
-        def val(f1, f2, p):
-            ival1 = f1.__tv_list[p]
-            ival2 = f2.__tv_list[p]
-            return ival1 | ival2
+        assert isinstance(other, BoolFunc)
         assert self.input_num == other.__input_num
-        nexp = 1 << self.input_num
         return BoolFunc(self.input_num,
-                        val_list=[val(self, other, p) for p in range(0, nexp)],
+                        val_list=[v1 | v2 for v1, v2 in zip(self.__tv_list,
+                                                            other.__tv_list)],
                         var_map=self.__var_map)
 
     def __xor__(self, other):
         """XOR演算子
 
-        @code
-          f1 = BoolFunc(2)
-          f2 = BoolFunc(2)
+        :param other: 他方のオペランド
+        :return: self と other の排他的論理和を表す関数を返す．
+
+        other.input_num は self.input_num と等しくなければならない．
+
+        ::
+
+          # f1, f2 は BoolFunc オブジェクト
           g = f1 ^ f2
-        @endcode
-        という風に使う．
         """
-        def val(f1, f2, p):
-            ival1 = f1.__tv_list[p]
-            ival2 = f2.__tv_list[p]
-            return ival1 ^ ival2
+        assert isinstance(other, BoolFunc)
         assert self.input_num == other.__input_num
-        nexp = 1 << self.input_num
         return BoolFunc(self.input_num,
-                        val_list=[val(self, other, p) for p in range(0, nexp)],
+                        val_list=[v1 ^ v2 for v1, v2 in zip(self.__tv_list,
+                                                            other.__tv_list)],
                         var_map=self.__var_map)
 
     def compose(self, ifunc_list):
         """compose 演算
 
         :param ifunc_list: 入力関数のリスト
+        :return: 個々の入力を ifunc_list の要素に置き換えた関数を返す．
 
-        - 個々の入力を ifunc_list の要素に置き換えた関数を作る．
         - self は完全指定関数でなければならない．
         - ifunc_list の要素数は self.input_num と等しくなければならない．
         - ifunc_list の関数は全て同じ入力数でなければならない．
         """
         assert len(ifunc_list) == self.input_num
+        for ifunc in ifunc_list:
+            assert isinstance(ifunc, BoolFunc)
 
         if self.input_num == 0:
             # 0 入力関数の場合は置き換える変数がない．
@@ -435,24 +439,27 @@ class BoolFunc:
     def __eq__(self, other):
         """等価比較演算子
 
-        @code
-          f1 = BoolFunc(2)
-          f2 = BoolFunc(2)
+        :param other: 他方のオペランド
+        :return: self と other が同じ関数の時 True を返す．
+
+        ::
+
+          # f1, f2 は BoolFunc オブジェクト
           if f1 == f2:
              ...
-        @endcode
+
         という風に使う．
         """
+        assert isinstance(other, BoolFunc)
         assert self.input_num == other.input_num
 
-        nexp = 1 << self.input_num
-        for p in range(0, nexp):
-            if self.__tv_list[p] != other.__tv_list[p]:
+        for v1, v2 in zip(self.__tv_list, other.__tv_list):
+            if v1 != v2:
                 return False
         return True
 
     def gen_minterm_list(self):
-        """BoolFunc から onset, dcset, offset のリストを作る．"""
+        """BoolFunc から onset, dcset, offset の最小項のリストを作る．"""
         nexp = 1 << self.input_num
         onset = []
         dcset = []
@@ -636,7 +643,9 @@ class BoolFunc:
         fout.write('\\end{tabular}\n')
 
     @staticmethod
-    def gen_latex_tables(func_list, fname_list, *, var_map=None, fout=sys.stdout):
+    def gen_latex_tables(func_list, fname_list, *,
+                         var_map=None,
+                         fout=sys.stdout):
         """複数の関数を表す真理値表を LaTeX 形式で出力する．
 
         :param func_list: 関数のリスト
@@ -740,10 +749,7 @@ class BoolFunc:
         if var_map is None:
             var_map = self.__var_map
 
-        if fout is None:
-            fout = sys.stdout
-
-        dpic_hc(self, var_map, fout)
+        dpic_hc(self, var_map=var_map, fout=fout)
 
 
 if __name__ == '__main__':
