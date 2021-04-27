@@ -249,7 +249,10 @@ class BoolFunc:
         from lctools.parser import Parser
 
         parser = Parser(input_num, var_map)
-        return parser(expr_string)
+        f = parser(expr_string)
+        if not f:
+            parser.print_emsg()
+        return f
 
     def __init__(self, input_num, *,
                  val_list=None,
@@ -473,7 +476,7 @@ class BoolFunc:
                 offset.append(minterm)
         return onset, dcset, offset
 
-    def print_table(self, *, var_map=None, fout=None):
+    def print_table(self, *, var_map=None, fout=sys.stdout):
         """真理値表の形式で出力する．
 
         :param var_map: 変数名の辞書(名前付きパラメータ)
@@ -483,9 +486,6 @@ class BoolFunc:
         """
         if var_map is None:
             var_map = self.__var_map
-
-        if fout is None:
-            fout = sys.stdout
 
         nexp = 1 << self.input_num
 

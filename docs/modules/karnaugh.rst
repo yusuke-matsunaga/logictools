@@ -1,7 +1,7 @@
 .. _karnaugh:
 
 Karnaugh
-=====
+========
 
 .. automodule:: lctools.karnaugh
    :members:
