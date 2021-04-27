@@ -211,7 +211,7 @@ class BoolFunc:
                         var_map=var_map)
 
     @staticmethod
-    def make_xor(input_num, *, var_map=None):
+    def make_xnor(input_num, *, var_map=None):
         """XNOR関数を作る．
 
         :param input_num: 入力数
