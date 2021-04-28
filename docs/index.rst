@@ -19,6 +19,7 @@ LCTools は L(ogic) C(ircuit) Tools の略で，
    :caption: Contents:
 
    function_tutorial
+   sop_tutorial
    modules/modules
 
 .. autosummary::
