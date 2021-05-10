@@ -8,19 +8,23 @@
 """
 
 import sys
+import os.path
 from lctools.state import State
+from graphviz import Digraph
 
 
 class Fsm:
-    """有限状態機械を表すクラス
-
-    :param input_list: 入力記号のリスト
-    :param output_list: 出力記号のリスト
-
-    この時点では状態をもたない．
-    """
+    """有限状態機械を表すクラス"""
 
     def __init__(self, input_list, output_list):
+        """初期化
+
+        :param input_list: 入力記号のリスト
+        :param output_list: 出力記号のリスト
+
+        この時点では状態をもたない．
+        """
+
         self.__input_list = tuple(input_list)
         self.__output_list = tuple(output_list)
         self.__state_list = list()
@@ -156,7 +160,7 @@ class Fsm:
                 fout.write(' ' * r2)
             fout.write('\n')
 
-    def gen_latex_table(self, fout=sys.stdout):
+    def gen_latex_table(self, *, fout=sys.stdout):
         """状態遷移表を LaTeX 形式で出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
@@ -180,7 +184,7 @@ class Fsm:
             fout.write('\\\\\\hline\n')
         fout.write('\\end{tabular}\n')
 
-    def gen_latex_compatible_table(self, fout=sys.stdout):
+    def gen_latex_compatible_table(self, *, fout=sys.stdout):
         """最小化のための両立テーブルを LaTeX 形式で出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
@@ -248,6 +252,37 @@ class Fsm:
 
         return new_fsm
 
+    def render_dot(self, *, filename=None):
+        """GraphVizを使って描画する．
+
+        :param filename: 画像ファイル名(名前付きオプション引数)
+
+        filenameが省略された場合，'fsm.png' が使用される．
+        """
+
+        if filename is None:
+            filename = 'fsm.png'
+
+        # ファイルの拡張子を得る．
+        root, ext = os.path.splitext(filename)
+        ext = ext[1:]
+
+        # 対象のグラフを作る．
+        g = Digraph(filename=root, format=ext)
+
+        # 状態を表すノードを作る．
+        for state in self.__state_list:
+            g.node(state.name)
+
+        # 状態遷移を表す枝を作る．
+        for state in self.__state_list:
+            for input_val in self.__input_list:
+                next_state, output_val = state.next(input_val)
+                label = '{}/{}'.format(input_val, output_val)
+                g.edge(state.name, next_state.name, label)
+
+        g.render()
+
 
 if __name__ == '__main__':
 
@@ -305,3 +340,5 @@ if __name__ == '__main__':
 
     print()
     new_fsm.gen_latex_compatible_table()
+
+    new_fsm.render_dot()

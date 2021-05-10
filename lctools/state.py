@@ -9,15 +9,18 @@
 
 class State:
     """有限状態機械の状態を表すクラス
-
-    :param id: ID番号
-    :param name: 状態名
-
-    状態名と次状態/出力記号の辞書を持つ．
-    辞書のキーは入力記号
     """
 
     def __init__(self, id, name):
+        """初期化
+
+        :param id: ID番号
+        :param name: 状態名
+
+        状態名と次状態/出力記号の辞書を持つ．
+        辞書のキーは入力記号
+        """
+
         self.__id = id
         self.__name = name
         self.__next_func = {}
