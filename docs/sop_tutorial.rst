@@ -264,3 +264,52 @@ Quine の定理により，最簡形積和形論理式は主項のみから構�
    mincov = MinCov(N)
 
 以降，各要素は要素番号(< N)を用いて指定される．
+最小被覆問題の被覆条件の追加は関数 `add_clause()` を用いる．
+
+::
+
+   mincov.add_clause([1, 2])
+   mincov.add_clause([1, 3, 4])
+   mincov.add_clause([2, 5, 6])
+   mincov.add_clause([7, 8, 9])
+   mincov.add_clause([4, 6, 8])
+
+被覆解を全て求めるには関数を `all_cover()` を用いる．
+
+::
+
+   for sol in mincov.all_cover():
+     print(sol)
+
+出力結果
+
+::
+
+   [1, 2, 4, 7]
+   [1, 2, 6, 7]
+   [1, 2, 7, 8]
+   ...
+   [2, 4, 7]
+   [2, 4, 8]
+   [2, 4, 9]
+
+このうちの要素数が最小の解のみを求める場合には `solve()` を用いる．
+
+::
+
+   for sol in mincov.solve():
+     print(sol)
+
+出力結果
+
+::
+
+   [1, 2, 8]
+   [1, 5, 8]
+   [1, 6, 7]
+   [1, 6, 8]
+   [1, 6, 9]
+   [2, 3, 8]
+   [2, 4, 7]
+   [2, 4, 8]
+   [2, 4, 9]
