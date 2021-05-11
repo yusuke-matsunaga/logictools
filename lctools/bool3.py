@@ -13,8 +13,20 @@ from enum import Enum
 
 
 class Bool3(Enum):
-    """
-    3値のブール値を表すクラス
+    """3値のブール値を表すクラス
+
+    _0 と _1 および _d を要素とする列挙型．
+    _1 と _0 は Python3 の組み込み型の True と False に対応する．
+    このクラスでは第３の値として _d (don't care) が定義されている．
+    _d は _0 もしくは _1 のどちらかの値を取るという意味で，
+    _d を含んだ演算の結果が不定の場合には結果も _d となる．
+    _0 との AND のように結果が決まる場合には _d との演算でも
+    結果が _0 または _1 に定まる場合もある．
+
+    もちろん，この３値の代数系はBool代数の基本律を満たしている．
+
+    文字列や数値からの変換関数 toBool3() を用いて Bool3 型へ変換
+    することもできる．
     """
     _d = 0
     _1 = 1
@@ -92,9 +104,66 @@ class Bool3(Enum):
         """大なりイコール比較演算子"""
         return self.value >= other.value
 
+def toBool3(arg):
+    """Bool3型へ変換する．
+
+    _0: 文字列'0'，数値0，ブール値False
+    _1: 文字列'1'，数値1，ブール値True
+    _d: 文字列'X'，'x'，'D'，'d'，'*'，'-'
+
+    それ以外の場合には例外(ValueError)が送出される．
+    """
+    if arg == '0' or arg == 0 or arg is False:
+        return Bool3._0
+    if arg == '1' or arg == 1 or arg is True:
+        return Bool3._1
+    if arg == 'X' or arg == 'x':
+        return Bool3._d
+    if arg == 'D' or arg == 'd':
+        return Bool3._d
+    if arg == '*' or arg == '-':
+        return Bool3._d
+    raise ValueError()
+
 
 if __name__ == '__main__':
     # テストコード
+
+    x = toBool3('0')
+    assert x == Bool3._0
+
+    x = toBool3(0)
+    assert x == Bool3._0
+
+    x = toBool3(False)
+    assert x == Bool3._0
+
+    x = toBool3('1')
+    assert x == Bool3._1
+
+    x = toBool3(1)
+    assert x == Bool3._1
+
+    x = toBool3(True)
+    assert x == Bool3._1
+
+    x = toBool3('X')
+    assert x == Bool3._d
+
+    x = toBool3('x')
+    assert x == Bool3._d
+
+    x = toBool3('D')
+    assert x == Bool3._d
+
+    x = toBool3('d')
+    assert x == Bool3._d
+
+    x = toBool3('*')
+    assert x == Bool3._d
+
+    x = toBool3('-')
+    assert x == Bool3._d
 
     b3_list = [Bool3._d, Bool3._0, Bool3._1]
 

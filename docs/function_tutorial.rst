@@ -123,12 +123,38 @@ XOR演算の真理値表は以下の通り
 また，列挙型の値はハッシュ可能であるのでPythonのdict
 のキーとして用いることもできる．
 
+文字列および数値から Bool3 型へ変換を行う関数として
+`lctools.toBool3()` を定義している．
+受け付ける値と結果は以下の表の通り．
+
+.. table::
+   :align: left
+   :widths: auto
+
+   ===== ========== ========
+   入力  入力の型   結果
+   ===== ========== ========
+   '0'   str        Bool3._0
+   0     int        Bool3._0
+   False bool       Bool3._0
+   '1'   str        Bool3._1
+   1     int        Bool3._1
+   True  bool       Bool3._1
+   'X'   str        Bool3._d
+   'x'   str        Bool3._d
+   'D'   str        Bool3._d
+   'd'   str        Bool3._d
+   '*'   str        Bool3._d
+   '-'   str        Bool3._d
+   ===== ========== ========
+
 
 論理関数(BoolFunc)
 ------------------
 
 論理関数を表すには `lctools.BoolFunc` を用いる．
-`BoolFunc` は内部では :math:`2^n` 個の `Bool3` を持つ(nは入力数)．
+`BoolFunc` は内部では :math:`2^n` 個の `Bool3`
+を持つ( :math:`n` は入力数)．
 そのため，多くの入力を持つ関数を扱うことはできない．
 
 
