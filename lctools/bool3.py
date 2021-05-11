@@ -27,6 +27,10 @@ class Bool3(Enum):
 
     文字列や数値からの変換関数 toBool3() を用いて Bool3 型へ変換
     することもできる．
+
+    通常の論理演算子 ~, &, |, ^ を用いてBool3どうしの論理演算を行なう
+    ことができる．また，右辺か左辺のどちらか一方でも Bool3 型ならば，
+    上記の文字列や数値から Bool3 に変換を行って論理演算を行なうことができる．
     """
     _d = 0
     _1 = 1
@@ -45,7 +49,17 @@ class Bool3(Enum):
 
     def __and__(self, other):
         """AND 演算子"""
-        assert isinstance(other, Bool3)
+        other = toBool3(other)
+        if self == Bool3._0 or other == Bool3._0:
+            return Bool3._0
+        elif self == Bool3._1 and other == Bool3._1:
+            return Bool3._1
+        else:
+            return Bool3._d
+
+    def __rand__(self, other):
+        """AND 演算子(右辺がBool3)"""
+        other = toBool3(other)
         if self == Bool3._0 or other == Bool3._0:
             return Bool3._0
         elif self == Bool3._1 and other == Bool3._1:
@@ -55,7 +69,17 @@ class Bool3(Enum):
 
     def __or__(self, other):
         """OR 演算子"""
-        assert isinstance(other, Bool3)
+        other = toBool3(other)
+        if self == Bool3._1 or other == Bool3._1:
+            return Bool3._1
+        elif self == Bool3._0 and other == Bool3._0:
+            return Bool3._0
+        else:
+            return Bool3._d
+
+    def __ror__(self, other):
+        """OR 演算子(右辺がBool3)"""
+        other = toBool3(other)
         if self == Bool3._1 or other == Bool3._1:
             return Bool3._1
         elif self == Bool3._0 and other == Bool3._0:
@@ -65,7 +89,21 @@ class Bool3(Enum):
 
     def __xor__(self, other):
         """XOR 演算子"""
-        assert isinstance(other, Bool3)
+        other = toBool3(other)
+        if self == Bool3._0 and other == Bool3._0:
+            return Bool3._0
+        elif self == Bool3._0 and other == Bool3._1:
+            return Bool3._1
+        elif self == Bool3._1 and other == Bool3._0:
+            return Bool3._1
+        elif self == Bool3._1 and other == Bool3._1:
+            return Bool3._0
+        else:
+            return Bool3._d
+
+    def __rxor__(self, other):
+        """XOR 演算子(右辺がBool3)"""
+        other = toBool3(other)
         if self == Bool3._0 and other == Bool3._0:
             return Bool3._0
         elif self == Bool3._0 and other == Bool3._1:
@@ -90,19 +128,24 @@ class Bool3(Enum):
 
     def __lt__(self, other):
         """小なり比較演算子"""
+        assert isinstance(other, Bool3)
         return self.value < other.value
 
     def __gt__(self, other):
         """大なり比較演算子"""
+        assert isinstance(other, Bool3)
         return self.value > other.value
 
     def __le__(self, other):
         """小なりイコール比較演算子"""
+        assert isinstance(other, Bool3)
         return self.value <= other.value
 
     def __ge__(self, other):
         """大なりイコール比較演算子"""
+        assert isinstance(other, Bool3)
         return self.value >= other.value
+
 
 def toBool3(arg):
     """Bool3型へ変換する．
@@ -113,6 +156,8 @@ def toBool3(arg):
 
     それ以外の場合には例外(ValueError)が送出される．
     """
+    if isinstance(arg, Bool3):
+        return arg
     if arg == '0' or arg == 0 or arg is False:
         return Bool3._0
     if arg == '1' or arg == 1 or arg is True:
@@ -124,67 +169,3 @@ def toBool3(arg):
     if arg == '*' or arg == '-':
         return Bool3._d
     raise ValueError()
-
-
-if __name__ == '__main__':
-    # テストコード
-
-    x = toBool3('0')
-    assert x == Bool3._0
-
-    x = toBool3(0)
-    assert x == Bool3._0
-
-    x = toBool3(False)
-    assert x == Bool3._0
-
-    x = toBool3('1')
-    assert x == Bool3._1
-
-    x = toBool3(1)
-    assert x == Bool3._1
-
-    x = toBool3(True)
-    assert x == Bool3._1
-
-    x = toBool3('X')
-    assert x == Bool3._d
-
-    x = toBool3('x')
-    assert x == Bool3._d
-
-    x = toBool3('D')
-    assert x == Bool3._d
-
-    x = toBool3('d')
-    assert x == Bool3._d
-
-    x = toBool3('*')
-    assert x == Bool3._d
-
-    x = toBool3('-')
-    assert x == Bool3._d
-
-    b3_list = [Bool3._d, Bool3._0, Bool3._1]
-
-    print('invert(~) 演算')
-    for val in b3_list:
-        print('~({}) = {}'.format(val, ~val))
-
-    print('')
-    print('and(&) 演算')
-    for val1 in b3_list:
-        for val2 in b3_list:
-            print('{} & {} = {}'.format(val1, val2, val1 & val2))
-
-    print('')
-    print('or(|) 演算')
-    for val1 in b3_list:
-        for val2 in b3_list:
-            print('{} | {} = {}'.format(val1, val2, val1 | val2))
-
-    print('')
-    print('xor(^) 演算')
-    for val1 in b3_list:
-        for val2 in b3_list:
-            print('{} ^ {} = {}'.format(val1, val2, val1 ^ val2))
