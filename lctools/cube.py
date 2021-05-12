@@ -7,45 +7,49 @@
 :Copyright: (C) 2017, 2019 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.bool3 import Bool3
+from lctools.bool3 import Bool3, toBool3
 
 
 class Cube:
     """キューブを表すクラス
 
-    :param pat_str: パタン文字列
-    :param input_num: 入力数(名前付きのオプション引数)
-
     意味的には Bool3 の列(シーケンス)
     入力数が高々10程度と仮定して符号なし整数１語で表す．
-
-    * input_num と pat_str のどちらか一方は指定されなければならない．
-    * input_num と pat_str の両方が指定された場合，pat_str の長さは
-      input_num と等しくなければならない．
-    * input_num のみが指定された場合の内容はすべてドントケアとなる．
-    * pat_str は '0'，'1'，'-' or '*' からなる．
-      '0'は否定，'1'は肯定のリテラル，'-' と '*' はその変数が現れな
-      いことを示す．
     """
-    def __init__(self, pat_str=None, *, input_num=None):
-        assert input_num is not None or pat_str is not None
-        if input_num is not None and pat_str is not None:
-            assert len(pat_str) == input_num
-        if input_num is None:
-            input_num = len(pat_str)
+    def __init__(self, arg):
+        """初期化
+
+        :param arg: パラメータ
+
+        arg は以下の３種類のうちいずれか
+        * int: 入力数を指定する．内容はすべてドントケアとなる．
+        * Bool3 のリスト:
+        * 文字列: 個々の文字は Bool3 に変換可能でなければならない．
+        値が `Bool3._0` の要素は否定のリテラル，
+        `Bool3._1` の要素は肯定のリテラルに対応する．
+        `Bool3._d` の要素はこのキューブで用いられていないことを示す．
+        """
+        if isinstance(arg, int):
+            input_num = arg
+            lits = [Bool3._d for _ in range(input_num)]
+        elif isinstance(arg, list) or isinstance(arg, tuple) or isinstance(arg, str):
+            input_num = len(arg)
+            lits = [toBool3(x) for x in arg]
+        else:
+            raise TypeError
+
         self.__input_num = input_num
         self.__body = 0
-        if pat_str:
-            for i in range(input_num):
-                pat = pat_str[i]
-                if pat == '0':
-                    self.set_negliteral(i)
-                elif pat == '1':
-                    self.set_posliteral(i)
-                elif pat == '-' or pat == '*':
-                    self.clr_literal(i)
-                else:
-                    assert False
+        for i in range(input_num):
+            lit = lits[i]
+            if lit == Bool3._0:
+                self.set_negliteral(i)
+            elif lit == Bool3._1:
+                self.set_posliteral(i)
+            elif lit == Bool3._d:
+                self.clr_literal(i)
+            else:
+                assert False
 
     def set_posliteral(self, pos):
         """pos 番目の変数を正のリテラルに設定する．
@@ -70,8 +74,7 @@ class Cube:
 
     def contain(self, other):
         """ 包含関係を調べる．"""
-        assert isinstance(self, Cube)
-        assert isinstance(other, Cube)
+        other = toCube(other)
         assert self.input_num == other.input_num
         for i in range(self.input_num):
             val_a = self[i]
@@ -125,6 +128,7 @@ class Cube:
         :param val: 値 ( Bool3 )
         """
         assert 0 <= pos < self.input_num
+        val = toBool3(val)
         sft = self.__shift(pos)
         msk = 3 << sft
         self.__body &= ~msk
@@ -145,7 +149,7 @@ class Cube:
         2つのキューブが隣接していなかった場合，None を返す．
         純粋な論理和ではないので注意
         """
-        assert isinstance(other, Cube)
+        other = toCube(other)
         assert self.input_num == other.input_num
         nd = 0
         ans_pat = ""
@@ -165,13 +169,13 @@ class Cube:
             else:
                 return None
         if nd == 1:
-            return Cube(pat_str=ans_pat)
+            return Cube(ans_pat)
         else:
             return None
 
     def __eq__(self, other):
         """等価比較演算子"""
-        assert isinstance(other, Cube)
+        other = toCube(other)
         assert self.input_num == other.input_num
         for i in range(self.input_num):
             val_a = self[i]
@@ -214,8 +218,7 @@ class Cube:
 
     def __comp(self, other):
         """比較関数"""
-        assert isinstance(self, Cube)
-        assert isinstance(other, Cube)
+        other = toCube(other)
         assert self.input_num == other.input_num
         for i in range(self.input_num):
             val_a = self[i]
@@ -236,16 +239,12 @@ class Cube:
         :param var_map: 変数名の辞書(名前つきのオプション引数)
         """
         if var_map is None:
-            var_map = {}
-            for i in range(self.input_num):
-                var_map[i] = 'x_{}'.format(i + 1)
+            var_map = self.__default_varmap()
         cube_str = ""
         for i in range(self.input_num):
             val = self[i]
-            if val == Bool3._0:
-                cube_str += '\\bar{{{}}}'.format(var_map[i])
-            elif val == Bool3._1:
-                cube_str += '{}'.format(var_map[i])
+            var = var_map[i]
+            cube_str += Cube.__latex_lit(val, var)
         if cube_str == '':
             cube_str = '1'
         return cube_str
@@ -256,23 +255,18 @@ class Cube:
         :param var_map: 変数名の辞書(名前付きのオプション引数)
         """
         if var_map is None:
-            var_map = {}
-            for i in range(self.input_num):
-                var_map[i] = 'x_{}'.format(i + 1)
-        cube_str = '('
-        plus = ''
+            var_map = self.__default_varmap()
+        lit_list = []
         for i in range(self.input_num):
             val = self[i]
-            if val == Bool3._1:
-                cube_str += plus
-                plus = ' + '
-                cube_str += '\\bar{{{}}}'.format(var_map[i])
-            elif val == Bool3._0:
-                cube_str += plus
-                plus = ' + '
-                cube_str += '{}'.format(var_map[i])
-        cube_str += ')'
-        return cube_str
+            if val != Bool3._d:
+                var = var_map[i]
+                lit = Cube.__latex_lit(~val, var)
+                lit_list.append(lit)
+        if len(lit_list) == 0:
+            return '0'
+
+        return '(' + ' + '.join(lit_list) + ')'
 
     def __str__(self):
         """内容を表す文字列を作る．"""
@@ -287,14 +281,45 @@ class Cube:
                 ans += '-'
         return ans
 
+    @staticmethod
+    def __latex_lit(val, var):
+        """LaTeX用のリテラルを表す文字列を作る．
+
+        :param val: 値(Bool3)
+        :param var: 変数名(str)
+        :return: リテラル用の文字列を返す．
+
+        val が Bool3._d の時は空文字列を返す．
+        """
+        if val == Bool3._0:
+            return '\\bar{{{}}}'.format(var)
+        elif val == Bool3._1:
+            return var
+        else:
+            return ''
+
+    def __default_varmap(self):
+        """デフォルトのvar_mapを作る．"""
+        return {i:'x_{}'.format(i + 1) for i in range(self.input_num)}
+
     def __shift(self, pos):
         """__body 中のシフト量を計算する．"""
         return (self.input_num - pos - 1) * 2
 
 
+def toCube(arg):
+    """Cube型へ変換する
+
+    変換できない時は TypeError 例外を送出する．
+    """
+    if isinstance(arg, Cube):
+        return arg
+    return Cube(arg)
+
+
 if __name__ == '__main__':
 
-    c1 = Cube(input_num=4)
+    c1 = Cube(4)
     print('c1 = {}: {}'.format(c1, c1.latex_str()))
 
     c2 = Cube('01--')
