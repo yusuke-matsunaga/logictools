@@ -150,9 +150,29 @@ class Bool3(Enum):
 def toBool3(arg):
     """Bool3型へ変換する．
 
-    _0: 文字列'0'，数値0，ブール値False
-    _1: 文字列'1'，数値1，ブール値True
-    _d: 文字列'X'，'x'，'D'，'d'，'*'，'-'
+    :param arg: 入力パラメータ
+
+    .. table::
+      :align: left
+      :widths: auto
+
+
+      ======== ===== ========================
+      arg の値 型     変換後のBool3
+      ======== ===== ========================
+      '0'      str    _0
+      0        int    _0
+      False    bool   _0
+      '1'      str    _1
+      1        int    _1
+      True     bool   _1
+      'X'      str    _d
+      'x'      str    _d
+      'D'      str    _d
+      'd'      str    _d
+      '*'      str    _d
+      '-'      str    _d
+      ======== ===== ========================
 
     それ以外の場合には例外(ValueError)が送出される．
     """
