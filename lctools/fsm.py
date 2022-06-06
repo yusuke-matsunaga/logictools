@@ -11,6 +11,7 @@ import sys
 import os.path
 from lctools.state import State
 from graphviz import Digraph
+from dot2tex import dot2tex
 
 
 class Fsm:
@@ -50,7 +51,10 @@ class Fsm:
         return (id1, id2, phase)
 
     def minimize(self):
-        """最小化を行う．"""
+        """最小化を行う．
+
+        :return: 最小化した機械を返す．
+        """
         self.__mark_dict = dict()
         phase = 0
         ns = len(self.__state_list)
@@ -100,24 +104,20 @@ class Fsm:
 
         # 最小化したFSMを作る．
         new_fsm = Fsm(self.__input_list, self.__output_list)
-        red_map = dict()
+        # 今の機械の状態と新しい状態の対応付けを持つ辞書
+        state_map = dict()
         for i1 in range(0, ns - 1):
             s = self.__state_list[i1]
-            if s in red_map:
+            if s in state_map:
+                # 等価状態がある．
                 continue
+            s1 = new_fsm.new_state(s.name)
+            state_map[s] = s1
             for i2 in range(i1 + 1, ns):
                 t = self.__state_list[i2]
                 key = Fsm.__key(s, t, self.__max_phase - 1)
                 if self.__mark_dict[key]:
-                    red_map[t] = s
-        state_map = dict()
-        for s in self.__state_list:
-            if s in red_map:
-                s0 = red_map[s]
-                state_map[s] = state_map[s0]
-            else:
-                s1 = new_fsm.new_state(s.name)
-                state_map[s] = s1
+                    state_map[t] = s1
         for s in self.__state_list:
             s1 = state_map[s]
             for i in self.__input_list:
@@ -189,9 +189,16 @@ class Fsm:
                 fout.write(' ' * r2)
             fout.write('\n')
 
-    def gen_latex_table(self, *, fout=sys.stdout):
+    def gen_latex_table(self, *,
+                        state_label='states',
+                        input_label='inputs',
+                        no_backslash=False,
+                        fout=sys.stdout):
         """状態遷移表を LaTeX 形式で出力する．
 
+        :param state_label: 左上隅の左下側のラベル
+        :param input_label: 左上隅の右上側のラベル．
+        :param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略されば場合には標準出力を用いる．
@@ -200,6 +207,9 @@ class Fsm:
         fout.write('|c' * len(self.__input_list))
         fout.write('|}\n')
         fout.write('\\hline\n')
+        if not no_backslash:
+            fout.write('\\backslashbox{{{}}}{{{}}}'.format(
+                state_label, input_label))
         for input_val in self.__input_list:
             fout.write(' & ')
             fout.write(input_val)
@@ -222,6 +232,10 @@ class Fsm:
         """
         self.minimize()
         for phase in range(self.__max_phase):
+            fout.write('\n')
+            fout.write('\\vspace{1cm}')
+            fout.write('Step\#{}\n'.format(phase + 1))
+            fout.write('\n')
             fout.write('\\begin{tabular}{|c||')
             n = len(self.__state_list)
             for i in range(0, n - 1):
@@ -281,23 +295,37 @@ class Fsm:
 
         return new_fsm
 
-    def render_dot(self, *, filename=None):
-        """GraphVizを使って描画する．
+    def gen_dot_diagram(self, *, fout=sys.stdout):
+        """GraphVizを使って状態遷移図を表す dot コードを出力する．
 
-        :param filename: dotファイル名(名前付きオプション引数)
+        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
-        filenameが省略された場合，'fsm.dot' が使用される．
+        fout が省略された場合，標準出力が使用される．
         """
 
-        if filename is None:
-            filename = 'fsm.dot'
+        dotcode = self._dot_code()
+        fout.write(dotcode)
 
-        # ファイルの拡張子を得る．
-        root, ext = os.path.splitext(filename)
-        ext = ext[1:]
+    def gen_latex_diagram(self, *, fout=sys.stdout):
+        """GraphVizを使って状態遷移図を表す latex コードを出力する．
+
+        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+
+        fout が省略された場合，標準出力が使用される．
+        """
+
+        dotcode = self._dot_code()
+        texcode = dot2tex(dotcode, texmode='raw')
+        fout.write(texcode)
+
+    def _dot_code(self):
+        """Graphviz を使って状態遷移図を表すdotコードを作る．
+
+        :return: dot コードを表す文字列を返す．
+        """
 
         # 対象のグラフを作る．
-        g = Digraph(filename=root, format=ext)
+        g = Digraph()
 
         # 状態を表すノードを作る．
         for state in self.__state_list:
@@ -310,8 +338,7 @@ class Fsm:
                 label = '{}/{}'.format(input_val, output_val)
                 g.edge(state.name, next_state.name, label)
 
-        with open(filename, 'wt') as fout:
-            print(g, file=fout)
+        return g.source
 
 
 if __name__ == '__main__':
@@ -371,4 +398,4 @@ if __name__ == '__main__':
     print()
     new_fsm.gen_latex_compatible_table()
 
-    new_fsm.render_dot()
+    new_fsm.gen_latex_diagram()
