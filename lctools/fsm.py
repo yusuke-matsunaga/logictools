@@ -98,6 +98,35 @@ class Fsm:
                 break
         self.__max_phase = phase + 1
 
+        # 最小化したFSMを作る．
+        new_fsm = Fsm(self.__input_list, self.__output_list)
+        red_map = dict()
+        for i1 in range(0, ns - 1):
+            s = self.__state_list[i1]
+            if s in red_map:
+                continue
+            for i2 in range(i1 + 1, ns):
+                t = self.__state_list[i2]
+                key = Fsm.__key(s, t, self.__max_phase - 1)
+                if self.__mark_dict[key]:
+                    red_map[t] = s
+        state_map = dict()
+        for s in self.__state_list:
+            if s in red_map:
+                s0 = red_map[s]
+                state_map[s] = state_map[s0]
+            else:
+                s1 = new_fsm.new_state(s.name)
+                state_map[s] = s1
+        for s in self.__state_list:
+            s1 = state_map[s]
+            for i in self.__input_list:
+                t, o = s.next(i)
+                t1 = state_map[t]
+                s1.set_next(i, t1, o)
+
+        return new_fsm
+
     def print_table(self, *, fout=sys.stdout):
         """状態遷移表を出力する．
 
@@ -213,7 +242,8 @@ class Fsm:
                     else:
                         fout.write('---')
                 if i < n - 1:
-                    fout.write(' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'.format(n - i - 1, i + 2))
+                    fout.write(
+                        ' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'.format(n - i - 1, i + 2))
                 else:
                     fout.write(' \\\\ \\hline \\hline\n')
             fout.write(' ')
@@ -236,7 +266,6 @@ class Fsm:
         new_output_list = [output_map[i] for i in self.__output_list]
         new_fsm = Fsm(new_input_list, new_output_list)
         state_dict = {}
-        new_state_list = []
         for state in self.__state_list:
             state1 = new_fsm.new_state(state_map[state.name])
             state_dict[state.name] = state1
@@ -255,13 +284,13 @@ class Fsm:
     def render_dot(self, *, filename=None):
         """GraphVizを使って描画する．
 
-        :param filename: 画像ファイル名(名前付きオプション引数)
+        :param filename: dotファイル名(名前付きオプション引数)
 
-        filenameが省略された場合，'fsm.png' が使用される．
+        filenameが省略された場合，'fsm.dot' が使用される．
         """
 
         if filename is None:
-            filename = 'fsm.png'
+            filename = 'fsm.dot'
 
         # ファイルの拡張子を得る．
         root, ext = os.path.splitext(filename)
@@ -281,7 +310,8 @@ class Fsm:
                 label = '{}/{}'.format(input_val, output_val)
                 g.edge(state.name, next_state.name, label)
 
-        g.render()
+        with open(filename, 'wt') as fout:
+            print(g, file=fout)
 
 
 if __name__ == '__main__':

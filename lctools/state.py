@@ -7,6 +7,7 @@
 :copyright: Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.
 """
 
+
 class State:
     """有限状態機械の状態を表すクラス
     """
