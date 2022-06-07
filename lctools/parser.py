@@ -63,10 +63,10 @@ class Parser:
         for varid, name in self.__varmap.items():
             self.__idmap[name] = varid
             assert varid < input_num
-
         self.__buf_str = ""
         self.__token_list = list()
         self.__rpos = 0
+        self.__first = True
         self.__emsg_list = list()
 
     def __call__(self, expr_str):
@@ -78,6 +78,7 @@ class Parser:
         self.__token_list = list()
         self.__rpos = 0
         if not self.__lex_analyze(expr_str):
+            self.print_emsg()
             return None
 
         return self.__parse_expr(None)
@@ -93,15 +94,16 @@ class Parser:
         rpos = 0
         token_list = list()
         self.__buf_str = ""
+        self.__first = True
         while rpos < epos:
             # 一文字読み出す．
             c = expr_str[rpos]
             rpos += 1
 
-            if c == '0':
+            if self.__first and c == '0':
                 self.__lex_flush_buf()
                 self.__token_list.append(Token('0'))
-            elif c == '1':
+            elif self.__first and c == '1':
                 self.__lex_flush_buf()
                 self.__token_list.append(Token('1'))
             elif c == '(':
@@ -137,11 +139,13 @@ class Parser:
             elif c == ' ' or c == '\t':
                 self.__lex_flush_buf()
             else:
+                self.__first = False
                 self.__buf_str += c
         self.__lex_flush_buf()
         return len(self.__emsg_list) == 0
 
     def __lex_flush_buf(self):
+        self.__first = True
         if self.__buf_str != "":
             # まず論理演算子のエイリアスのチェック
             tmp_str = self.__buf_str.lower()
@@ -201,19 +205,15 @@ class Parser:
     def __parse_primary(self):
         token = self.__read_token()
         if token.id == '0':
-            return BoolFunc.make_const0(self.__input_num,
-                                        var_map=self.__varmap)
+            return BoolFunc.make_const0(self.__input_num)
         if token.id == '1':
-            return BoolFunc.make_const1(self.__input_num,
-                                        var_map=self.__varmap)
+            return BoolFunc.make_const1(self.__input_num)
         if token.id == 'Var':
-            return BoolFunc.make_literal(self.__input_num, token.var_id,
-                                         var_map=self.__varmap)
+            return BoolFunc.make_literal(self.__input_num, token.var_id)
         if token.id == '~':
             token = self.__read_token()
             if token.id == 'Var':
-                func1 = BoolFunc.make_literal(self.__input_num, token.var_id,
-                                              var_map=self.__varmap)
+                func1 = BoolFunc.make_literal(self.__input_num, token.var_id)
             if token.id == '(':
                 func1 = self.__parse_expr(')')
             return ~func1
@@ -258,3 +258,14 @@ if __name__ == '__main__':
 
     if f2:
         f2.print_table()
+
+    var_map2 = {0:'x_0',
+                1:'x_1',
+                2:'x_2',
+                3:'x_3'}
+    parser2 = Parser(4, var_map2)
+    f3 = parser2('x_0 * x_1 + x_2 * x_3')
+    if f3:
+        f3.print_table()
+    else:
+        parser.print_emsg()
