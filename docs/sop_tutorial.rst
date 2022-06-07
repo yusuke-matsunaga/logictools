@@ -268,6 +268,23 @@ Cube は生成したあとでも内容を変更することが可能である．
 結果は :math:`(a + \bar{b})(b + \bar{c})` のようになる．
 
 
+積和標準形(最小項)の導出
+------------------------
+
+与えられた論理関数の最小項を得るには `BoolFunc.gen_minterm_list`
+を用いる．
+
+::
+
+   on, dc, off = f.gen_minterm_list()
+
+`on`, `dc`, `off` に関数 `f` のオンセット，ドントケアセット，
+オフセットを表す最小項のリストが返される．
+ここで，最小項は `Cube` のインスタンスとして表される．
+`f` が完全指定論理関数の場合(ドントケアを持たない場合)，
+`on` は積和標準形を表している．
+また， `off` を否定したものが和積標準形を表している．
+
 最簡形論理式の導出
 ------------------
 
@@ -277,77 +294,55 @@ Cube は生成したあとでも内容を変更することが可能である．
 主項の列挙
 ^^^^^^^^^^
 
-Quine の定理により，最簡形積和形論理式は主項のみから構成されるので，
+Quine の定理により，最簡積和形論理式は主項のみから構成されるので，
 まず最初に主項の列挙を行なう．
 そのためには `lctools.qm.gen_primes(minterm_list)` を用いる．
 ここで `minterm_list` は対象の論理関数の最小項のリストである．
+通常は前述の `gen_minterm_list` の結果の `on` と `dc` を連結
+したものが用いられる．
 結果として主項を表す `Cube` のリストが返される．
 
-通常は `minterm_list` としてオンセットの最小項のリストを与えるが，
-対象の関数がドントケアを含む不完全指定論理関数の場合には，
-オンセットとドントケアセットの最小項のリストを与える．
+論理関数の最適化
+^^^^^^^^^^^^^^^^
 
-最簡形を得るためには主項のなかからオンセットの最小項を被覆する
-最小被覆を求める必要がある．
-そのために `lctools.MinCov` を用いる．
-`MinCov` は `Cube` や `Cover` とは独立したクラスで，
-番号で表された要素の最小被覆を求める処理を行う．
-そのため `MinCov` オブジェクトの生成時に要素数を指定する．
+最簡積和形論理式を求めるには，
+`gen_minimum_cover(onset, primes)` を用いる．
+ここで `onset` はオンセットを表す最小項のリスト
+( `Cube` のリスト)，
+`primes` は主項のリスト( `Cube` のリスト)である．
+結果として最簡積和形論理式を表す `Cover` のリストが返される．
+たとえ，解が一つの場合でも結果はリストの形で返されるので注意すること．
 
-::
+例題
+^^^^^
 
-   from lctools import MinCov
-
-   N = 10
-   mincov = MinCov(N)
-
-以降，各要素は要素番号(< N)を用いて指定される．
-最小被覆問題の被覆条件の追加は関数 `add_clause()` を用いる．
+BoolFunc の形で与えられた論理関数 `f` に対する最簡形を求める
+サンプルコードを以下に示す．
 
 ::
 
-   mincov.add_clause([1, 2])
-   mincov.add_clause([1, 3, 4])
-   mincov.add_clause([2, 5, 6])
-   mincov.add_clause([7, 8, 9])
-   mincov.add_clause([4, 6, 8])
+   on, dc, off = f.gen_minterm_list()
 
-被覆解を全て求めるには関数を `all_cover()` を用いる．
+   # 主項の生成
+   primes = gen_primes(on + dc)
 
-::
+   # 主項を表示したカルノー図の生成
+   f.gen_latex_karnaugh(implicant_list=primes)
 
-   for sol in mincov.all_cover():
-     print(sol)
+   # 最簡形の生成
+   cover_list = gen_minimum_cover(on, primes)
 
-出力結果
+   # 個々の解とカルノー図の生成
+   for cover in cover_list:
+      f.gen_latex_karnaugh(implicant_list=cover.cube_list)
+      print(cover.latex_str())
 
-::
 
-   [1, 2, 4, 7]
-   [1, 2, 6, 7]
-   [1, 2, 7, 8]
-   ...
-   [2, 4, 7]
-   [2, 4, 8]
-   [2, 4, 9]
-
-このうちの要素数が最小の解のみを求める場合には `solve()` を用いる．
-
-::
-
-   for sol in mincov.solve():
-     print(sol)
-
-出力結果
-
-::
-
-   [1, 2, 8]
-   [1, 5, 8]
-   [1, 6, 7]
-   [1, 6, 8]
-   [1, 6, 9]
-   [2, 3, 8]
-   [2, 4, 7]
-   [2, 4, 8]
-   [2, 4, 9]
+なお，このコードでは LaTeX のソースコードが標準出力に出力されるので，
+実際には適切なファイルにリダイレクトする必要がある．
+このようにカルノー図を出力する際に `implicatn_list` オプションを指定す
+ることで，積項を表示することができる．
+`implicant_list` には `Cube` のリストを指定する．
+`gen_minimum_cover` の結果は `Cover` のリストで与えられるので，
+`Cover` から `Cube` のリストを取り出すためにメンバ `cube_list`
+を用いている．
