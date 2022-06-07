@@ -321,25 +321,56 @@ BoolFunc の形で与えられた論理関数 `f` に対する最簡形を求め
 
 ::
 
+   from lctools import BoolFunc, gen_primes, gen_minimum_cover
+
+
+   # 関数の生成
+   f = BoolFunc('1011011110101100')
+
+   # カルノー図の生成
+   with open('f_karnaugh.tex', 'wt') as fout:
+     f.gen_latex_karnaugh(fout=fout)
+
+この `f_karnaugh.tex` の結果は以下のようになる．
+
+.. image:: f_karnaugh.png
+
+
+::
+
    on, dc, off = f.gen_minterm_list()
 
    # 主項の生成
    primes = gen_primes(on + dc)
 
    # 主項を表示したカルノー図の生成
-   f.gen_latex_karnaugh(implicant_list=primes)
+   with open('f_primes.tex', 'wt') as fout:
+     f.gen_latex_karnaugh(implicant_list=primes, fout=fout)
+
+この `f_primes.tex` の結果は以下のようになる．
+
+.. image:: f_primes.png
+
+
+::
 
    # 最簡形の生成
    cover_list = gen_minimum_cover(on, primes)
 
    # 個々の解とカルノー図の生成
-   for cover in cover_list:
-      f.gen_latex_karnaugh(implicant_list=cover.cube_list)
-      print(cover.latex_str())
+   for i, cover in enumerate(cover_list):
+      with open('f_cover{}.tex'.format(i), 'wt') as fout:
+        f.gen_latex_karnaugh(implicant_list=cover.cube_list, fout=fout)
+        fout.write('${}$\n'.format(cover.latex_str()))
 
+この `cover_list` は3つの要素を持つ．
 
-なお，このコードでは LaTeX のソースコードが標準出力に出力されるので，
-実際には適切なファイルにリダイレクトする必要がある．
+.. image:: f_cover0.png
+
+.. image:: f_cover1.png
+
+.. image:: f_cover2.png
+
 このようにカルノー図を出力する際に `implicatn_list` オプションを指定す
 ることで，積項を表示することができる．
 `implicant_list` には `Cube` のリストを指定する．
