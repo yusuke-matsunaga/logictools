@@ -10,6 +10,8 @@
 import sys
 import os.path
 from lctools.state import State
+from lctools.boolfunc import BoolFunc
+from lctools.bool3 import Bool3
 from graphviz import Digraph
 from dot2tex import dot2tex
 
@@ -223,6 +225,55 @@ class Fsm:
             fout.write('\\\\\\hline\n')
         fout.write('\\end{tabular}\n')
 
+    def gen_latex_encoded_table(self, *,
+                                input_map,
+                                output_map,
+                                state_map,
+                                state_label='states',
+                                input_label='inputs',
+                                no_backslash=False,
+                                fout=sys.stdout):
+        """符号化された状態遷移表を LaTeX 形式で出力する．
+
+        :param dict input_map: 入力記号の符号割当
+        :param dict output_map: 出力記号の符号割当
+        :param dict state_map: 状態の符号割当
+        :param state_label: 左上隅の左下側のラベル
+        :param input_label: 左上隅の右上側のラベル．
+        :param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
+        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+
+        fout が省略された場合には標準出力を用いる．
+        """
+
+        def encoded_str(src, encoding_map):
+            vec = encoding_map[src]
+            ans = ''
+            for b in vec:
+                ans += '{}'.format(b)
+            return ans
+
+        fout.write('\\begin{tabular}{|l')
+        fout.write('|c' * len(self.__input_list))
+        fout.write('|}\n')
+        fout.write('\\hline\n')
+        if not no_backslash:
+            fout.write('\\backslashbox{{{}}}{{{}}}'.format(
+                state_label, input_label))
+        for input_val in self.__input_list:
+            fout.write(' & {}'.format(encoded_str(input_val, input_map)))
+        fout.write('\\\\\\hline\n')
+
+        for state in self.__state_list:
+            fout.write('{}'.format(encoded_str(state.name, state_map)))
+            for input_val in self.__input_list:
+                next_state, output_val = state.next(input_val)
+                ns_str = encoded_str(next_state.name, state_map)
+                o_str = encoded_str(output_val, output_map)
+                fout.write(' & {}/{}'.format(ns_str, o_str))
+            fout.write('\\\\\\hline\n')
+        fout.write('\\end{tabular}\n')
+
     def gen_latex_compatible_table(self, *, fout=sys.stdout):
         """最小化のための両立テーブルを LaTeX 形式で出力する．
 
@@ -234,7 +285,7 @@ class Fsm:
         for phase in range(self.__max_phase):
             fout.write('\n')
             fout.write('\\vspace{1cm}')
-            fout.write('Step\#{}\n'.format(phase + 1))
+            fout.write(r'Step\#{}\n'.format(phase + 1))
             fout.write('\n')
             fout.write('\\begin{tabular}{|c||')
             n = len(self.__state_list)
@@ -257,7 +308,7 @@ class Fsm:
                         fout.write('---')
                 if i < n - 1:
                     fout.write(
-                        ' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'.format(n - i - 1, i + 2))
+                        r' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'.format(n - i - 1, i + 2))
                 else:
                     fout.write(' \\\\ \\hline \\hline\n')
             fout.write(' ')
@@ -267,6 +318,66 @@ class Fsm:
                 fout.write(s.name)
             fout.write('\\\\\n \\hline')
             fout.write('\\end{tabular}\n')
+
+    def extract_functions(self, *,
+                          input_map,
+                          output_map,
+                          state_map):
+        """符号割当を行って次状態関数，出力関数を取り出す．
+
+        :param input_map: 入力の符号割当
+        :param output_map: 出力の符号割当
+        :param state_map: 状態の符号割当
+        :return 次状態関数，出力関数のリストを返す．
+        """
+
+        # 入力，出力，状態のビット長を得る．
+        input_vec = input_map[self.__input_list[0]]
+        ni = len(input_vec)
+        output_vec = output_map[self.__output_list[0]]
+        no = len(output_vec)
+        state_vec = state_map[self.__state_list[0].name]
+        ns = len(state_vec)
+
+        # 状態遷移関数，出力関数を作る．
+        nfi = ni + ns
+        nfi_exp = 1 << nfi
+        delta_val_list = [
+            [Bool3._d for i in range(nfi_exp)] for j in range(ns)]
+        lambda_val_list = [
+            [Bool3._d for i in range(nfi_exp)] for j in range(no)]
+        for state in self.__state_list:
+            print('state = {}'.format(state.name))
+            state_vec = state_map[state.name]
+            pos0 = 0
+            for b in state_vec:
+                pos0 <<= 1
+                pos0 += b
+            print(' pos0 = {}'.format(pos0))
+            for input_val in self.__input_list:
+                print(' input = {}'.format(input_val))
+                input_vec = input_map[input_val]
+                pos = pos0
+                for b in input_vec:
+                    pos <<= 1
+                    pos += b
+                print('  pos = {}'.format(pos))
+                next_state, output_val = state.next(input_val)
+                next_vec = state_map[next_state.name]
+                output_vec = output_map[output_val]
+                for i in range(ns):
+                    if next_vec[i]:
+                        delta_val_list[i][pos] = Bool3._1
+                    else:
+                        delta_val_list[i][pos] = Bool3._0
+                for i in range(no):
+                    if output_vec[i]:
+                        lambda_val_list[i][pos] = Bool3._1
+                    else:
+                        lambda_val_list[i][pos] = Bool3._0
+        delta_list = [BoolFunc(delta_val_list[i]) for i in range(ns)]
+        lambda_list = [BoolFunc(lambda_val_list[i]) for i in range(no)]
+        return delta_list, lambda_list
 
     def encode(self, input_map, output_map, state_map):
         """符号化を行う．

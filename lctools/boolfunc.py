@@ -406,7 +406,7 @@ class BoolFunc:
         dcset = []
         offset = []
         for p in range(0, nexp):
-            minterm = Cube(input_num=self.input_num)
+            minterm = Cube(self.input_num)
             ival_list = []
             for i in range(self.input_num):
                 if p & (1 << i):
@@ -684,7 +684,7 @@ class BoolFunc:
     def __default_var_map(self, var_map):
         """デフォルトのvar_mapを作る．"""
         if var_map is None:
-            return {i:'x_{}'.format(i + 1) for i in range(self.input_num)}
+            return {i: 'x_{}'.format(i + 1) for i in range(self.input_num)}
         else:
             return var_map
 

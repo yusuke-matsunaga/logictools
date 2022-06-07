@@ -16,6 +16,7 @@ class Cube:
     意味的には Bool3 の列(シーケンス)
     入力数が高々10程度と仮定して符号なし整数１語で表す．
     """
+
     def __init__(self, arg):
         """初期化
 
@@ -300,7 +301,7 @@ class Cube:
 
     def __default_varmap(self):
         """デフォルトのvar_mapを作る．"""
-        return {i:'x_{}'.format(i + 1) for i in range(self.input_num)}
+        return {i: 'x_{}'.format(i + 1) for i in range(self.input_num)}
 
     def __shift(self, pos):
         """__body 中のシフト量を計算する．"""
