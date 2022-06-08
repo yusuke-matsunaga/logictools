@@ -10,6 +10,7 @@
 import sys
 from lctools.bool3 import Bool3, toBool3
 from lctools.cube import Cube
+import lctools.qm as qm
 
 
 class BoolFunc:
@@ -423,6 +424,28 @@ class BoolFunc:
             elif oval == Bool3._0:
                 offset.append(minterm)
         return onset, dcset, offset
+
+    @staticmethod
+    def gen_primes(onset):
+        """オンセットから主項のリストを作る．
+
+        :param list[Cube] onset: オンセットを表す最小項の Cube のリスト
+        :return: 主項の Cube のリストを返す．
+
+        対象が不完全指定論理関数の場合には onset にドントケアセットも含める必要がある．
+        """
+        return qm.gen_primes(onset)
+
+    def gen_minimum_cover(self):
+        """最簡積和形論理式を返す．
+        :return: 最簡積和形論理式を表す Cover のリストを返す．
+
+        最簡形が一つしかない場合でも結果はリストの形で返される．
+        """
+
+        on, dc, off = self.gen_minterm_list()
+        primes = qm.gen_primes(on + dc)
+        return qm.gen_minimum_cover(on, primes)
 
     def print_table(self, *, var_map=None, fout=sys.stdout):
         """真理値表の形式で出力する．

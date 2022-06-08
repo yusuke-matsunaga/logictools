@@ -12,5 +12,4 @@ from lctools.bool3 import Bool3, toBool3
 from lctools.boolfunc import BoolFunc
 from lctools.cube import Cube
 from lctools.cover import Cover
-from lctools.qm import gen_primes, gen_minimum_cover
 from lctools.fsm import Fsm
