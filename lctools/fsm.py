@@ -285,7 +285,7 @@ class Fsm:
         for phase in range(self.__max_phase):
             fout.write('\n')
             fout.write('\\vspace{1cm}')
-            fout.write(r'Step\#{}\n'.format(phase + 1))
+            fout.write('Step\#{}\n'.format(phase + 1))
             fout.write('\n')
             fout.write('\\begin{tabular}{|c||')
             n = len(self.__state_list)
@@ -308,7 +308,7 @@ class Fsm:
                         fout.write('---')
                 if i < n - 1:
                     fout.write(
-                        r' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'.format(n - i - 1, i + 2))
+                        ' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'.format(n - i - 1, i + 2))
                 else:
                     fout.write(' \\\\ \\hline \\hline\n')
             fout.write(' ')
@@ -347,21 +347,17 @@ class Fsm:
         lambda_val_list = [
             [Bool3._d for i in range(nfi_exp)] for j in range(no)]
         for state in self.__state_list:
-            print('state = {}'.format(state.name))
             state_vec = state_map[state.name]
             pos0 = 0
             for b in state_vec:
                 pos0 <<= 1
                 pos0 += b
-            print(' pos0 = {}'.format(pos0))
             for input_val in self.__input_list:
-                print(' input = {}'.format(input_val))
                 input_vec = input_map[input_val]
                 pos = pos0
                 for b in input_vec:
                     pos <<= 1
                     pos += b
-                print('  pos = {}'.format(pos))
                 next_state, output_val = state.next(input_val)
                 next_vec = state_map[next_state.name]
                 output_vec = output_map[output_val]

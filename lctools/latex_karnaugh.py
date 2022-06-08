@@ -198,7 +198,7 @@ def __gen_implicant_str(func, cube):
             return '\\implicantedge{1}{3}{9}{11}'
         elif pat == 0b0000110000001100:
             # x3x4
-            return '\\implicantedge{3}{2}{11}{12}'
+            return '\\implicantedge{3}{2}{11}{10}'
         elif pat == 0b0000000100000001:
             # ~x2~x3~x4
             return '\\implicantedge{0}{0}{8}{8}'
