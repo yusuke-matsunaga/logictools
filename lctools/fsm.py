@@ -8,7 +8,6 @@
 """
 
 import sys
-from lctools.state import State
 from lctools.boolfunc import BoolFunc
 from lctools.bool3 import Bool3
 from graphviz import Digraph
@@ -34,38 +33,82 @@ def label_str(src, label_map):
 class Fsm:
     """有限状態機械を表すクラス"""
 
-    def __init__(self, input_list, output_list):
+    def __init__(self, *,
+                 input_list,
+                 output_list,
+                 state_list):
         """初期化
 
-        :param input_list: 入力記号のリスト
-        :param output_list: 出力記号のリスト
+        :param list[str] input_list: 入力記号のリスト
+        :param list[str] output_list: 出力記号のリスト
+        :param list[str] state_list: 状態名のリスト
 
-        この時点では状態をもたない．
+        この時点では状態遷移をもたない．
         """
 
+        # 入力記号のリストと辞書を作る．
         self.__input_list = tuple(input_list)
+        self.__input_dict = dict()
+        for i, val in enumerate(self.__input_list):
+            self.__input_dict[val] = i
+        self.__ni = len(self.__input_list)
+        # 出力記号のリストと辞書を作る．
         self.__output_list = tuple(output_list)
-        self.__state_list = list()
+        self.__output_dict = dict()
+        for i, val in enumerate(self.__output_list):
+            self.__output_dict[val] = i
+        self.__no = len(self.__output_list)
+        # 状態名のリストと辞書を作る．
+        self.__state_list = tuple(state_list)
+        self.__state_dict = dict()
+        for i, val in enumerate(self.__state_list):
+            self.__state_dict[val] = i
+        self.__ns = len(self.__state_list)
+        # 状態遷移表を表す(1次元の)リストを作る．
+        self.__transition_array = [None for _ in range(self.__ni * self.__ns)]
 
-    def new_state(self, name):
-        """状態を追加する．
+    def add_transition(self, from_name, input_val, next_name, output_val):
+        """状態遷移を追加する．
 
-        :param name: 追加する状態名
-        :return: 追加した状態を返す．
+        :param str from_name: 遷移元の状態名
+        :param str input_val: 入力記号
+        :param str next_name: 遷移先の状態名
+        :param str output_val: 出力記号
         """
-        state = State(len(self.__state_list), name)
-        self.__state_list.append(state)
-        return state
+        assert input_val in self.__input_dict
+        assert output_val in self.__output_dict
+        assert from_name in self.__state_dict
+        assert next_name in self.__state_dict
+        input_id = self.__input_dict[input_val]
+        from_id = self.__state_dict[from_name]
+        next_id = self.__state_dict[next_name]
+        output_id = self.__output_dict[output_val]
+        self.__add_transition(from_id, input_id, next_id, output_id)
 
-    @staticmethod
-    def __key(s, t, phase):
-        """__mark_dict 用のキーを作る．"""
-        id1 = s.id
-        id2 = t.id
-        if id1 > id2:
-            id1 = t.id
-            id2 = s.id
-        return (id1, id2, phase)
+    def __add_transition(self, from_id, input_id, next_id, output_id):
+        key = from_id * self.__ni + input_id
+        assert self.__transition_array[key] is None
+        self.__transition_array[key] = (next_id, output_id)
+
+    def get_transition(self, from_name, input_val):
+        """状態遷移の情報を得る．
+
+        :param str from_name: 遷移元の状態名
+        :param str input_val: 入力
+        :return: (遷移先の状態名, 出力) のタプルを返す．
+        """
+        assert from_name in self.__state_dict
+        assert input_val in self.__input_dict
+        input_id = self.__input_dict[input_val]
+        from_id = self.__state_dict[from_name]
+        next_id, output_id = self.__get_transition(from_id, input_id)
+        next_name = self.__state_list[next_id]
+        output_val = self.__output_list[output_id]
+        return next_name, output_val
+
+    def __get_transition(self, s, i):
+        key = s * self.__ni + i
+        return self.__transition_array[key]
 
     def minimize(self):
         """最小化を行う．
@@ -74,22 +117,19 @@ class Fsm:
         """
         self.__mark_dict = dict()
         phase = 0
-        ns = len(self.__state_list)
-        for i1 in range(0, ns - 1):
-            s = self.__state_list[i1]
-            for i2 in range(i1 + 1, ns):
-                t = self.__state_list[i2]
-                key = Fsm.__key(s, t, phase)
-                for iv in self.__input_list:
-                    s1, o1 = s.next(iv)
-                    t1, o2 = t.next(iv)
+        for s in range(self.__ns - 1):
+            for t in range(s + 1, self.__ns):
+                key = (s, t, phase)
+                for i in range(self.__ni):
+                    s1, o1 = self.__get_transition(s, i)
+                    t1, o2 = self.__get_transition(t, i)
                     if o1 != o2:
                         self.__mark_dict[key] = False
                         break
                     if s1 != t1:
                         if key not in self.__mark_dict:
                             self.__mark_dict[key] = set()
-                        if s1.id > t1.id:
+                        if s1 > t1:
                             s1, t1 = t1, s1
                         self.__mark_dict[key].add((s1, t1))
                 assert key in self.__mark_dict
@@ -98,19 +138,17 @@ class Fsm:
         while True:
             phase += 1
             changed = False
-            for i1 in range(0, ns - 1):
-                s = self.__state_list[i1]
-                for i2 in range(i1 + 1, ns):
-                    t = self.__state_list[i2]
-                    key = Fsm.__key(s, t, phase - 1)
-                    new_key = Fsm.__key(s, t, phase)
+            for s in range(self.__ns - 1):
+                for t in range(s + 1, self.__ns):
+                    key = (s, t, phase - 1)
+                    new_key = (s, t, phase)
                     if not self.__mark_dict[key]:
                         self.__mark_dict[new_key] = False
                         continue
                     self.__mark_dict[new_key] = set()
                     for s1, t1 in self.__mark_dict[key]:
                         self.__mark_dict[new_key].add((s1, t1))
-                        key1 = Fsm.__key(s1, t1, phase - 1)
+                        key1 = (s1, t1, phase - 1)
                         if not self.__mark_dict[key1]:
                             self.__mark_dict[new_key] = False
                             changed = True
@@ -120,28 +158,31 @@ class Fsm:
         self.__max_phase = phase + 1
 
         # 最小化したFSMを作る．
-        new_fsm = Fsm(self.__input_list, self.__output_list)
-        # 今の機械の状態と新しい状態の対応付けを持つ辞書
         state_map = dict()
-        for i1 in range(0, ns - 1):
-            s = self.__state_list[i1]
+        new_state_list = list()
+        new_state_id_list = list()
+        for s in range(self.__ns):
             if s in state_map:
                 # 等価状態がある．
                 continue
-            s1 = new_fsm.new_state(s.name)
-            state_map[s] = s1
-            for i2 in range(i1 + 1, ns):
-                t = self.__state_list[i2]
-                key = Fsm.__key(s, t, self.__max_phase - 1)
+            s_name = self.__state_list[s]
+            new_id = len(new_state_list)
+            new_state_list.append(s_name)
+            new_state_id_list.append(s)
+            state_map[s] = new_id
+            for t in range(s + 1, self.__ns):
+                key = (s, t, self.__max_phase - 1)
                 if self.__mark_dict[key]:
-                    state_map[t] = s1
-        for s in self.__state_list:
+                    state_map[t] = new_id
+        new_fsm = Fsm(input_list=self.__input_list,
+                      output_list=self.__output_list,
+                      state_list=new_state_list)
+        for s in new_state_id_list:
             s1 = state_map[s]
-            for i in self.__input_list:
-                t, o = s.next(i)
+            for i in range(self.__ni):
+                t, o = self.__get_transition(s, i)
                 t1 = state_map[t]
-                s1.set_next(i, t1, o)
-
+                new_fsm.__add_transition(s1, i, t1, o)
         return new_fsm
 
     def print_table(self, *,
@@ -176,7 +217,7 @@ class Fsm:
         # 状態名の最大長さを求める．
         max_n = 0
         for state in self.__state_list:
-            n = len(label_str(state.name, state_dict))
+            n = len(label_str(state, state_dict))
             if max_n < n:
                 max_n = n
 
@@ -188,7 +229,7 @@ class Fsm:
         # 状態名の分の空白
         fout.write(' ' * max_n)
         for input_val in self.__input_list:
-            input_label = input_dict[input_val]
+            input_label = label_str(input_val, input_dict)
             # 各入力記号
             fout.write('|')
             r = max_ino - len(input_label)
@@ -198,21 +239,24 @@ class Fsm:
             fout.write(' ' * (r - r2))
         fout.write('\n')
 
-        for state in self.__state_list:
-            state_label = state_dict[state.name]
-            fout.write(state_label)
-            n = max_n - len(state_label)
+        for from_name in self.__state_list:
+            from_label = label_str(from_name, state_dict)
+            fout.write(from_label)
+            n = max_n - len(from_label)
             fout.write(' ' * n)
 
             for input_val in self.__input_list:
-                next_state, output_val = state.next(input_val)
-                r1 = max_n - len(next_state.name)
+                next_name, output_val = self.get_transition(
+                    from_name, input_val)
+                next_label = label_str(next_name, state_dict)
+                output_label = label_str(output_val, output_dict)
+                r1 = max_n - len(next_label)
                 fout.write('|')
                 fout.write(' ' * r1)
-                fout.write(state_dict[next_state.name])
+                fout.write(next_label)
                 fout.write('/')
-                fout.write(output_val)
-                r2 = max_o - len(output_dict[output_val])
+                fout.write(output_label)
+                r2 = max_o - len(output_label)
                 fout.write(' ' * r2)
             fout.write('\n')
 
@@ -249,11 +293,12 @@ class Fsm:
             fout.write(label_str(input_val, input_dict))
         fout.write('\\\\\\hline\n')
 
-        for state in self.__state_list:
-            fout.write(label_str(state.name, state_dict))
+        for from_name in self.__state_list:
+            fout.write(label_str(from_name, state_dict))
             for input_val in self.__input_list:
-                next_state, output_val = state.next(input_val)
-                ns_label = label_str(next_state.name, state_dict)
+                next_name, output_val = self.get_transition(
+                    from_name, input_val)
+                ns_label = label_str(next_name, state_dict)
                 o_label = label_str(output_val, output_dict)
                 fout.write(' & {}/{}'.format(ns_label, o_label))
             fout.write('\\\\\\hline\n')
@@ -299,10 +344,10 @@ class Fsm:
         fout.write('\\\\\\hline\n')
 
         for state in self.__state_list:
-            fout.write('{}'.format(encoded_str(state.name, state_map)))
+            fout.write('{}'.format(encoded_str(state, state_map)))
             for input_val in self.__input_list:
                 next_state, output_val = state.next(input_val)
-                ns_str = encoded_str(next_state.name, state_map)
+                ns_str = encoded_str(next_state, state_map)
                 o_str = encoded_str(output_val, output_map)
                 fout.write(' & {}/{}'.format(ns_str, o_str))
             fout.write('\\\\\\hline\n')
@@ -325,36 +370,37 @@ class Fsm:
             fout.write('Step\#{}\n'.format(phase + 1))
             fout.write('\n')
             fout.write('\\begin{tabular}{|c||')
-            n = len(self.__state_list)
-            for i in range(0, n - 1):
+            for i in range(0, self.__ns - 1):
                 fout.write('c|')
             fout.write('}\n')
             fout.write('\\cline{1-2}\n')
-            for i in range(1, n):
+            for i in range(1, self.__ns):
                 t = self.__state_list[i]
-                fout.write(label_str(t.name, state_dict))
+                fout.write(label_str(t, state_dict))
                 for j in range(0, i):
                     fout.write(' & ')
                     s = self.__state_list[j]
-                    key = Fsm.__key(s, t, phase)
+                    key = (j, i, phase)
                     x = self.__mark_dict[key]
                     if x:
-                        for s1, t1, in x:
+                        for s1_id, t1_id, in x:
+                            s1 = self.__state_list[s1_id]
+                            t1 = self.__state_list[t1_id]
                             s1_label = label_str(s1, state_dict)
                             t1_label = label_str(t1, state_dict)
                             fout.write(' ({}, {})'.format(s1_label, t1_label))
                     else:
                         fout.write('---')
-                if i < n - 1:
-                    fout.write(
-                        ' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'.format(n - i - 1, i + 2))
+                if i < self.__ns - 1:
+                    fmt_str = ' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'
+                    fout.write(fmt_str.format(self.__ns - i - 1, i + 2))
                 else:
                     fout.write(' \\\\ \\hline \\hline\n')
             fout.write(' ')
-            for i in range(0, n - 1):
+            for i in range(0, self.__ns - 1):
                 s = self.__state_list[i]
                 fout.write(' & ')
-                fout.write(label_str(s.name, stat_dict))
+                fout.write(label_str(s, state_dict))
             fout.write('\\\\\n \\hline')
             fout.write('\\end{tabular}\n')
 
@@ -367,7 +413,7 @@ class Fsm:
         :param input_map: 入力の符号割当
         :param output_map: 出力の符号割当
         :param state_map: 状態の符号割当
-        :return 次状態関数，出力関数のリストを返す．
+        :return: 次状態関数，出力関数のリストを返す．
         """
 
         # 入力，出力，状態のビット長を得る．
@@ -375,7 +421,7 @@ class Fsm:
         ni = len(input_vec)
         output_vec = output_map[self.__output_list[0]]
         no = len(output_vec)
-        state_vec = state_map[self.__state_list[0].name]
+        state_vec = state_map[self.__state_list[0]]
         ns = len(state_vec)
 
         # 状態遷移関数，出力関数を作る．
@@ -386,7 +432,7 @@ class Fsm:
         lambda_val_list = [
             [Bool3._d for i in range(nfi_exp)] for j in range(no)]
         for state in self.__state_list:
-            state_vec = state_map[state.name]
+            state_vec = state_map[state]
             pos0 = 0
             for b in state_vec:
                 pos0 <<= 1
@@ -397,8 +443,8 @@ class Fsm:
                 for b in input_vec:
                     pos <<= 1
                     pos += b
-                next_state, output_val = state.next(input_val)
-                next_vec = state_map[next_state.name]
+                next_state, output_val = self.get_transition(state, input_val)
+                next_vec = state_map[next_state]
                 output_vec = output_map[output_val]
                 for i in range(ns):
                     if next_vec[i]:
@@ -414,7 +460,7 @@ class Fsm:
         lambda_list = [BoolFunc(lambda_val_list[i]) for i in range(no)]
         return delta_list, lambda_list
 
-    def encode(self, input_map, output_map, state_map):
+    def encode(self, *, input_map, output_map, state_map):
         """符号化を行う．
 
         :param input_map: 入力の符号割当
@@ -424,21 +470,20 @@ class Fsm:
         """
         new_input_list = [input_map[i] for i in self.__input_list]
         new_output_list = [output_map[i] for i in self.__output_list]
-        new_fsm = Fsm(new_input_list, new_output_list)
-        state_dict = {}
-        for state in self.__state_list:
-            state1 = new_fsm.new_state(state_map[state.name])
-            state_dict[state.name] = state1
+        new_state_list = [state_map[i] for i in self.__state_list]
+        new_fsm = Fsm(input_list=new_input_list,
+                      output_list=new_output_list,
+                      state_list=new_state_list)
 
         for state in self.__state_list:
-            state1 = state_dict[state.name]
+            new_state = state_map[state]
             for input_val in self.__input_list:
-                next_state, output_val = state.next(input_val)
+                next_state, output_val = self.get_transition(state, input_val)
                 new_input_val = input_map[input_val]
-                new_next_state = state_dict[next_state.name]
+                new_next_state = state_map[next_state]
                 new_output_val = output_map[output_val]
-                state1.set_next(new_input_val, new_next_state, new_output_val)
-
+                new_fsm.add_transition(new_state, new_input_val,
+                                       new_next_state, new_output_val)
         return new_fsm
 
     def gen_dot_diagram(self, *, fout=sys.stdout):
@@ -459,6 +504,9 @@ class Fsm:
                           fout=sys.stdout):
         """GraphVizを使って状態遷移図を表す latex コードを出力する．
 
+        :param dict[str, str] input_dict: 出力用の入力記号の辞書
+        :param dict[str, str] output_dict: 出力用の出力記号の辞書
+        :param dict[str, str] state_dict: 出力用の状態名の辞書
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略された場合，標準出力が使用される．
@@ -487,67 +535,64 @@ class Fsm:
 
         # 状態を表すノードを作る．
         for state in self.__state_list:
-            g.node(state.name, texlbl=label_str(state.name, state_dict))
+            g.node(state, texlbl=label_str(state, state_dict))
 
         # 状態遷移を表す枝を作る．
         for state in self.__state_list:
             for input_val in self.__input_list:
-                next_state, output_val = state.next(input_val)
+                next_state, output_val = self.get_transition(state, input_val)
                 input_label = label_str(input_val, input_dict)
                 output_label = label_str(output_val, output_dict)
                 label = '{}/{}'.format(input_label, output_label)
-                g.edge(state.name, next_state.name, "dummy", texlbl=label)
+                g.edge(state, next_state, "dummy", texlbl=label)
 
         return g.source
 
 
 if __name__ == '__main__':
 
-    i_0 = '0'
-    i_1 = '1'
-    input_list = (i_0, i_1)
-
-    o_a = 'a'
-    o_b = 'b'
-    o_c = 'c'
-    o_d = 'd'
-    o_e = 'e'
-    o_0 = '$\\epsilon$'
-
-    output_list = (o_a, o_b, o_c, o_d, o_e, o_0)
-
-    fsm = Fsm(input_list, output_list)
-    s0 = fsm.new_state('$S_0$')
-    s1 = fsm.new_state('$S_1$')
-    s11 = fsm.new_state('$S_{11}$')
-    s111 = fsm.new_state('$S_{111}$')
-
-    s0.set_next(i_0, s0, o_b)
-    s0.set_next(i_1, s1, o_0)
-
-    s1.set_next(i_0, s0, o_c)
-    s1.set_next(i_1, s11, o_0)
-
-    s11.set_next(i_0, s0, o_a)
-    s11.set_next(i_1, s111, o_0)
-
-    s111.set_next(i_0, s0, o_d)
-    s111.set_next(i_1, s0, o_e)
+    fsm = Fsm(input_list=('0', '1'),
+              output_list=('0', 'a', 'b', 'c', 'd', 'e'),
+              state_list=('s0', 's1', 's2', 's3'))
+    fsm.add_transition('s0', '0', 's0', 'b')
+    fsm.add_transition('s0', '1', 's1', '0')
+    fsm.add_transition('s1', '0', 's0', 'c')
+    fsm.add_transition('s1', '1', 's2', '0')
+    fsm.add_transition('s2', '0', 's0', 'a')
+    fsm.add_transition('s2', '1', 's3', '0')
+    fsm.add_transition('s3', '0', 's0', 'd')
+    fsm.add_transition('s3', '1', 's0', 'e')
 
     fsm.print_table()
 
     print('')
 
-    fsm.gen_latex_table()
+    output_map = {'a': '$a$', 'b': '$b$', 'c': '$c$',
+                  'd': '$d$', 'e': '$e$', '0': '$\epsilon$'}
+    state_map = {'s0': '$S_{abcde}$', 's1': '$S_{acde}$',
+                 's2': '$S_{ade}$', 's3': '$S_{de}$'}
+    fsm.gen_latex_table(output_dict=output_map,
+                        state_dict=state_map)
 
     print('')
 
-    input_map = {i_0: i_0, i_1: i_1}
-    output_map = {o_a: '001', o_b: '010', o_c: '011',
-                  o_d: '100', o_e: '101', o_0: '000'}
-    state_map = {s0.name: '00', s1.name: '01', s11.name: '10', s111.name: '11'}
+    output_map = {'a': '$a$', 'b': '$b$', 'c': '$c$',
+                  'd': '$d$', 'e': '$e$', '0': '$\epsilon$'}
+    state_map = {'s0': '$S_{abcde}$', 's1': '$S_{acde}$',
+                 's2': '$S_{ade}$', 's3': '$S_{de}$'}
+    fsm.gen_latex_diagram(output_dict=output_map,
+                          state_dict=state_map)
 
-    new_fsm = fsm.encode(input_map, output_map, state_map)
+    print('')
+
+    input_map = {'0': '0', '1': '1'}
+    output_map = {'a': '001', 'b': '010', 'c': '011',
+                  'd': '100', 'e': '101', '0': '000'}
+    state_map = {'s0': '00', 's1': '01', 's2': '10', 's3': '11'}
+
+    new_fsm = fsm.encode(input_map=input_map,
+                         output_map=output_map,
+                         state_map=state_map)
 
     new_fsm.print_table()
 
@@ -557,5 +602,3 @@ if __name__ == '__main__':
 
     print()
     new_fsm.gen_latex_compatible_table()
-
-    new_fsm.gen_latex_diagram()

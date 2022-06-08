@@ -269,7 +269,7 @@ class BoolFunc:
         assert len(ival_list) == self.input_num
         pos = 0
         for i in range(0, self.input_num):
-            if ival_list[i] == Bool3._1:
+            if toBool3(ival_list[i]) == Bool3._1:
                 pos += (1 << (self.input_num - i - 1))
         return self.__tv_list[pos]
 
@@ -368,6 +368,7 @@ class BoolFunc:
         ans = BoolFunc.make_const0(new_ni)
         nexp = 1 << self.input_num
         for p in range(0, nexp):
+            assert self.__tv_list[p] != Bool3._d
             if self.__tv_list[p] == Bool3._1:
                 p_func = BoolFunc.make_const1(new_ni)
                 for i in range(0, self.input_num):

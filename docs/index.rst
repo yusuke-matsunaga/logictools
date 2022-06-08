@@ -20,6 +20,8 @@ LCTools は L(ogic) C(ircuit) Tools の略で，
 
    function_tutorial
    sop_tutorial
+   mincov_tutorial
+   fsm_tutorial
    modules/modules
 
 .. autosummary::

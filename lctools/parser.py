@@ -17,6 +17,7 @@ class Token:
     :param str_rep: 文字列表現
     :param var_id: 変数番号
     """
+
     def __init__(self, token_id, str_rep=None, var_id=0):
         self.__id = token_id
         if str_rep:
@@ -53,16 +54,11 @@ class Parser:
     :param input_numm: 入力数
     :param var_map: 変数の辞書
     """
+
     def __init__(self, input_num, var_map):
         self.__input_num = input_num
         # コピーを作る．
         self.__varmap = dict(var_map)
-        # 逆向きの辞書を作る．
-        self.__idmap = dict()
-        max_id = 0
-        for varid, name in self.__varmap.items():
-            self.__idmap[name] = varid
-            assert varid < input_num
         self.__buf_str = ""
         self.__token_list = list()
         self.__rpos = 0
@@ -92,7 +88,7 @@ class Parser:
         """字句解析を行う．"""
         epos = len(expr_str)
         rpos = 0
-        token_list = list()
+        self.__token_list = list()
         self.__buf_str = ""
         self.__first = True
         while rpos < epos:
@@ -163,12 +159,12 @@ class Parser:
                 self.__token_list.append(Token('~', 'not'))
             else:
                 # それ以外は変数名のみOK
-                if self.__buf_str not in self.__idmap:
+                if self.__buf_str not in self.__varmap:
                     emsg = 'Error: {} is not found.'.format(self.__buf_str)
                     self.__emsg_list.append(emsg)
                     # ここでは無視
                 else:
-                    var_id = self.__idmap[self.__buf_str]
+                    var_id = self.__varmap[self.__buf_str]
                     tok = Token('Var', self.__buf_str, var_id)
                     self.__token_list.append(tok)
             self.__buf_str = ''
@@ -180,7 +176,8 @@ class Parser:
             if token is None or token.id == end_token:
                 return func
             if token.id != '+' and token.id != '^':
-                emsg = 'Error[parse_expr]: {}, unexpected'.format(token.to_string())
+                emsg = 'Error[parse_expr]: {}, unexpected'.format(
+                    token.to_string())
                 self.__emsg_list.append(emsg)
                 return None
             func1 = self.__parse_product()
@@ -220,7 +217,8 @@ class Parser:
         if token.id == '(':
             return self.__parse_expr(')')
 
-        emsg = 'Error[parse_primary]: {}, unexpected.'.format(token.to_string())
+        emsg = 'Error[parse_primary]: {}, unexpected.'.format(
+            token.to_string())
         self.__emsg_list.append(emsg)
         return None
 
@@ -259,10 +257,10 @@ if __name__ == '__main__':
     if f2:
         f2.print_table()
 
-    var_map2 = {0:'x_0',
-                1:'x_1',
-                2:'x_2',
-                3:'x_3'}
+    var_map2 = {0: 'x_0',
+                1: 'x_1',
+                2: 'x_2',
+                3: 'x_3'}
     parser2 = Parser(4, var_map2)
     f3 = parser2('x_0 * x_1 + x_2 * x_3')
     if f3:
