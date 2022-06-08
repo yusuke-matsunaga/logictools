@@ -425,16 +425,13 @@ class BoolFunc:
                 offset.append(minterm)
         return onset, dcset, offset
 
-    @staticmethod
-    def gen_primes(onset):
-        """オンセットから主項のリストを作る．
+    def gen_primes(self):
+        """主項のリストを作る．
 
-        :param list[Cube] onset: オンセットを表す最小項の Cube のリスト
         :return: 主項の Cube のリストを返す．
-
-        対象が不完全指定論理関数の場合には onset にドントケアセットも含める必要がある．
         """
-        return qm.gen_primes(onset)
+        on, dc, off = self.gen_minterm_list()
+        return qm.gen_primes(on + dc)
 
     def gen_minimum_cover(self):
         """最簡積和形論理式を返す．
