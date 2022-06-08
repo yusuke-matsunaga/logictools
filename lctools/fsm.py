@@ -8,12 +8,27 @@
 """
 
 import sys
-import os.path
 from lctools.state import State
 from lctools.boolfunc import BoolFunc
 from lctools.bool3 import Bool3
 from graphviz import Digraph
 from dot2tex import dot2tex
+
+
+def label_str(src, label_map):
+    """出力用のラベル文字列を得る．
+
+    :param str src: 元の文字列
+    :param dict[str, str] label_map: 変換用の辞書
+
+    label_map が None の場合は src を返す．
+    """
+    if label_map is None:
+        return src
+    else:
+        if src not in label_map:
+            print('{} is not found'.format(src))
+        return label_map[src]
 
 
 class Fsm:
@@ -129,31 +144,39 @@ class Fsm:
 
         return new_fsm
 
-    def print_table(self, *, fout=sys.stdout):
+    def print_table(self, *,
+                    input_dict=None,
+                    output_dict=None,
+                    state_dict=None,
+                    fout=sys.stdout):
         """状態遷移表を出力する．
 
+        :param dict[str, str] input_dict: 出力用の入力記号の辞書
+        :param dict[str, str] output_dict: 出力用の出力記号の辞書
+        :param dict[str, str] state_dict: 出力用の状態名の辞書
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略されば場合には標準出力を用いる．
         """
+
         # 入力記号の最大長さを求める．
         max_i = 0
         for input_val in self.__input_list:
-            n = len(input_val)
+            n = len(label_str(input_val, input_dict))
             if max_i < n:
                 max_i = n
 
         # 出力記号の最大長さを求める．
         max_o = 0
         for output_val in self.__output_list:
-            n = len(output_val)
+            n = len(label_str(output_val, output_dict))
             if max_o < n:
                 max_o = n
 
         # 状態名の最大長さを求める．
         max_n = 0
         for state in self.__state_list:
-            n = len(state.name)
+            n = len(label_str(state.name, state_dict))
             if max_n < n:
                 max_n = n
 
@@ -165,18 +188,20 @@ class Fsm:
         # 状態名の分の空白
         fout.write(' ' * max_n)
         for input_val in self.__input_list:
+            input_label = input_dict[input_val]
             # 各入力記号
             fout.write('|')
-            r = max_ino - len(input_val)
+            r = max_ino - len(input_label)
             r2 = r // 2
             fout.write(' ' * r2)
-            fout.write(input_val)
+            fout.write(input_label)
             fout.write(' ' * (r - r2))
         fout.write('\n')
 
         for state in self.__state_list:
-            fout.write(state.name)
-            n = max_n - len(state.name)
+            state_label = state_dict[state.name]
+            fout.write(state_label)
+            n = max_n - len(state_label)
             fout.write(' ' * n)
 
             for input_val in self.__input_list:
@@ -184,20 +209,26 @@ class Fsm:
                 r1 = max_n - len(next_state.name)
                 fout.write('|')
                 fout.write(' ' * r1)
-                fout.write(next_state.name)
+                fout.write(state_dict[next_state.name])
                 fout.write('/')
                 fout.write(output_val)
-                r2 = max_o - len(output_val)
+                r2 = max_o - len(output_dict[output_val])
                 fout.write(' ' * r2)
             fout.write('\n')
 
     def gen_latex_table(self, *,
+                        input_dict=None,
+                        output_dict=None,
+                        state_dict=None,
                         state_label='states',
                         input_label='inputs',
                         no_backslash=False,
                         fout=sys.stdout):
         """状態遷移表を LaTeX 形式で出力する．
 
+        :param dict[str, str] input_dict: 出力用の入力記号の辞書
+        :param dict[str, str] output_dict: 出力用の出力記号の辞書
+        :param dict[str, str] state_dict: 出力用の状態名の辞書
         :param state_label: 左上隅の左下側のラベル
         :param input_label: 左上隅の右上側のラベル．
         :param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
@@ -205,6 +236,7 @@ class Fsm:
 
         fout が省略されば場合には標準出力を用いる．
         """
+
         fout.write('\\begin{tabular}{|l')
         fout.write('|c' * len(self.__input_list))
         fout.write('|}\n')
@@ -214,14 +246,16 @@ class Fsm:
                 state_label, input_label))
         for input_val in self.__input_list:
             fout.write(' & ')
-            fout.write(input_val)
+            fout.write(label_str(input_val, input_dict))
         fout.write('\\\\\\hline\n')
 
         for state in self.__state_list:
-            fout.write(state.name)
+            fout.write(label_str(state.name, state_dict))
             for input_val in self.__input_list:
                 next_state, output_val = state.next(input_val)
-                fout.write(' & {}/{}'.format(next_state.name, output_val))
+                ns_label = label_str(next_state.name, state_dict)
+                o_label = label_str(output_val, output_dict)
+                fout.write(' & {}/{}'.format(ns_label, o_label))
             fout.write('\\\\\\hline\n')
         fout.write('\\end{tabular}\n')
 
@@ -274,9 +308,12 @@ class Fsm:
             fout.write('\\\\\\hline\n')
         fout.write('\\end{tabular}\n')
 
-    def gen_latex_compatible_table(self, *, fout=sys.stdout):
+    def gen_latex_compatible_table(self, *,
+                                   state_dict=None,
+                                   fout=sys.stdout):
         """最小化のための両立テーブルを LaTeX 形式で出力する．
 
+        :param dict[str, str] state_dict: 出力用の状態名の辞書
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略されば場合には標準出力を用いる．
@@ -295,7 +332,7 @@ class Fsm:
             fout.write('\\cline{1-2}\n')
             for i in range(1, n):
                 t = self.__state_list[i]
-                fout.write(t.name)
+                fout.write(label_str(t.name, state_dict))
                 for j in range(0, i):
                     fout.write(' & ')
                     s = self.__state_list[j]
@@ -303,7 +340,9 @@ class Fsm:
                     x = self.__mark_dict[key]
                     if x:
                         for s1, t1, in x:
-                            fout.write(' ({}, {})'.format(s1.name, t1.name))
+                            s1_label = label_str(s1, state_dict)
+                            t1_label = label_str(t1, state_dict)
+                            fout.write(' ({}, {})'.format(s1_label, t1_label))
                     else:
                         fout.write('---')
                 if i < n - 1:
@@ -315,7 +354,7 @@ class Fsm:
             for i in range(0, n - 1):
                 s = self.__state_list[i]
                 fout.write(' & ')
-                fout.write(s.name)
+                fout.write(label_str(s.name, stat_dict))
             fout.write('\\\\\n \\hline')
             fout.write('\\end{tabular}\n')
 
@@ -413,7 +452,11 @@ class Fsm:
         dotcode = self._dot_code()
         fout.write(dotcode)
 
-    def gen_latex_diagram(self, *, fout=sys.stdout):
+    def gen_latex_diagram(self, *,
+                          input_dict=None,
+                          output_dict=None,
+                          state_dict=None,
+                          fout=sys.stdout):
         """GraphVizを使って状態遷移図を表す latex コードを出力する．
 
         :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
@@ -421,13 +464,21 @@ class Fsm:
         fout が省略された場合，標準出力が使用される．
         """
 
-        dotcode = self._dot_code()
+        dotcode = self._dot_code(input_dict=input_dict,
+                                 output_dict=output_dict,
+                                 state_dict=state_dict)
         texcode = dot2tex(dotcode, texmode='raw')
         fout.write(texcode)
 
-    def _dot_code(self):
+    def _dot_code(self, *,
+                  input_dict=None,
+                  output_dict=None,
+                  state_dict=None):
         """Graphviz を使って状態遷移図を表すdotコードを作る．
 
+        :param dict[str, str] input_dict: 出力用の入力記号の辞書
+        :param dict[str, str] output_dict: 出力用の出力記号の辞書
+        :param dict[str, str] state_dict: 出力用の状態名の辞書
         :return: dot コードを表す文字列を返す．
         """
 
@@ -436,14 +487,16 @@ class Fsm:
 
         # 状態を表すノードを作る．
         for state in self.__state_list:
-            g.node(state.name)
+            g.node(state.name, texlbl=label_str(state.name, state_dict))
 
         # 状態遷移を表す枝を作る．
         for state in self.__state_list:
             for input_val in self.__input_list:
                 next_state, output_val = state.next(input_val)
-                label = '{}/{}'.format(input_val, output_val)
-                g.edge(state.name, next_state.name, label)
+                input_label = label_str(input_val, input_dict)
+                output_label = label_str(output_val, output_dict)
+                label = '{}/{}'.format(input_label, output_label)
+                g.edge(state.name, next_state.name, "dummy", texlbl=label)
 
         return g.source
 
