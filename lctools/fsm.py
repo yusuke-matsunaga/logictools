@@ -10,6 +10,7 @@
 import sys
 from lctools.boolfunc import BoolFunc
 from lctools.bool3 import Bool3
+from lctools.eqtable import EqTable
 from graphviz import Digraph
 from dot2tex import dot2tex
 
@@ -110,52 +111,48 @@ class Fsm:
         key = s * self.__ni + i
         return self.__transition_array[key]
 
+    def make_eqtable(self):
+        """等価状態のテーブルを得る．
+
+        :return: EqTable を返す．
+        """
+
+        table = EqTable()
+        step = 0
+        for s_id in range(self.__ns - 1):
+            for t_id in range(s_id + 1, self.__ns):
+                cond_set = set()
+                for i_id in range(self.__ni):
+                    s1_id, o1_id = self.__get_transition(s_id, i_id)
+                    t1_id, o2_id = self.__get_transition(t_id, i_id)
+                    if o1_id != o2_id:
+                        cond_set = None
+                        break
+                    if s1_id != t1_id:
+                        cond_set.add((s1_id, t1_id))
+                table.put(s_id, t_id, step, cond_set)
+        changed = True
+        while changed:
+            step += 1
+            changed = False
+            for s_id in range(self.__ns - 1):
+                for t_id in range(s_id + 1, self.__ns):
+                    cond_set = table.get(s_id, t_id, step - 1)
+                    if cond_set is not None:
+                        for s1_id, t1_id in cond_set:
+                            if table.get(s1_id, t1_id, step - 1) is None:
+                                cond_set = None
+                                changed = True
+                                break
+                    table.put(s_id, t_id, step, cond_set)
+        return table
+
     def minimize(self):
         """最小化を行う．
 
-        :return: 最小化した機械を返す．
+        : return: 最小化した機械を返す．
         """
-        self.__mark_dict = dict()
-        phase = 0
-        for s in range(self.__ns - 1):
-            for t in range(s + 1, self.__ns):
-                key = (s, t, phase)
-                for i in range(self.__ni):
-                    s1, o1 = self.__get_transition(s, i)
-                    t1, o2 = self.__get_transition(t, i)
-                    if o1 != o2:
-                        self.__mark_dict[key] = False
-                        break
-                    if s1 != t1:
-                        if key not in self.__mark_dict:
-                            self.__mark_dict[key] = set()
-                        if s1 > t1:
-                            s1, t1 = t1, s1
-                        self.__mark_dict[key].add((s1, t1))
-                assert key in self.__mark_dict
-
-        # 二周目以降
-        while True:
-            phase += 1
-            changed = False
-            for s in range(self.__ns - 1):
-                for t in range(s + 1, self.__ns):
-                    key = (s, t, phase - 1)
-                    new_key = (s, t, phase)
-                    if not self.__mark_dict[key]:
-                        self.__mark_dict[new_key] = False
-                        continue
-                    self.__mark_dict[new_key] = set()
-                    for s1, t1 in self.__mark_dict[key]:
-                        self.__mark_dict[new_key].add((s1, t1))
-                        key1 = (s1, t1, phase - 1)
-                        if not self.__mark_dict[key1]:
-                            self.__mark_dict[new_key] = False
-                            changed = True
-                            break
-            if not changed:
-                break
-        self.__max_phase = phase + 1
+        table = self.make_eqtable()
 
         # 最小化したFSMを作る．
         state_map = dict()
@@ -171,8 +168,7 @@ class Fsm:
             new_state_id_list.append(s)
             state_map[s] = new_id
             for t in range(s + 1, self.__ns):
-                key = (s, t, self.__max_phase - 1)
-                if self.__mark_dict[key]:
+                if table.get(s, t) is not None:
                     state_map[t] = new_id
         new_fsm = Fsm(input_list=self.__input_list,
                       output_list=self.__output_list,
@@ -192,10 +188,10 @@ class Fsm:
                     fout=sys.stdout):
         """状態遷移表を出力する．
 
-        :param dict[str, str] input_dict: 出力用の入力記号の辞書
-        :param dict[str, str] output_dict: 出力用の出力記号の辞書
-        :param dict[str, str] state_dict: 出力用の状態名の辞書
-        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+        : param dict[str, str] input_dict: 出力用の入力記号の辞書
+        : param dict[str, str] output_dict: 出力用の出力記号の辞書
+        : param dict[str, str] state_dict: 出力用の状態名の辞書
+        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略されば場合には標準出力を用いる．
         """
@@ -270,13 +266,13 @@ class Fsm:
                         fout=sys.stdout):
         """状態遷移表を LaTeX 形式で出力する．
 
-        :param dict[str, str] input_dict: 出力用の入力記号の辞書
-        :param dict[str, str] output_dict: 出力用の出力記号の辞書
-        :param dict[str, str] state_dict: 出力用の状態名の辞書
-        :param state_label: 左上隅の左下側のラベル
-        :param input_label: 左上隅の右上側のラベル．
-        :param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
-        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+        : param dict[str, str] input_dict: 出力用の入力記号の辞書
+        : param dict[str, str] output_dict: 出力用の出力記号の辞書
+        : param dict[str, str] state_dict: 出力用の状態名の辞書
+        : param state_label: 左上隅の左下側のラベル
+        : param input_label: 左上隅の右上側のラベル．
+        : param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
+        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略されば場合には標準出力を用いる．
         """
@@ -314,13 +310,13 @@ class Fsm:
                                 fout=sys.stdout):
         """符号化された状態遷移表を LaTeX 形式で出力する．
 
-        :param dict input_map: 入力記号の符号割当
-        :param dict output_map: 出力記号の符号割当
-        :param dict state_map: 状態の符号割当
-        :param state_label: 左上隅の左下側のラベル
-        :param input_label: 左上隅の右上側のラベル．
-        :param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
-        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+        : param dict input_map: 入力記号の符号割当
+        : param dict output_map: 出力記号の符号割当
+        : param dict state_map: 状態の符号割当
+        : param state_label: 左上隅の左下側のラベル
+        : param input_label: 左上隅の右上側のラベル．
+        : param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
+        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略された場合には標準出力を用いる．
         """
@@ -358,32 +354,31 @@ class Fsm:
                                    fout=sys.stdout):
         """最小化のための両立テーブルを LaTeX 形式で出力する．
 
-        :param dict[str, str] state_dict: 出力用の状態名の辞書
-        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+        : param dict[str, str] state_dict: 出力用の状態名の辞書
+        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略されば場合には標準出力を用いる．
         """
-        self.minimize()
-        for phase in range(self.__max_phase):
+        table = self.make_eqtable()
+        for step in range(table.max_step + 1):
             fout.write('\n')
             fout.write('\\vspace{1cm}')
-            fout.write('Step\#{}\n'.format(phase + 1))
+            fout.write('Step\#{}\n'.format(step + 1))
             fout.write('\n')
             fout.write('\\begin{tabular}{|c||')
-            for i in range(0, self.__ns - 1):
+            for _ in range(self.__ns - 1):
                 fout.write('c|')
             fout.write('}\n')
             fout.write('\\cline{1-2}\n')
             for i in range(1, self.__ns):
                 t = self.__state_list[i]
                 fout.write(label_str(t, state_dict))
-                for j in range(0, i):
+                for j in range(i):
                     fout.write(' & ')
                     s = self.__state_list[j]
-                    key = (j, i, phase)
-                    x = self.__mark_dict[key]
-                    if x:
-                        for s1_id, t1_id, in x:
+                    cond_set = table.get(j, i, step)
+                    if cond_set is not None:
+                        for s1_id, t1_id, in cond_set:
                             s1 = self.__state_list[s1_id]
                             t1 = self.__state_list[t1_id]
                             s1_label = label_str(s1, state_dict)
@@ -397,7 +392,7 @@ class Fsm:
                 else:
                     fout.write(' \\\\ \\hline \\hline\n')
             fout.write(' ')
-            for i in range(0, self.__ns - 1):
+            for i in range(self.__ns - 1):
                 s = self.__state_list[i]
                 fout.write(' & ')
                 fout.write(label_str(s, state_dict))
@@ -410,10 +405,10 @@ class Fsm:
                           state_map):
         """符号割当を行って次状態関数，出力関数を取り出す．
 
-        :param input_map: 入力の符号割当
-        :param output_map: 出力の符号割当
-        :param state_map: 状態の符号割当
-        :return: 次状態関数，出力関数のリストを返す．
+        : param input_map: 入力の符号割当
+        : param output_map: 出力の符号割当
+        : param state_map: 状態の符号割当
+        : return: 次状態関数，出力関数のリストを返す．
         """
 
         # 入力，出力，状態のビット長を得る．
@@ -463,10 +458,10 @@ class Fsm:
     def encode(self, *, input_map, output_map, state_map):
         """符号化を行う．
 
-        :param input_map: 入力の符号割当
-        :param output_map: 出力の符号割当
-        :param state_map: 状態の符号割当
-        :return: 符号化を行った有限状態機械を返す．
+        : param input_map: 入力の符号割当
+        : param output_map: 出力の符号割当
+        : param state_map: 状態の符号割当
+        : return: 符号化を行った有限状態機械を返す．
         """
         new_input_list = [input_map[i] for i in self.__input_list]
         new_output_list = [output_map[i] for i in self.__output_list]
@@ -489,7 +484,7 @@ class Fsm:
     def gen_dot_diagram(self, *, fout=sys.stdout):
         """GraphVizを使って状態遷移図を表す dot コードを出力する．
 
-        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略された場合，標準出力が使用される．
         """
@@ -504,10 +499,10 @@ class Fsm:
                           fout=sys.stdout):
         """GraphVizを使って状態遷移図を表す latex コードを出力する．
 
-        :param dict[str, str] input_dict: 出力用の入力記号の辞書
-        :param dict[str, str] output_dict: 出力用の出力記号の辞書
-        :param dict[str, str] state_dict: 出力用の状態名の辞書
-        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+        : param dict[str, str] input_dict: 出力用の入力記号の辞書
+        : param dict[str, str] output_dict: 出力用の出力記号の辞書
+        : param dict[str, str] state_dict: 出力用の状態名の辞書
+        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略された場合，標準出力が使用される．
         """
@@ -524,10 +519,10 @@ class Fsm:
                   state_dict=None):
         """Graphviz を使って状態遷移図を表すdotコードを作る．
 
-        :param dict[str, str] input_dict: 出力用の入力記号の辞書
-        :param dict[str, str] output_dict: 出力用の出力記号の辞書
-        :param dict[str, str] state_dict: 出力用の状態名の辞書
-        :return: dot コードを表す文字列を返す．
+        : param dict[str, str] input_dict: 出力用の入力記号の辞書
+        : param dict[str, str] output_dict: 出力用の出力記号の辞書
+        : param dict[str, str] state_dict: 出力用の状態名の辞書
+        : return: dot コードを表す文字列を返す．
         """
 
         # 対象のグラフを作る．
