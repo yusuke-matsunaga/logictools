@@ -130,7 +130,8 @@ class Fsm:
                         break
                     if s1_id != t1_id:
                         cond_set.add((s1_id, t1_id))
-                table.put(s_id, t_id, step, cond_set)
+                if cond_set is not None:
+                    table.put(s_id, t_id, step, cond_set)
         changed = True
         while changed:
             step += 1
@@ -144,15 +145,16 @@ class Fsm:
                                 cond_set = None
                                 changed = True
                                 break
-                    table.put(s_id, t_id, step, cond_set)
+                        if cond_set is not None:
+                            table.put(s_id, t_id, step, cond_set)
         return table
 
-    def minimize(self):
+    def minimize(self, table):
         """最小化を行う．
 
-        : return: 最小化した機械を返す．
+        :param EqTable table: 等価状態対テーブル
+        :return: 最小化した機械を返す．
         """
-        table = self.make_eqtable()
 
         # 最小化したFSMを作る．
         state_map = dict()
@@ -300,104 +302,71 @@ class Fsm:
             fout.write('\\\\\\hline\n')
         fout.write('\\end{tabular}\n')
 
-    def gen_latex_encoded_table(self, *,
-                                input_map,
-                                output_map,
-                                state_map,
-                                state_label='states',
-                                input_label='inputs',
-                                no_backslash=False,
-                                fout=sys.stdout):
-        """符号化された状態遷移表を LaTeX 形式で出力する．
+    def gen_latex_eqtable_all(self, table, *,
+                              state_dict=None,
+                              fout=sys.stdout):
+        """最小化のための等価状態テーブルを LaTeX 形式で出力する．
 
-        : param dict input_map: 入力記号の符号割当
-        : param dict output_map: 出力記号の符号割当
-        : param dict state_map: 状態の符号割当
-        : param state_label: 左上隅の左下側のラベル
-        : param input_label: 左上隅の右上側のラベル．
-        : param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
-        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
-
-        fout が省略された場合には標準出力を用いる．
-        """
-
-        def encoded_str(src, encoding_map):
-            vec = encoding_map[src]
-            ans = ''
-            for b in vec:
-                ans += '{}'.format(b)
-            return ans
-
-        fout.write('\\begin{tabular}{|l')
-        fout.write('|c' * len(self.__input_list))
-        fout.write('|}\n')
-        fout.write('\\hline\n')
-        if not no_backslash:
-            fout.write('\\backslashbox{{{}}}{{{}}}'.format(
-                state_label, input_label))
-        for input_val in self.__input_list:
-            fout.write(' & {}'.format(encoded_str(input_val, input_map)))
-        fout.write('\\\\\\hline\n')
-
-        for state in self.__state_list:
-            fout.write('{}'.format(encoded_str(state, state_map)))
-            for input_val in self.__input_list:
-                next_state, output_val = state.next(input_val)
-                ns_str = encoded_str(next_state, state_map)
-                o_str = encoded_str(output_val, output_map)
-                fout.write(' & {}/{}'.format(ns_str, o_str))
-            fout.write('\\\\\\hline\n')
-        fout.write('\\end{tabular}\n')
-
-    def gen_latex_compatible_table(self, *,
-                                   state_dict=None,
-                                   fout=sys.stdout):
-        """最小化のための両立テーブルを LaTeX 形式で出力する．
-
-        : param dict[str, str] state_dict: 出力用の状態名の辞書
-        : param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+        :param EqTable table: 等価状態対テーブル
+        :param dict[str, str] state_dict: 出力用の状態名の辞書
+        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
 
         fout が省略されば場合には標準出力を用いる．
         """
-        table = self.make_eqtable()
+
         for step in range(table.max_step + 1):
             fout.write('\n')
             fout.write('\\vspace{1cm}')
             fout.write('Step\#{}\n'.format(step + 1))
-            fout.write('\n')
-            fout.write('\\begin{tabular}{|c||')
-            for _ in range(self.__ns - 1):
-                fout.write('c|')
-            fout.write('}\n')
-            fout.write('\\cline{1-2}\n')
-            for i in range(1, self.__ns):
-                t = self.__state_list[i]
-                fout.write(label_str(t, state_dict))
-                for j in range(i):
-                    fout.write(' & ')
-                    s = self.__state_list[j]
-                    cond_set = table.get(j, i, step)
-                    if cond_set is not None:
-                        for s1_id, t1_id, in cond_set:
-                            s1 = self.__state_list[s1_id]
-                            t1 = self.__state_list[t1_id]
-                            s1_label = label_str(s1, state_dict)
-                            t1_label = label_str(t1, state_dict)
-                            fout.write(' ({}, {})'.format(s1_label, t1_label))
-                    else:
-                        fout.write('---')
-                if i < self.__ns - 1:
-                    fmt_str = ' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'
-                    fout.write(fmt_str.format(self.__ns - i - 1, i + 2))
-                else:
-                    fout.write(' \\\\ \\hline \\hline\n')
-            fout.write(' ')
-            for i in range(self.__ns - 1):
-                s = self.__state_list[i]
+            self.gen_latex_eqtable(
+                table, step, state_dict=state_dict, fout=fout)
+
+    def gen_latex_eqtable(self, table, step, *,
+                          state_dict=None,
+                          fout=sys.stdout):
+        """最小化のための等価状態テーブルを LaTeX 形式で出力する．
+
+        :param EqTable table: 等価状態対テーブル
+        :param int step: 対象のステップ
+        :param dict[str, str] state_dict: 出力用の状態名の辞書
+        :param fout: 出力先のファイルオブジェクト(名前付きオプション引数)
+
+        fout が省略されば場合には標準出力を用いる．
+        """
+
+        fout.write('\\begin{tabular}{|c||')
+        for _ in range(self.__ns - 1):
+            fout.write('c|')
+        fout.write('}\n')
+        fout.write('\\cline{1-2}\n')
+        for i in range(1, self.__ns):
+            t = self.__state_list[i]
+            fout.write(label_str(t, state_dict))
+            for j in range(i):
                 fout.write(' & ')
-                fout.write(label_str(s, state_dict))
-            fout.write('\\\\\n \\hline')
-            fout.write('\\end{tabular}\n')
+                s = self.__state_list[j]
+                cond_set = table.get(j, i, step)
+                if cond_set is not None:
+                    for s1_id, t1_id, in cond_set:
+                        s1 = self.__state_list[s1_id]
+                        t1 = self.__state_list[t1_id]
+                        s1_label = label_str(s1, state_dict)
+                        t1_label = label_str(t1, state_dict)
+                        fout.write(' ({}, {})'.format(s1_label, t1_label))
+                else:
+                    fout.write('---')
+            if i < self.__ns - 1:
+                fmt_str = ' & \\multicolumn{{{}}}{{|c}}{{}} \\\\ \\cline{{1-{}}}\n'
+                fout.write(fmt_str.format(self.__ns - i - 1, i + 2))
+            else:
+                fout.write(' \\\\ \\hline \\hline\n')
+        fout.write(' ')
+        for i in range(self.__ns - 1):
+            s = self.__state_list[i]
+            fout.write(' & ')
+            fout.write(label_str(s, state_dict))
+        fout.write('\\\\\n \\hline')
+        fout.write('\\end{tabular}\n')
 
     def extract_functions(self, *,
                           input_map,
@@ -454,32 +423,6 @@ class Fsm:
         delta_list = [BoolFunc(delta_val_list[i]) for i in range(ns)]
         lambda_list = [BoolFunc(lambda_val_list[i]) for i in range(no)]
         return delta_list, lambda_list
-
-    def encode(self, *, input_map, output_map, state_map):
-        """符号化を行う．
-
-        : param input_map: 入力の符号割当
-        : param output_map: 出力の符号割当
-        : param state_map: 状態の符号割当
-        : return: 符号化を行った有限状態機械を返す．
-        """
-        new_input_list = [input_map[i] for i in self.__input_list]
-        new_output_list = [output_map[i] for i in self.__output_list]
-        new_state_list = [state_map[i] for i in self.__state_list]
-        new_fsm = Fsm(input_list=new_input_list,
-                      output_list=new_output_list,
-                      state_list=new_state_list)
-
-        for state in self.__state_list:
-            new_state = state_map[state]
-            for input_val in self.__input_list:
-                next_state, output_val = self.get_transition(state, input_val)
-                new_input_val = input_map[input_val]
-                new_next_state = state_map[next_state]
-                new_output_val = output_map[output_val]
-                new_fsm.add_transition(new_state, new_input_val,
-                                       new_next_state, new_output_val)
-        return new_fsm
 
     def gen_dot_diagram(self, *, fout=sys.stdout):
         """GraphVizを使って状態遷移図を表す dot コードを出力する．
@@ -577,23 +520,30 @@ if __name__ == '__main__':
                  's2': '$S_{ade}$', 's3': '$S_{de}$'}
     fsm.gen_latex_diagram(output_dict=output_map,
                           state_dict=state_map)
+    print('')
 
+    table = fsm.make_eqtable()
+    fsm.gen_latex_eqtable_all(table)
     print('')
 
     input_map = {'0': '0', '1': '1'}
     output_map = {'a': '001', 'b': '010', 'c': '011',
                   'd': '100', 'e': '101', '0': '000'}
     state_map = {'s0': '00', 's1': '01', 's2': '10', 's3': '11'}
+    delta_list, lambda_list = fsm.extract_functions(input_map={'0': (0, ), '1': (1, )},
+                                                    output_map={'a': (0, 0, 1),
+                                                                'b': (0, 1, 0),
+                                                                'c': (0, 1, 1),
+                                                                'd': (1, 0, 0),
+                                                                'e': (1, 0, 1),
+                                                                '0': (0, 0, 0)},
+                                                    state_map={'s0': (0, 0),
+                                                               's1': (0, 1),
+                                                               's2': (1, 0),
+                                                               's3': (1, 1)})
 
-    new_fsm = fsm.encode(input_map=input_map,
-                         output_map=output_map,
-                         state_map=state_map)
+    for func in delta_list:
+        func.gen_latex_karnaugh()
 
-    new_fsm.print_table()
-
-    print('')
-
-    new_fsm.gen_latex_table()
-
-    print()
-    new_fsm.gen_latex_compatible_table()
+    for func in lambda_list:
+        func.gen_latex_karnaugh()

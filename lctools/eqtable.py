@@ -43,7 +43,22 @@ class EqTable:
             key = (s, t, step)
         else:
             key = (t, s, step)
-        return self.__marks[key]
+        if key in self.__marks:
+            return self.__marks[key]
+        else:
+            return None
+
+    def get_all(self):
+        """等価状態対を全て取り出す．
+
+        :return: 等価状態対のリストを返す．
+        """
+
+        ans_list = list()
+        for s, t, step in self.__marks.keys():
+            if step == self.__max_step:
+                ans_list.append((s, t))
+        return ans_list
 
     def put(self, s, t, step, cond_set):
         """内容を追加する．
