@@ -13,3 +13,5 @@ from lctools.boolfunc import BoolFunc
 from lctools.cube import Cube
 from lctools.cover import Cover
 from lctools.fsm import Fsm
+from lctools.bdd import Bdd
+from lctools.bddmgr import BddMgr
