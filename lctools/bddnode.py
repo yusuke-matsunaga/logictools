@@ -10,11 +10,16 @@
 
 class BddNode:
 
-    def __init__(self, index, edge0, edge1):
+    def __init__(self, id, index, edge0, edge1):
+        self._id = id
         self._index = index
         self._edge0 = edge0
         self._edge1 = edge1
 
+    @property
+    def id(self):
+        return self._id
+    
     @property
     def index(self):
         return self._index

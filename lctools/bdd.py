@@ -20,7 +20,7 @@ class Bdd:
         """
         return Bdd(None, None)
 
-    def __not__(self):
+    def __invert__(self):
         """否定する．
         """
         return Bdd(self._mgr, ~self._root)
@@ -41,6 +41,9 @@ class Bdd:
         self._root = rbdd._root
         return self
 
+    def is_valid(self):
+        return not is_invalid()
+    
     def is_invalid(self):
         return self._mgr is None
     
@@ -59,3 +62,14 @@ class Bdd:
             return False
         return self._root.is_const()
     
+    def root_decomp(self):
+        if self.is_invalid():
+            return None, None, None
+        if self.is_const():
+            return None, None, None
+        node = self._root.node
+        inv = self._root.inv
+        edge0 = node.edge0 * inv
+        edge1 = node.edge1 * inv
+        index = node.index
+        return index, edge0, edge1

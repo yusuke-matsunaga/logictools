@@ -6,13 +6,15 @@
 :author: Yusuke Matsunaga (松永 裕介)
 :copyright: Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.
 """
-from lctools.bddedge import BddEdge
 from lctools.bdd import Bdd
+from lctools.bddedge import BddEdge
+from lctools.bddnode import BddNode
 
 
 class BddMgr:
 
     def __init__(self):
+        self._node_count = 0
         self._node_table = dict()
         self._and_table = dict()
         self._xor_table = dict()
@@ -52,6 +54,7 @@ class BddMgr:
         :param bool inv: 反転フラグ
         """
         edge = self.new_node(var, BddEdge.zero(), BddEdge.one())
+        assert isinstance(edge, BddEdge)
         return Bdd(self, edge * inv)
 
     def posi_literal(self, var):
@@ -133,7 +136,9 @@ class BddMgr:
         if key in self._node_table:
             return BddEdge(self._node_table[key], oinv)
         # なかったので作る．
-        node = BddNode(index, edge0, edge1)
+        id = self._node_count
+        self._node_count += 1
+        node = BddNode(id, index, edge0, edge1)
         self._node_table[key] = node
         return BddEdge(node, oinv)
 

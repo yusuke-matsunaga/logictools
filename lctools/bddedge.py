@@ -93,6 +93,14 @@ class BddEdge:
         self._inv ^= other
         return self
 
+    def __hash__(self):
+        """ハッシュ関数
+        """
+        if self._node is None:
+            return int(self._inv)
+        else:
+            return self._node.id * 2 + int(self._inv)
+        
     def __eq__(self, other):
         """等価比較演算
         """
