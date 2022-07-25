@@ -149,6 +149,33 @@ class Fsm:
                             table.put(s_id, t_id, step, cond_set)
         return table
 
+    def get_all_eqpairs(self, table, *,
+                        state_dict=None):
+        """等価状態対を求める．
+        """
+        ans_list = []
+        for s_id, t_id in table.get_all_pairs():
+            s = self.__state_list[s_id]
+            t = self.__state_list[t_id]
+            s_label = label_str(s, state_dict)
+            t_label = label_str(t, state_dict)
+            ans_list.append((s_label, t_label))
+        return ans_list
+
+    def get_all_eqgroups(self, table, *,
+                         state_dict=None):
+        """等価状態グループを求める．
+        """
+        ans_list = []
+        for s_list in table.get_all_groups():
+            s_label_list = []
+            for s_id in s_list:
+                s = self.__state_list[s_id]
+                s_label = label_str(s, state_dict)
+                s_label_list.append(s_label)
+            ans_list.append(s_label_list)
+        return ans_list
+
     def minimize(self, table):
         """最小化を行う．
 
@@ -503,7 +530,7 @@ if __name__ == '__main__':
 
     fsm.print_table()
 
-    print('')
+    print()
 
     output_map = {'a': '$a$', 'b': '$b$', 'c': '$c$',
                   'd': '$d$', 'e': '$e$', '0': '$\epsilon$'}
@@ -512,20 +539,36 @@ if __name__ == '__main__':
     fsm.gen_latex_table(output_dict=output_map,
                         state_dict=state_map)
 
-    print('')
+    print()
 
     output_map = {'a': '$a$', 'b': '$b$', 'c': '$c$',
                   'd': '$d$', 'e': '$e$', '0': '$\epsilon$'}
     state_map = {'s0': '$S_{abcde}$', 's1': '$S_{acde}$',
                  's2': '$S_{ade}$', 's3': '$S_{de}$'}
+    """
     fsm.gen_latex_diagram(output_dict=output_map,
                           state_dict=state_map)
-    print('')
+    """
+    print('-')
 
     table = fsm.make_eqtable()
     fsm.gen_latex_eqtable_all(table)
-    print('')
+    print('-')
 
+    eqpairs_list = fsm.get_all_eqpairs(table, state_dict=state_map)
+    for s, t in eqpairs_list:
+        print(' {} = {}'.format(s, t))
+    print('-')
+
+    eqgroups_list = fsm.get_all_eqgroups(table, state_dict=state_map)
+    for group in eqgroups_list:
+        print('{', end='')
+        comma = ''
+        for s in group:
+            print('{}{}'.format(comma, s), end='')
+            comma = ', '
+        print('}')
+    print('-')
     input_map = {'0': '0', '1': '1'}
     output_map = {'a': '001', 'b': '010', 'c': '011',
                   'd': '100', 'e': '101', '0': '000'}
