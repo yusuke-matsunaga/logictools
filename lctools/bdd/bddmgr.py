@@ -6,80 +6,76 @@
 :author: Yusuke Matsunaga (松永 裕介)
 :copyright: Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.
 """
-from lctools.bdd import Bdd
-from lctools.bddedge import BddEdge
-from lctools.bddnode import BddNode
+from lctools.bdd.bdd import Bdd
+from lctools.bdd.bddedge import BddEdge
+from lctools.bdd.bddnode import BddNode
+from lctools.bdd.truthop import TruthOp
+from lctools.bdd.copyop import CopyOp
 
-
-def disp_edge(edge):
-    if edge.is_zero():
-        print("ZERO", end="")
-    elif edge.is_one():
-        print(" ONE", end="")
-    else:
-        assert not edge.is_const()
-        node = edge.node
-        inv = edge.inv
-        if inv:
-            inv_char = "~"
-        else:
-            inv_char = " "
-        print("{:1}{:3d}".format(inv_char, node.id), end="")
-
-def dfs(edge, node_list):
-    if edge.is_const():
-        return
-    node = edge.node
-    if node not in node_list:
-        node_list.append(node)
-        dfs(node.edge0, node_list)
-        dfs(node.edge1, node_list)
-        
-def display(edge):
-    node_list = []
-    dfs(edge, node_list)
-
-    print("Root: ", end="")
-    disp_edge(edge)
-    print()
-
-    for node in node_list:
-        print("Node#{:3d}: L{:2d}: ".format(node.id, node.index), end="")
-        disp_edge(node.edge0)
-        print(": ", end="")
-        disp_edge(node.edge1)
-        print()
-              
 
 class BddMgr:
 
     def __init__(self):
         self._node_count = 0
-        self._node_table = dict()
-        self._and_table = dict()
-        self._xor_table = dict()
+        self._node_table = {}
+        self._and_table = {}
+        self._or_table = {}
+        self._xor_table = {}
 
     def copy(self, src):
         """BDDをコピーする．
 
         :param Bdd src: コピー元のBDD
         """
-        edge = self._copy_step(src._root)
+        if src._mgr != self:
+            edge = self.copy_step(src._root)
+        else:
+            edge = src._root
         return Bdd(self, edge)
 
     def and_op(self, left, right):
         """AND演算を行う．
         """
         if self != left._mgr:
-            ledge = self._copy_step(left._root)
+            ledge = self.copy_step(left._root)
         else:
             ledge = left._root
         if self != right._mgr:
-            redge = self._copy_step(right._root)
+            redge = self.copy_step(right._root)
         else:
             redge = right._root
-        self._and_table = dict()
+        self._and_table = {}
         edge = self.and_step(ledge, redge)
+        return Bdd(self, edge)
+
+    def or_op(self, left, right):
+        """OR演算を行う．
+        """
+        if self != left._mgr:
+            ledge = self.copy_step(left._root)
+        else:
+            ledge = left._root
+        if self != right._mgr:
+            redge = self.copy_step(right._root)
+        else:
+            redge = right._root
+        self._or_table = {}
+        edge = self.or_step(ledge, redge)
+        return Bdd(self, edge)
+
+    def xor_op(self, left, right):
+        """XOR演算を行う．
+        """
+        if self != left._mgr:
+            ledge = self.copy_step(left._root)
+        else:
+            ledge = left._root
+        if self != right._mgr:
+            redge = self.copy_step(right._root)
+        else:
+            redge = right._root
+        self._xor_table = {}
+        edge = self.xor_step(ledge, redge)
         return Bdd(self, edge)
     
     def zero(self):
@@ -119,7 +115,15 @@ class BddMgr:
         """真理値表形式の文字列からBDDを作る．
         :param str truth_str: 真理値表形式の文字列
         """
-        pass
+        # 文字列の長さが正しいかチェックする．
+        n = len(truth_str)
+        ni = 0
+        while (1 << ni) < n:
+            ni += 1
+        assert (1 << ni) == n
+        op = TruthOp(self)
+        edge = op.op_step(truth_str, 0)
+        return Bdd(self, edge)
 
     @property
     def node_num(self):
@@ -130,43 +134,25 @@ class BddMgr:
     def copy_step(self, edge):
         """コピーする
         """
-        if edge.is_const():
-            # 定数ならそのまま返す．
-            return edge
-        node = edge.node
-        inv = edge.inv
-        index = node.index
-        edge0 = self.copy_step(node.edge0)
-        edge1 = self.copy_step(node.edge1)
-        new_node = self.new_node(index, edge0, edge1)
-        return BddEdge(new_node, inv)
+        op = CopyOp(self)
+        return op.op_step(edge)
 
     def and_step(self, left, right):
         """ANDを計算する．
         """
 
-        print("left = ", end="")
-        display(left)
-        print("right = ", end="")
-        display(right)
-        
         if left.is_zero():
             return BddEdge.zero()
         if right.is_zero():
-            print("case1b")
             return BddEdge.zero()
         if left.is_one():
-            print("case2")
             return right
         if right.is_one():
-            print("case3")
             return left
         if left == right:
-            print("case4")
             return left
         if left.node == right.node:
             # ということは極性違い
-            print("case5")
             return BddEdge.zero()
         key = left, right
         if key in self._and_table:
@@ -176,6 +162,60 @@ class BddMgr:
         e1 = self.and_step(l1, r1)
         result = self.new_node(top, e0, e1)
         self._and_table[key] = result
+        return result
+
+    def or_step(self, left, right):
+        """ORを計算する．
+        """
+
+        if left.is_one():
+            return BddEdge.one()
+        if right.is_one():
+            return BddEdge.one()
+        if left.is_zero():
+            return right
+        if right.is_zero():
+            return left
+        if left == right:
+            return left
+        if left.node == right.node:
+            # ということは極性違い
+            return BddEdge.one()
+        key = left, right
+        if key in self._or_table:
+            return self._or_table[key]
+        top, l0, l1, r0, r1 = BddMgr.decomp(left, right)
+        e0 = self.or_step(l0, r0)
+        e1 = self.or_step(l1, r1)
+        result = self.new_node(top, e0, e1)
+        self._or_table[key] = result
+        return result
+
+    def xor_step(self, left, right):
+        """XORを計算する．
+        """
+
+        if left.is_one():
+            return ~right
+        if right.is_one():
+            return ~left
+        if left.is_zero():
+            return right
+        if right.is_zero():
+            return left
+        if left == right:
+            return BddEdge.zero()
+        if left.node == right.node:
+            # ということは極性違い
+            return BddEdge.one()
+        key = left, right
+        if key in self._xor_table:
+            return self._xor_table[key]
+        top, l0, l1, r0, r1 = BddMgr.decomp(left, right)
+        e0 = self.xor_step(l0, r0)
+        e1 = self.xor_step(l1, r1)
+        result = self.new_node(top, e0, e1)
+        self._xor_table[key] = result
         return result
     
     def new_node(self, index, edge0, edge1):
@@ -224,5 +264,4 @@ class BddMgr:
         else:
             r0 = r1 = right
         return top, l0, l1, r0, r1
-
 

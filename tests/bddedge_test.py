@@ -8,7 +8,7 @@
 """
 
 import pytest
-from lctools.bddedge import BddEdge
+from lctools.bdd.bddedge import BddEdge
 
 
 def test_BddEdge_zero():

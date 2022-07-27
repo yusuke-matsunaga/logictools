@@ -7,10 +7,18 @@
 :copyright: Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.
 """
 
+from lctools.bdd.bddnode import BddNode
+
 
 class BddEdge:
+    """Bdd のノードを指す枝を表すクラス
+
+    通常はただのノードを指すポインタだが，
+    反転属性を持つ．
+    """
 
     def __init__(self, node, inv=False):
+        assert node is None or isinstance(node, BddNode)
         self._node = node
         self._inv = inv
 
@@ -98,11 +106,11 @@ class BddEdge:
         """
         if self._node is None:
             return int(self._inv)
-        else:
-            return self._node.id * 2 + int(self._inv)
+        return self._node.id * 2 + int(self._inv)
         
     def __eq__(self, other):
         """等価比較演算
         """
-        if isinstance(other, BddEdge):
-            return self._node == other._node and self._inv == other._inv
+        if not isinstance(other, BddEdge):
+            raise NotImplementedError
+        return self._node == other._node and self._inv == other._inv
