@@ -11,6 +11,46 @@ from lctools.bddedge import BddEdge
 from lctools.bddnode import BddNode
 
 
+def disp_edge(edge):
+    if edge.is_zero():
+        print("ZERO", end="")
+    elif edge.is_one():
+        print(" ONE", end="")
+    else:
+        assert not edge.is_const()
+        node = edge.node
+        inv = edge.inv
+        if inv:
+            inv_char = "~"
+        else:
+            inv_char = " "
+        print("{:1}{:3d}".format(inv_char, node.id), end="")
+
+def dfs(edge, node_list):
+    if edge.is_const():
+        return
+    node = edge.node
+    if node not in node_list:
+        node_list.append(node)
+        dfs(node.edge0, node_list)
+        dfs(node.edge1, node_list)
+        
+def display(edge):
+    node_list = []
+    dfs(edge, node_list)
+
+    print("Root: ", end="")
+    disp_edge(edge)
+    print()
+
+    for node in node_list:
+        print("Node#{:3d}: L{:2d}: ".format(node.id, node.index), end="")
+        disp_edge(node.edge0)
+        print(": ", end="")
+        disp_edge(node.edge1)
+        print()
+              
+
 class BddMgr:
 
     def __init__(self):
@@ -30,12 +70,16 @@ class BddMgr:
     def and_op(self, left, right):
         """AND演算を行う．
         """
+        if self != left._mgr:
+            ledge = self._copy_step(left._root)
+        else:
+            ledge = left._root
         if self != right._mgr:
             redge = self._copy_step(right._root)
         else:
             redge = right._root
         self._and_table = dict()
-        edge = self.and_step(left._root, redge)
+        edge = self.and_step(ledge, redge)
         return Bdd(self, edge)
     
     def zero(self):
@@ -100,16 +144,29 @@ class BddMgr:
     def and_step(self, left, right):
         """ANDを計算する．
         """
-        if left.is_zero or right.is_zero:
+
+        print("left = ", end="")
+        display(left)
+        print("right = ", end="")
+        display(right)
+        
+        if left.is_zero():
             return BddEdge.zero()
-        if left.is_one:
+        if right.is_zero():
+            print("case1b")
+            return BddEdge.zero()
+        if left.is_one():
+            print("case2")
             return right
-        if right.is_one:
+        if right.is_one():
+            print("case3")
             return left
         if left == right:
+            print("case4")
             return left
         if left.node == right.node:
             # ということは極性違い
+            print("case5")
             return BddEdge.zero()
         key = left, right
         if key in self._and_table:
@@ -167,4 +224,5 @@ class BddMgr:
         else:
             r0 = r1 = right
         return top, l0, l1, r0, r1
-            
+
+

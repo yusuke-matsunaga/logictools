@@ -29,12 +29,12 @@ class BddEdge:
     def is_zero(self):
         """定数0の時 True を返す．
         """
-        return self._node is None and not self._inv
+        return self.is_const() and not self._inv
 
     def is_one(self):
         """定数1の時 True を返す．
         """
-        return self._node is None and self._inv
+        return self.is_const() and self._inv
 
     def is_const(self):
         """定数の時 True を返す．
