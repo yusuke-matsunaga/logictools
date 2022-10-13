@@ -8,9 +8,9 @@
 """
 
 import sys
-from lctools.bool3 import Bool3, toBool3
-from lctools.cube import Cube
-import lctools.qm as qm
+from logictools.bool3 import Bool3, toBool3
+from logictools.cube import Cube
+import logictools.qm as qm
 
 
 class BoolFunc:
@@ -219,7 +219,7 @@ class BoolFunc:
         :param input_numm: 入力数
         :param var_map: 変数名の辞書
         """
-        from lctools.parser import Parser
+        from logictools.parser import Parser
 
         parser = Parser(input_num, var_map)
         f = parser(expr_string)
@@ -483,8 +483,8 @@ class BoolFunc:
 
         fout を省略した場合には標準出力が用いられる．
         """
-        from lctools.karnaugh import karnaugh0, karnaugh1
-        from lctools.karnaugh import karnaugh2, karnaugh3, karnaugh4
+        from logictools.karnaugh import karnaugh0, karnaugh1
+        from logictools.karnaugh import karnaugh2, karnaugh3, karnaugh4
 
         var_map = self.__default_var_map(var_map)
 
@@ -681,7 +681,7 @@ class BoolFunc:
 
         fout を省略した場合には標準出力が用いられる．
         """
-        from lctools.latex_karnaugh import latex_karnaugh
+        from logictools.latex_karnaugh import latex_karnaugh
 
         var_map = self.__default_var_map(var_map)
 
@@ -696,7 +696,7 @@ class BoolFunc:
 
         fout を省略した場合には標準出力が用いられる．
         """
-        from lctools.dpic_hc import dpic_hc
+        from logictools.dpic_hc import dpic_hc
 
         var_map = self.__default_var_map(var_map)
 

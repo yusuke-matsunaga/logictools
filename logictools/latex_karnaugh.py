@@ -7,7 +7,7 @@
 :copyright: Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.bool3 import Bool3
+from logictools.bool3 import Bool3
 
 
 def __gen_implicant_str(func, cube):
@@ -293,7 +293,7 @@ def latex_karnaugh(func, implicant_list, var_map, fout):
 if __name__ == '__main__':
 
     import sys
-    from lctools import BoolFunc, Cube
+    from logictools import BoolFunc, Cube
 
     var_map = {0: 'x_1',
                1: 'x_2',

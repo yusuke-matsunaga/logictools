@@ -7,7 +7,7 @@
 :Copyright: (C) 2017, 2019 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.bool3 import Bool3, toBool3
+from logictools.bool3 import Bool3, toBool3
 
 
 class Cube:

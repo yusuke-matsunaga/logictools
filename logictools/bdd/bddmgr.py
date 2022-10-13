@@ -6,11 +6,11 @@
 :author: Yusuke Matsunaga (松永 裕介)
 :copyright: Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.
 """
-from lctools.bdd.bdd import Bdd
-from lctools.bdd.bddedge import BddEdge
-from lctools.bdd.bddnode import BddNode
-from lctools.bdd.truthop import TruthOp
-from lctools.bdd.copyop import CopyOp
+from logictools.bdd.bdd import Bdd
+from logictools.bdd.bddedge import BddEdge
+from logictools.bdd.bddnode import BddNode
+from logictools.bdd.truthop import TruthOp
+from logictools.bdd.copyop import CopyOp
 
 
 class BddMgr:

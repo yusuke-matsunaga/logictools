@@ -8,7 +8,7 @@
 """
 
 import sys
-from lctools import BddMgr
+from logictools import BddMgr
 
 
 mgr = BddMgr()

@@ -7,7 +7,7 @@
 :copyright: Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.bdd.bddnode import BddNode
+from logictools.bdd.bddnode import BddNode
 
 
 class BddEdge:

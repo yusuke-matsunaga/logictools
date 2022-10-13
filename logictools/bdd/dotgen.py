@@ -8,8 +8,8 @@
 """
 
 import sys
-from lctools.bdd.bddedge import BddEdge
-from lctools.bdd.nodecollector import NodeCollector
+from logictools.bdd.bddedge import BddEdge
+from logictools.bdd.nodecollector import NodeCollector
 
 
 class DotGen(NodeCollector):

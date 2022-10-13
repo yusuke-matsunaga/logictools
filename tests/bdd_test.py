@@ -8,7 +8,7 @@
 """
 
 import pytest
-from lctools import BddMgr, Bdd
+from logictools import BddMgr, Bdd
 
 
 def test_BddMgr_zero():

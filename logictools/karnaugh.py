@@ -7,7 +7,7 @@
 :copyright: Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.bool3 import Bool3
+from logictools.bool3 import Bool3
 
 
 def karnaugh0(func, var_map, fout):

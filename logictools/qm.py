@@ -7,8 +7,8 @@
 :copyright: Copyright (C) 2017 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.cover import Cover
-from lctools.mincov import MinCov
+from logictools.cover import Cover
+from logictools.mincov import MinCov
 
 
 def gen_primes(minterm_list):
@@ -107,7 +107,7 @@ def gen_minimum_cover(onset, prime_list):
 
 if __name__ == '__main__':
 
-    from lctools.boolfunc import BoolFunc
+    from logictools.boolfunc import BoolFunc
 
     f = BoolFunc(4, val_str="10*1*****0100*01")
 

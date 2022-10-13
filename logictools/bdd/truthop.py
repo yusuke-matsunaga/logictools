@@ -7,7 +7,7 @@
 :copyright: Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.bdd.bddedge import BddEdge
+from logictools.bdd.bddedge import BddEdge
 
 
 class TruthOp:

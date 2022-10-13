@@ -9,7 +9,7 @@ BoolFunc のテストプログラム
 """
 
 import pytest
-from lctools import BoolFunc, Bool3
+from logictools import BoolFunc, Bool3
 
 
 def test_BoolFunc_init1():

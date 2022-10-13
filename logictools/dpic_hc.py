@@ -8,7 +8,7 @@
 """
 
 import sys
-from lctools.bool3 import Bool3
+from logictools.bool3 import Bool3
 
 
 head = R""".PS

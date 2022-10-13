@@ -8,9 +8,9 @@
 """
 
 import sys
-from lctools.boolfunc import BoolFunc
-from lctools.bool3 import Bool3
-from lctools.eqtable import EqTable
+from logictools.boolfunc import BoolFunc
+from logictools.bool3 import Bool3
+from logictools.eqtable import EqTable
 from graphviz import Digraph
 from dot2tex import dot2tex
 

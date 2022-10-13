@@ -12,8 +12,8 @@ import sys
 import os.path
 sys.path.append(os.pardir)
 import pytest
-from lctools import Bool3, toBool3
-from lctools import Cube
+from logictools import Bool3, toBool3
+from logictools import Cube
 
 
 def test_init1():

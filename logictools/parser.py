@@ -7,7 +7,7 @@
 :copyright: Copyright (C) 2020 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.boolfunc import BoolFunc
+from logictools.boolfunc import BoolFunc
 
 
 class Token:

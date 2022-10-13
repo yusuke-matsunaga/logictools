@@ -7,8 +7,8 @@
 :copyright: Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.
 """
 
-from lctools.bdd.dispop import DispOp
-from lctools.bdd.dotgen import DotGen
+from logictools.bdd.dispop import DispOp
+from logictools.bdd.dotgen import DotGen
 
 
 class Bdd:

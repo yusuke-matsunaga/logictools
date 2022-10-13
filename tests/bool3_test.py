@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 
 """
-lctools.Bool3 のユニットテスト
+logictools.Bool3 のユニットテスト
 
 :file: test_bool3.py
 :author: Yusuke Matsunaga (松永 裕介)
@@ -12,7 +12,7 @@ import sys
 import os.path
 sys.path.append(os.pardir)
 import pytest
-from lctools import Bool3, toBool3
+from logictools import Bool3, toBool3
 
 
 def test_toBool3_good():
