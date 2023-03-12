@@ -1,0 +1,10 @@
+.. _state:
+
+Bool3
+=====
+
+.. automodule:: logictools.state
+   :members:
+   :special-members:
+   :undoc-members:
+   :show-inheritance:

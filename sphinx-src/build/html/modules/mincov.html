@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>MinCov &#8212; logictools 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="Parser" href="parser.html" />
+    <link rel="prev" title="LaTeXKarnaugh" href="latex_karnaugh.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="latex_karnaugh.html" title="LaTeXKarnaugh"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">モジュール一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">MinCov</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="mincov">
+<span id="id1"></span><h1>MinCov<a class="headerlink" href="#mincov" title="この見出しへのパーマリンク">¶</a></h1>
+<span class="target" id="module-logictools.mincov"></span><p>MinCov の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mincov.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.mincov.</span></span><span class="sig-name descname"><span class="pre">MinCov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nelem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>minimum covering を行うクラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nelem</strong> -- 要素数</p>
+</dd>
+</dl>
+<p>最小被覆問題とは要素の集合と，
+その集合の部分集合族が与えられた時に，
+すべての部分集合族について最低１つの要素を含むような
+解集合(被覆解と呼ぶ)のなかで要素数最小のものを求める問題である．</p>
+<p>最小被覆問題はNP困難問題であり，厳密最小解を求める効率の良いアルゴリズム
+は見つかっていない．
+ここでは小さな問題に対して解を全列挙する方式で最小解を求めている．</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.__dict__">
+<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'logictools.mincov',</span> <span class="pre">'__doc__':</span> <span class="pre">'minimum</span> <span class="pre">covering</span> <span class="pre">を行うクラス\n\n</span>&#160;&#160;&#160; <span class="pre">:param</span> <span class="pre">nelem:</span> <span class="pre">要素数\n\n</span>&#160;&#160;&#160; <span class="pre">最小被覆問題とは要素の集合と，\n</span>&#160;&#160;&#160; <span class="pre">その集合の部分集合族が与えられた時に，\n</span>&#160;&#160;&#160; <span class="pre">すべての部分集合族について最低１つの要素を含むような\n</span>&#160;&#160;&#160; <span class="pre">解集合(被覆解と呼ぶ)のなかで要素数最小のものを求める問題である．\n\n</span>&#160;&#160;&#160; <span class="pre">最小被覆問題はNP困難問題であり，厳密最小解を求める効率の良いアルゴリズム\n</span>&#160;&#160;&#160; <span class="pre">は見つかっていない．\n</span>&#160;&#160;&#160; <span class="pre">ここでは小さな問題に対して解を全列挙する方式で最小解を求めている．\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">MinCov.__init__&gt;,</span> <span class="pre">'nelem':</span> <span class="pre">&lt;property</span> <span class="pre">object&gt;,</span> <span class="pre">'add_clause':</span> <span class="pre">&lt;function</span> <span class="pre">MinCov.add_clause&gt;,</span> <span class="pre">'solve':</span> <span class="pre">&lt;function</span> <span class="pre">MinCov.solve&gt;,</span> <span class="pre">'all_cover':</span> <span class="pre">&lt;function</span> <span class="pre">MinCov.all_cover&gt;,</span> <span class="pre">'_MinCov__solve_sub':</span> <span class="pre">&lt;function</span> <span class="pre">MinCov.__solve_sub&gt;,</span> <span class="pre">'print':</span> <span class="pre">&lt;function</span> <span class="pre">MinCov.print&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'MinCov'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'MinCov'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#logictools.mincov.MinCov.__dict__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nelem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.__init__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'logictools.mincov'</span></em><a class="headerlink" href="#logictools.mincov.MinCov.__module__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#logictools.mincov.MinCov.__weakref__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.add_clause">
+<span class="sig-name descname"><span class="pre">add_clause</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clause</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.add_clause" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>被覆条件を追加する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clause</strong> -- 追加する条件</p>
+</dd>
+</dl>
+<p>clause は要素のリストの形で与える．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.all_cover">
+<span class="sig-name descname"><span class="pre">all_cover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.all_cover" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>被覆解をすべて求める．</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.nelem">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nelem</span></span><a class="headerlink" href="#logictools.mincov.MinCov.nelem" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>要素数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.print" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を表示する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fout</strong> -- 出力先のファイルオブジェクト</p>
+</dd>
+</dl>
+<p>fout が省略された時は標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.solve" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小被覆解をすべて求める．</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="latex_karnaugh.html"
+                          title="前の章へ">LaTeXKarnaugh</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="parser.html"
+                          title="次の章へ">Parser</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/mincov.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="parser.html" title="Parser"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="latex_karnaugh.html" title="LaTeXKarnaugh"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >モジュール一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">MinCov</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

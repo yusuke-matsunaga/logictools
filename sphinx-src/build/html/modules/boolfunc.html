@@ -1,0 +1,626 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>BoolFunc &#8212; logictools 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="Cover" href="cover.html" />
+    <link rel="prev" title="Bool3" href="bool3.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="cover.html" title="Cover"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="bool3.html" title="Bool3"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">モジュール一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BoolFunc</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="boolfunc">
+<span id="id1"></span><h1>BoolFunc<a class="headerlink" href="#boolfunc" title="この見出しへのパーマリンク">¶</a></h1>
+<span class="target" id="module-logictools.boolfunc"></span><p>BoolFunc の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>boolfunc.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.boolfunc.</span></span><span class="sig-name descname"><span class="pre">BoolFunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Boolean Function を表すクラス</p>
+<ul class="simple">
+<li><p>実際には不完全指定論理関数を表すので出力値は Bool3 型となる．</p></li>
+<li><p>入力数が高々10程度と仮定して真理値表で表す．</p></li>
+<li><p>真理値表は x0, x1, x2, ... の順に並べる．</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__and__">
+<span class="sig-name descname"><span class="pre">__and__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__and__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>AND演算子</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> -- 他方のオペランド</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>self と other の論理積を表す関数を返す．</p>
+</dd>
+</dl>
+<p>other.input_num は self.input_num と等しくなければならない．</p>
+<p>使用例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># f1, f2 は BoolFunc オブジェクト</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">&amp;</span> <span class="n">f2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__dict__">
+<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'logictools.boolfunc',</span> <span class="pre">'__doc__':</span> <span class="pre">'Boolean</span> <span class="pre">Function</span> <span class="pre">を表すクラス\n\n</span>&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">実際には不完全指定論理関数を表すので出力値は</span> <span class="pre">Bool3</span> <span class="pre">型となる．\n</span>&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">入力数が高々10程度と仮定して真理値表で表す．\n</span>&#160;&#160;&#160; <span class="pre">*</span> <span class="pre">真理値表は</span> <span class="pre">x0,</span> <span class="pre">x1,</span> <span class="pre">x2,</span> <span class="pre">...</span> <span class="pre">の順に並べる．\n</span>&#160;&#160;&#160; <span class="pre">',</span> <span class="pre">'make_const0':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_const1':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_literal':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_and':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_nand':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_or':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_nor':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_xor':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_xnor':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'make_from_string':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.__init__&gt;,</span> <span class="pre">'input_num':</span> <span class="pre">&lt;property</span> <span class="pre">object&gt;,</span> <span class="pre">'val':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.val&gt;,</span> <span class="pre">'__invert__':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.__invert__&gt;,</span> <span class="pre">'__and__':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.__and__&gt;,</span> <span class="pre">'__or__':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.__or__&gt;,</span> <span class="pre">'__xor__':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.__xor__&gt;,</span> <span class="pre">'compose':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.compose&gt;,</span> <span class="pre">'__eq__':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.__eq__&gt;,</span> <span class="pre">'gen_minterm_list':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_minterm_list&gt;,</span> <span class="pre">'gen_primes':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_primes&gt;,</span> <span class="pre">'gen_minimum_cover':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_minimum_cover&gt;,</span> <span class="pre">'print_table':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.print_table&gt;,</span> <span class="pre">'print_karnaugh':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.print_karnaugh&gt;,</span> <span class="pre">'gen_latex_minterm_sop':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_latex_minterm_sop&gt;,</span> <span class="pre">'gen_latex_maxterm_pos':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_latex_maxterm_pos&gt;,</span> <span class="pre">'gen_latex_table':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_latex_table&gt;,</span> <span class="pre">'gen_latex_tables':</span> <span class="pre">&lt;staticmethod</span> <span class="pre">object&gt;,</span> <span class="pre">'gen_latex_karnaugh':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_latex_karnaugh&gt;,</span> <span class="pre">'gen_dpic_hypercube':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.gen_dpic_hypercube&gt;,</span> <span class="pre">'_BoolFunc__default_var_map':</span> <span class="pre">&lt;function</span> <span class="pre">BoolFunc.__default_var_map&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'BoolFunc'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'BoolFunc'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__hash__':</span> <span class="pre">None,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__dict__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__eq__">
+<span class="sig-name descname"><span class="pre">__eq__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__eq__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価比較演算子</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> -- 他方のオペランド</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>self と other が同じ関数の時 True を返す．</p>
+</dd>
+</dl>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># f1, f2 は BoolFunc オブジェクト</span>
+<span class="k">if</span> <span class="n">f1</span> <span class="o">==</span> <span class="n">f2</span><span class="p">:</span>
+   <span class="o">...</span>
+</pre></div>
+</div>
+<p>という風に使う．</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__hash__">
+<span class="sig-name descname"><span class="pre">__hash__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__hash__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__init__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>初期化</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arg</strong> -- 入力パラメータ</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>arg には Bool3 のリスト(シーケンス)か文字列を指定する．</p></li>
+<li><p>リストの長さは 2^input_num でなければならない(input_numは入力数)．</p></li>
+<li><p>文字列の長さは 2^input_num でなければならない(input_numは入力数)．</p></li>
+<li><p>文字列の個々の文字は Bool3 へ変換可能でなければならない．</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__invert__">
+<span class="sig-name descname"><span class="pre">__invert__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__invert__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>not演算子</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>self の否定を表す論理関数を返す．</p>
+</dd>
+</dl>
+<p>使用例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># f は BoolFunc オブジェクト</span>
+<span class="n">g</span> <span class="o">=</span> <span class="o">~</span><span class="n">f</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'logictools.boolfunc'</span></em><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__module__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__or__">
+<span class="sig-name descname"><span class="pre">__or__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__or__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>OR演算子</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> -- 他方のオペランド</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>self と other の論理和を表す関数を返す．</p>
+</dd>
+</dl>
+<p>other.input_num は self.input_num と等しくなければならない．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># f1, f2 は BoolFunc オブジェクト</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">|</span> <span class="n">f2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__weakref__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>list of weak references to the object (if defined)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.__xor__">
+<span class="sig-name descname"><span class="pre">__xor__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.__xor__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>XOR演算子</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>other</strong> -- 他方のオペランド</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>self と other の排他的論理和を表す関数を返す．</p>
+</dd>
+</dl>
+<p>other.input_num は self.input_num と等しくなければならない．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># f1, f2 は BoolFunc オブジェクト</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">f1</span> <span class="o">^</span> <span class="n">f2</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.compose">
+<span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ifunc_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.compose" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>compose 演算</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ifunc_list</strong> -- 入力関数のリスト</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>個々の入力を ifunc_list の要素に置き換えた関数を返す．</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>self は完全指定関数でなければならない．</p></li>
+<li><p>ifunc_list の要素数は self.input_num と等しくなければならない．</p></li>
+<li><p>ifunc_list の関数は全て同じ入力数でなければならない．</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_dpic_hypercube">
+<span class="sig-name descname"><span class="pre">gen_dpic_hypercube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_dpic_hypercube" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>幾何学表現（ハイパーキューブ）用のdpicソースを出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_karnaugh">
+<span class="sig-name descname"><span class="pre">gen_latex_karnaugh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicant_list=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_karnaugh" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>カルノー図をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>implicant_list</strong> -- インプリカントのリスト(名前付きオプション引数)</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_maxterm_pos">
+<span class="sig-name descname"><span class="pre">gen_latex_maxterm_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_maxterm_pos" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>和積標準形をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varmap</strong> -- 変数名の辞書(名前付きのオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_minterm_sop">
+<span class="sig-name descname"><span class="pre">gen_latex_minterm_sop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_minterm_sop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>積和標準形をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varmap</strong> -- 変数名の辞書(名前付きのオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_table">
+<span class="sig-name descname"><span class="pre">gen_latex_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>真理値表をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> -- 関数名</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きオプションパラメータ)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプションパラメータ)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_tables">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gen_latex_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_tables" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>複数の関数を表す真理値表を LaTeX 形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func_list</strong> -- 関数のリスト</p></li>
+<li><p><strong>fname_list</strong> -- 関数名のリスト</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きオプションパラメータ)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプションパラメータ)</p></li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>func_list は最低1つは要素を持たなければならない．</p></li>
+<li><p>fname_list の要素数は func_list の要素数と同じでなければならない．</p></li>
+<li><p>fout を省略した場合には標準出力が用いられる．</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_minimum_cover">
+<span class="sig-name descname"><span class="pre">gen_minimum_cover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_minimum_cover" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最簡積和形論理式を返す．
+:return: 最簡積和形論理式を表す Cover のリストを返す．</p>
+<p>最簡形が一つしかない場合でも結果はリストの形で返される．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_minterm_list">
+<span class="sig-name descname"><span class="pre">gen_minterm_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_minterm_list" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>BoolFunc から onset, dcset, offset の最小項のリストを作る．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_primes">
+<span class="sig-name descname"><span class="pre">gen_primes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_primes" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>主項のリストを作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>主項の Cube のリストを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.input_num">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_num</span></span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.input_num" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>入力数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_and">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_and</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_and" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>AND関数を作る．</p>
+<p>param input_num: 入力数</p>
+<p>4入力のAND関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_and</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_const0">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_const0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_const0" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>恒偽関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力の恒偽関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_const0</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_const1">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_const1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_const1" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>恒真関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>3入力の恒真関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_const1</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_from_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_from_string" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>論理式を表す文字列から関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr_string</strong> -- 論理式を表す文字列</p></li>
+<li><p><strong>input_numm</strong> -- 入力数</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_literal">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_literal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_literal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>リテラル関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_num</strong> -- 入力数</p></li>
+<li><p><strong>var_id</strong> -- 変数番号 ( 0 &lt;= var_id &lt; input_num )</p></li>
+</ul>
+</dd>
+</dl>
+<p>5入力の0番目の変数のりテラル関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_literal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>否定のリテラルは否定演算(~)で作る．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_nand">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_nand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_nand" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>NAND関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のNAND関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_nand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_nor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_nor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_nor" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>NOR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のNOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_nor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_or">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_or</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_or" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>OR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_or</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_xnor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_xnor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_xnor" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>XNOR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のXNOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_xnor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_xor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_xor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_xor" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>XOR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のXOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_xor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.print_karnaugh">
+<span class="sig-name descname"><span class="pre">print_karnaugh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.print_karnaugh" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>カルノー図の形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きのオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>4入力関数まで対応している．</p>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.print_table">
+<span class="sig-name descname"><span class="pre">print_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.print_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>真理値表の形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きパラメータ)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きパラメータ)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.val">
+<span class="sig-name descname"><span class="pre">val</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ival_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.val" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>入力値に対する出力値を返す．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ival_list</strong> -- 入力値のリスト</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.boolfunc.toBoolFunc">
+<span class="sig-prename descclassname"><span class="pre">logictools.boolfunc.</span></span><span class="sig-name descname"><span class="pre">toBoolFunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.toBoolFunc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>BoolFunc型へ変換する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arg</strong> -- 入力パラメータ</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>BoolFunc のオブジェクトを返す．</p>
+</dd>
+</dl>
+<p>arg が BooleFunc 以外の型の場合にはリストか文字列から
+BoolFunc型へ変換する．</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="bool3.html"
+                          title="前の章へ">Bool3</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="cover.html"
+                          title="次の章へ">Cover</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/boolfunc.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="cover.html" title="Cover"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="bool3.html" title="Bool3"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >モジュール一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">BoolFunc</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>
