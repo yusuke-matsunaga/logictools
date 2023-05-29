@@ -352,7 +352,7 @@ class BoolFunc:
         - ifunc_list の関数は全て同じ入力数でなければならない．
         """
         assert len(ifunc_list) == self.input_num
-        ifunc_list - [toBoolFunc(ifunc) for ifunc in ifunc_list]
+        ifunc_list = [toBoolFunc(ifunc) for ifunc in ifunc_list]
 
         if self.input_num == 0:
             # 0 入力関数の場合は置き換える変数がない．
