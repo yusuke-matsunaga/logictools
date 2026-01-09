@@ -21,5 +21,4 @@ Logic Tools は論理関数，論理式，有限状態機械などの論理回�
 
 ## ドキュメント
 
-``docs`` ディレクトリに移動して ``(g)make hmtl`` を実行すれば
-``_build/html`` の下にチュートリアルのドキュメントが生成されます．
+https://yusuke-matsunaga.github.io/logictools/
