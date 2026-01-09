@@ -1,0 +1,1562 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>logictools package &#8212; logictools 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">logictools package</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="logictools-package">
+<h1>logictools package<a class="headerlink" href="#logictools-package" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="この見出しへのパーマリンク">¶</a></h2>
+</section>
+<section id="module-logictools.bool3">
+<span id="logictools-bool3-module"></span><h2>logictools.bool3 module<a class="headerlink" href="#module-logictools.bool3" title="この見出しへのパーマリンク">¶</a></h2>
+<p>Bool3 の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool3.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.bool3.Bool3">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.bool3.</span></span><span class="sig-name descname"><span class="pre">Bool3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">module</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">qualname</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.bool3.Bool3" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
+<p>3値のブール値を表すクラス</p>
+<p>_0 と _1 および _d を要素とする列挙型．
+_1 と _0 は Python3 の組み込み型の True と False に対応する．
+このクラスでは第３の値として _d (don't care) が定義されている．
+_d は _0 もしくは _1 のどちらかの値を取るという意味で，
+_d を含んだ演算の結果が不定の場合には結果も _d となる．
+_0 との AND のように結果が決まる場合には _d との演算でも
+結果が _0 または _1 に定まる場合もある．</p>
+<p>もちろん，この３値の代数系はBool代数の基本律を満たしている．</p>
+<p>文字列や数値からの変換関数 toBool3() を用いて Bool3 型へ変換
+することもできる．</p>
+<p>通常の論理演算子 ~, &amp;, |, ^ を用いてBool3どうしの論理演算を行なう
+ことができる．また，右辺か左辺のどちらか一方でも Bool3 型ならば，
+上記の文字列や数値から Bool3 に変換を行って論理演算を行なうことができる．</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.bool3.toBool3">
+<span class="sig-prename descclassname"><span class="pre">logictools.bool3.</span></span><span class="sig-name descname"><span class="pre">toBool3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.bool3.toBool3" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Bool3型へ変換する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arg</strong> -- 入力パラメータ</p>
+</dd>
+</dl>
+<table class="docutils align-left">
+<thead>
+<tr class="row-odd"><th class="head"><p>arg の値</p></th>
+<th class="head"><p>型</p></th>
+<th class="head"><p>変換後のBool3</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>'0'</p></td>
+<td><p>str</p></td>
+<td><p>_0</p></td>
+</tr>
+<tr class="row-odd"><td><p>0</p></td>
+<td><p>int</p></td>
+<td><p>_0</p></td>
+</tr>
+<tr class="row-even"><td><p>False</p></td>
+<td><p>bool</p></td>
+<td><p>_0</p></td>
+</tr>
+<tr class="row-odd"><td><p>'1'</p></td>
+<td><p>str</p></td>
+<td><p>_1</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>int</p></td>
+<td><p>_1</p></td>
+</tr>
+<tr class="row-odd"><td><p>True</p></td>
+<td><p>bool</p></td>
+<td><p>_1</p></td>
+</tr>
+<tr class="row-even"><td><p>'X'</p></td>
+<td><p>str</p></td>
+<td><p>_d</p></td>
+</tr>
+<tr class="row-odd"><td><p>'x'</p></td>
+<td><p>str</p></td>
+<td><p>_d</p></td>
+</tr>
+<tr class="row-even"><td><p>'D'</p></td>
+<td><p>str</p></td>
+<td><p>_d</p></td>
+</tr>
+<tr class="row-odd"><td><p>'d'</p></td>
+<td><p>str</p></td>
+<td><p>_d</p></td>
+</tr>
+<tr class="row-even"><td><p>'*'</p></td>
+<td><p>str</p></td>
+<td><p>_d</p></td>
+</tr>
+<tr class="row-odd"><td><p>'-'</p></td>
+<td><p>str</p></td>
+<td><p>_d</p></td>
+</tr>
+</tbody>
+</table>
+<p>それ以外の場合には例外(ValueError)が送出される．</p>
+</dd></dl>
+
+</section>
+<section id="module-logictools.boolfunc">
+<span id="logictools-boolfunc-module"></span><h2>logictools.boolfunc module<a class="headerlink" href="#module-logictools.boolfunc" title="この見出しへのパーマリンク">¶</a></h2>
+<p>BoolFunc の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>boolfunc.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.boolfunc.</span></span><span class="sig-name descname"><span class="pre">BoolFunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Boolean Function を表すクラス</p>
+<ul class="simple">
+<li><p>実際には不完全指定論理関数を表すので出力値は Bool3 型となる．</p></li>
+<li><p>入力数が高々10程度と仮定して真理値表で表す．</p></li>
+<li><p>真理値表は x0, x1, x2, ... の順に並べる．</p></li>
+</ul>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.compose">
+<span class="sig-name descname"><span class="pre">compose</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ifunc_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.compose" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>compose 演算</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ifunc_list</strong> -- 入力関数のリスト</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>個々の入力を ifunc_list の要素に置き換えた関数を返す．</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>self は完全指定関数でなければならない．</p></li>
+<li><p>ifunc_list の要素数は self.input_num と等しくなければならない．</p></li>
+<li><p>ifunc_list の関数は全て同じ入力数でなければならない．</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_dpic_hypercube">
+<span class="sig-name descname"><span class="pre">gen_dpic_hypercube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_dpic_hypercube" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>幾何学表現（ハイパーキューブ）用のdpicソースを出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_karnaugh">
+<span class="sig-name descname"><span class="pre">gen_latex_karnaugh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicant_list=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_karnaugh" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>カルノー図をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>implicant_list</strong> -- インプリカントのリスト(名前付きオプション引数)</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_maxterm_pos">
+<span class="sig-name descname"><span class="pre">gen_latex_maxterm_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_maxterm_pos" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>和積標準形をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varmap</strong> -- 変数名の辞書(名前付きのオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_minterm_sop">
+<span class="sig-name descname"><span class="pre">gen_latex_minterm_sop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_minterm_sop" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>積和標準形をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>varmap</strong> -- 変数名の辞書(名前付きのオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_table">
+<span class="sig-name descname"><span class="pre">gen_latex_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>真理値表をLaTex形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fname</strong> -- 関数名</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きオプションパラメータ)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプションパラメータ)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_latex_tables">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">gen_latex_tables</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_latex_tables" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>複数の関数を表す真理値表を LaTeX 形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func_list</strong> -- 関数のリスト</p></li>
+<li><p><strong>fname_list</strong> -- 関数名のリスト</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きオプションパラメータ)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプションパラメータ)</p></li>
+</ul>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>func_list は最低1つは要素を持たなければならない．</p></li>
+<li><p>fname_list の要素数は func_list の要素数と同じでなければならない．</p></li>
+<li><p>fout を省略した場合には標準出力が用いられる．</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_minimum_cover">
+<span class="sig-name descname"><span class="pre">gen_minimum_cover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_minimum_cover" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最簡積和形論理式を返す．
+:return: 最簡積和形論理式を表す Cover のリストを返す．</p>
+<p>最簡形が一つしかない場合でも結果はリストの形で返される．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_minterm_list">
+<span class="sig-name descname"><span class="pre">gen_minterm_list</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_minterm_list" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>BoolFunc から onset, dcset, offset の最小項のリストを作る．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.gen_primes">
+<span class="sig-name descname"><span class="pre">gen_primes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.gen_primes" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>主項のリストを作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>主項の Cube のリストを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.input_num">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_num</span></span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.input_num" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>入力数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_and">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_and</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_and" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>AND関数を作る．</p>
+<p>param input_num: 入力数</p>
+<p>4入力のAND関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_and</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_const0">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_const0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_const0" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>恒偽関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力の恒偽関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_const0</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_const1">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_const1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_const1" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>恒真関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>3入力の恒真関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_const1</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_from_string">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_from_string</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">expr_string</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_from_string" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>論理式を表す文字列から関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>expr_string</strong> -- 論理式を表す文字列</p></li>
+<li><p><strong>input_numm</strong> -- 入力数</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_literal">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_literal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_id</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_literal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>リテラル関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_num</strong> -- 入力数</p></li>
+<li><p><strong>var_id</strong> -- 変数番号 ( 0 &lt;= var_id &lt; input_num )</p></li>
+</ul>
+</dd>
+</dl>
+<p>5入力の0番目の変数のりテラル関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_literal</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>否定のリテラルは否定演算(~)で作る．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_nand">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_nand</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_nand" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>NAND関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のNAND関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_nand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_nor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_nor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_nor" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>NOR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のNOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_nor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_or">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_or</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_or" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>OR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_or</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_xnor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_xnor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_xnor" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>XNOR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のXNOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_xnor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.make_xor">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">make_xor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.make_xor" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>XOR関数を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_num</strong> -- 入力数</p>
+</dd>
+</dl>
+<p>4入力のXOR関数を作るコード例</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="n">BoolFunc</span><span class="o">.</span><span class="n">make_xor</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.print_karnaugh">
+<span class="sig-name descname"><span class="pre">print_karnaugh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.print_karnaugh" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>カルノー図の形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きのオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>4入力関数まで対応している．</p>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.print_table">
+<span class="sig-name descname"><span class="pre">print_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.print_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>真理値表の形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きパラメータ)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きパラメータ)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout を省略した場合には標準出力が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.boolfunc.BoolFunc.val">
+<span class="sig-name descname"><span class="pre">val</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ival_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.BoolFunc.val" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>入力値に対する出力値を返す．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>ival_list</strong> -- 入力値のリスト</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.boolfunc.toBoolFunc">
+<span class="sig-prename descclassname"><span class="pre">logictools.boolfunc.</span></span><span class="sig-name descname"><span class="pre">toBoolFunc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.boolfunc.toBoolFunc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>BoolFunc型へ変換する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>arg</strong> -- 入力パラメータ</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>BoolFunc のオブジェクトを返す．</p>
+</dd>
+</dl>
+<p>arg が BooleFunc 以外の型の場合にはリストか文字列から
+BoolFunc型へ変換する．</p>
+</dd></dl>
+
+</section>
+<section id="module-logictools.cover">
+<span id="logictools-cover-module"></span><h2>logictools.cover module<a class="headerlink" href="#module-logictools.cover" title="この見出しへのパーマリンク">¶</a></h2>
+<p>Cover の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cover.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.cover.Cover">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.cover.</span></span><span class="sig-name descname"><span class="pre">Cover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cover.Cover" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>カバー(キューブの集合)を表すクラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cube_list</strong> -- キューブ(Cube)のリスト</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cover.Cover.DeMorgan_latex_str">
+<span class="sig-name descname"><span class="pre">DeMorgan_latex_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cover.Cover.DeMorgan_latex_str" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>De Morgan の法則で否定した和積形論理式を表す LaTeX 文字列を返す．</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param[in] var_map<span class="colon">:</span></dt>
+<dd class="field-odd"><p>変数名の辞書(名前付きのオプション引数)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cover.Cover.add_cube">
+<span class="sig-name descname"><span class="pre">add_cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">cube</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cover.Cover.add_cube" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューブ(Cube)を追加する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>cube</strong> -- 追加するキューブ</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.cover.Cover.cube_list">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cube_list</span></span><a class="headerlink" href="#logictools.cover.Cover.cube_list" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューブのリストを返す．</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.cover.Cover.cube_num">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">cube_num</span></span><a class="headerlink" href="#logictools.cover.Cover.cube_num" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>キューブ数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cover.Cover.latex_str">
+<span class="sig-name descname"><span class="pre">latex_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cover.Cover.latex_str" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>積和形論理式を表す LaTeX 文字列を返す．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var_map</strong> -- 変数名の辞書(名前付きのオプション引数)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.cover.Cover.literal_num">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">literal_num</span></span><a class="headerlink" href="#logictools.cover.Cover.literal_num" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>リテラル数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cover.Cover.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cover.Cover.print" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p>
+</dd>
+</dl>
+<p>fout が省略された場合は標準出力が用いられる．</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-logictools.cube">
+<span id="logictools-cube-module"></span><h2>logictools.cube module<a class="headerlink" href="#module-logictools.cube" title="この見出しへのパーマリンク">¶</a></h2>
+<p>Cube の定義ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>cube.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">Copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><ol class="upperalpha simple" start="3">
+<li><p>2017, 2019 Yusuke Matsunaga, All rights reserved.</p></li>
+</ol>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.cube.Cube">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.cube.</span></span><span class="sig-name descname"><span class="pre">Cube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.Cube" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>キューブを表すクラス</p>
+<p>意味的には Bool3 の列(シーケンス)
+入力数が高々10程度と仮定して符号なし整数１語で表す．</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cube.Cube.DeMorgan_latex_str">
+<span class="sig-name descname"><span class="pre">DeMorgan_latex_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.Cube.DeMorgan_latex_str" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>DeMorgan の法則で否定した和積形論理式を表すLaTex文字列を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var_map</strong> -- 変数名の辞書(名前付きのオプション引数)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cube.Cube.clr_literal">
+<span class="sig-name descname"><span class="pre">clr_literal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.Cube.clr_literal" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>pos 番目の変数をドントケアに設定する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pos</strong> -- 変数番号 ( 0 &lt;= pos &lt; input_num )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cube.Cube.contain">
+<span class="sig-name descname"><span class="pre">contain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">other</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.Cube.contain" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>包含関係を調べる．</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.cube.Cube.input_num">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">input_num</span></span><a class="headerlink" href="#logictools.cube.Cube.input_num" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>入力数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cube.Cube.latex_str">
+<span class="sig-name descname"><span class="pre">latex_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.Cube.latex_str" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を表すLaTex文字列を作る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>var_map</strong> -- 変数名の辞書(名前つきのオプション引数)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.cube.Cube.literal_num">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">literal_num</span></span><a class="headerlink" href="#logictools.cube.Cube.literal_num" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>リテラル数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cube.Cube.set_negliteral">
+<span class="sig-name descname"><span class="pre">set_negliteral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.Cube.set_negliteral" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>pos 番目の変数を負のリテラルに設定する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pos</strong> -- 変数番号 ( 0 &lt;= pos &lt; input_num )</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.cube.Cube.set_posliteral">
+<span class="sig-name descname"><span class="pre">set_posliteral</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pos</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.Cube.set_posliteral" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>pos 番目の変数を正のリテラルに設定する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pos</strong> -- 変数番号 ( 0 &lt;= pos &lt; input_num )</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.cube.toCube">
+<span class="sig-prename descclassname"><span class="pre">logictools.cube.</span></span><span class="sig-name descname"><span class="pre">toCube</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">arg</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.cube.toCube" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>Cube型へ変換する</p>
+<p>変換できない時は TypeError 例外を送出する．</p>
+</dd></dl>
+
+</section>
+<section id="module-logictools.dpic_hc">
+<span id="logictools-dpic-hc-module"></span><h2>logictools.dpic_hc module<a class="headerlink" href="#module-logictools.dpic_hc" title="この見出しへのパーマリンク">¶</a></h2>
+<p>ハイパーキューブを描く dpic ソースを出力するスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dpic_hc.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2020 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.dpic_hc.dpic_hc">
+<span class="sig-prename descclassname"><span class="pre">logictools.dpic_hc.</span></span><span class="sig-name descname"><span class="pre">dpic_hc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.dpic_hc.dpic_hc" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>関数の幾何学的表現の図を描くための dpic ファイルを生成する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> -- 対象の関数</p></li>
+<li><p><strong>var_map</strong> -- 変数名の辞書(名前付きのオプション引数)</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きのオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout が省略された場合には標準出力が用いられる．</p>
+</dd></dl>
+
+</section>
+<section id="module-logictools.eqtable">
+<span id="logictools-eqtable-module"></span><h2>logictools.eqtable module<a class="headerlink" href="#module-logictools.eqtable" title="この見出しへのパーマリンク">¶</a></h2>
+<p>有限状態機械の等価状態対の状態を表すクラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>eqtable.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2022 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.eqtable.EqTable">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.eqtable.</span></span><span class="sig-name descname"><span class="pre">EqTable</span></span><a class="headerlink" href="#logictools.eqtable.EqTable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>有限状態機械の等価状態対の情報を格納するテーブル</p>
+<p>2つの状態番号とステップ番号をキーとして，
+以下の情報を持つ．
+- 等価な場合は条件となる状態対の集合
+- 等価でない場合はその印</p>
+<p>等価な場合に条件が空の場合があるので等価でない場合は
+set() ではなく None を持つ．</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.eqtable.EqTable.get">
+<span class="sig-name descname"><span class="pre">get</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.eqtable.EqTable.get" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を取り出す．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>int s</em><em>,</em>) -- 状態番号</p></li>
+<li><p><strong>step</strong> (<em>int</em>) -- ステップ</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>対応する状態対の set を返す．</p>
+</dd>
+</dl>
+<p>step が指定されなかった場合には max_step が用いられる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.eqtable.EqTable.get_all_groups">
+<span class="sig-name descname"><span class="pre">get_all_groups</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.eqtable.EqTable.get_all_groups" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態グループをすべて取り出す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.eqtable.EqTable.get_all_pairs">
+<span class="sig-name descname"><span class="pre">get_all_pairs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.eqtable.EqTable.get_all_pairs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態対を全て取り出す．</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>等価状態対のリストを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.eqtable.EqTable.max_step">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">max_step</span></span><a class="headerlink" href="#logictools.eqtable.EqTable.max_step" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>step の最大値を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.eqtable.EqTable.put">
+<span class="sig-name descname"><span class="pre">put</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">t</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cond_set</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.eqtable.EqTable.put" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を追加する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>t</strong> (<em>int s</em><em>,</em>) -- 状態番号</p></li>
+<li><p><strong>step</strong> (<em>int</em>) -- ステップ</p></li>
+<li><p><strong>cond_set</strong> (<em>set</em>) -- 条件を表す状態対のセット</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-logictools.fsm">
+<span id="logictools-fsm-module"></span><h2>logictools.fsm module<a class="headerlink" href="#module-logictools.fsm" title="この見出しへのパーマリンク">¶</a></h2>
+<p>Fsm の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fsm.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.fsm.</span></span><span class="sig-name descname"><span class="pre">Fsm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>有限状態機械を表すクラス</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.add_transition">
+<span class="sig-name descname"><span class="pre">add_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.add_transition" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移を追加する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from_name</strong> (<em>str</em>) -- 遷移元の状態名</p></li>
+<li><p><strong>input_val</strong> (<em>str</em>) -- 入力記号</p></li>
+<li><p><strong>next_name</strong> (<em>str</em>) -- 遷移先の状態名</p></li>
+<li><p><strong>output_val</strong> (<em>str</em>) -- 出力記号</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.extract_functions">
+<span class="sig-name descname"><span class="pre">extract_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.extract_functions" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>符号割当を行って次状態関数，出力関数を取り出す．</p>
+<p>: param input_map: 入力の符号割当
+: param output_map: 出力の符号割当
+: param state_map: 状態の符号割当
+: return: 次状態関数，出力関数のリストを返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_dot_diagram">
+<span class="sig-name descname"><span class="pre">gen_dot_diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_dot_diagram" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>GraphVizを使って状態遷移図を表す dot コードを出力する．</p>
+<p>: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略された場合，標準出力が使用される．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_diagram">
+<span class="sig-name descname"><span class="pre">gen_latex_diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_diagram" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>GraphVizを使って状態遷移図を表す latex コードを出力する．</p>
+<p>: param dict[str, str] input_dict: 出力用の入力記号の辞書
+: param dict[str, str] output_dict: 出力用の出力記号の辞書
+: param dict[str, str] state_dict: 出力用の状態名の辞書
+: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略された場合，標準出力が使用される．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_eqtable">
+<span class="sig-name descname"><span class="pre">gen_latex_eqtable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_eqtable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小化のための等価状態テーブルを LaTeX 形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<a class="reference internal" href="#logictools.eqtable.EqTable" title="logictools.eqtable.EqTable"><em>EqTable</em></a>) -- 等価状態対テーブル</p></li>
+<li><p><strong>step</strong> (<em>int</em>) -- 対象のステップ</p></li>
+<li><p><strong>state_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) -- 出力用の状態名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_eqtable_all">
+<span class="sig-name descname"><span class="pre">gen_latex_eqtable_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_eqtable_all" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小化のための等価状態テーブルを LaTeX 形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<a class="reference internal" href="#logictools.eqtable.EqTable" title="logictools.eqtable.EqTable"><em>EqTable</em></a>) -- 等価状態対テーブル</p></li>
+<li><p><strong>state_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) -- 出力用の状態名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_table">
+<span class="sig-name descname"><span class="pre">gen_latex_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_label='states'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_label='inputs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_backslash=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移表を LaTeX 形式で出力する．</p>
+<p>: param dict[str, str] input_dict: 出力用の入力記号の辞書
+: param dict[str, str] output_dict: 出力用の出力記号の辞書
+: param dict[str, str] state_dict: 出力用の状態名の辞書
+: param state_label: 左上隅の左下側のラベル
+: param input_label: 左上隅の右上側のラベル．
+: param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
+: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.get_all_eqgroups">
+<span class="sig-name descname"><span class="pre">get_all_eqgroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.get_all_eqgroups" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態グループを求める．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.get_all_eqpairs">
+<span class="sig-name descname"><span class="pre">get_all_eqpairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.get_all_eqpairs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態対を求める．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.get_transition">
+<span class="sig-name descname"><span class="pre">get_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.get_transition" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移の情報を得る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from_name</strong> (<em>str</em>) -- 遷移元の状態名</p></li>
+<li><p><strong>input_val</strong> (<em>str</em>) -- 入力</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>(遷移先の状態名, 出力) のタプルを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.make_eqtable">
+<span class="sig-name descname"><span class="pre">make_eqtable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.make_eqtable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態のテーブルを得る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>EqTable を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.minimize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小化を行う．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>table</strong> (<a class="reference internal" href="#logictools.eqtable.EqTable" title="logictools.eqtable.EqTable"><em>EqTable</em></a>) -- 等価状態対テーブル</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>最小化した機械を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.print_table">
+<span class="sig-name descname"><span class="pre">print_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.print_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移表を出力する．</p>
+<p>: param dict[str, str] input_dict: 出力用の入力記号の辞書
+: param dict[str, str] output_dict: 出力用の出力記号の辞書
+: param dict[str, str] state_dict: 出力用の状態名の辞書
+: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.fsm.label_str">
+<span class="sig-prename descclassname"><span class="pre">logictools.fsm.</span></span><span class="sig-name descname"><span class="pre">label_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.label_str" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>出力用のラベル文字列を得る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>str</em>) -- 元の文字列</p></li>
+<li><p><strong>label_map</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) -- 変換用の辞書</p></li>
+</ul>
+</dd>
+</dl>
+<p>label_map が None の場合は src を返す．</p>
+</dd></dl>
+
+</section>
+<section id="module-logictools.karnaugh">
+<span id="logictools-karnaugh-module"></span><h2>logictools.karnaugh module<a class="headerlink" href="#module-logictools.karnaugh" title="この見出しへのパーマリンク">¶</a></h2>
+<p>カルノー図を作るスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>karnaugh.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.karnaugh.karnaugh0">
+<span class="sig-prename descclassname"><span class="pre">logictools.karnaugh.</span></span><span class="sig-name descname"><span class="pre">karnaugh0</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.karnaugh.karnaugh0" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>0変数のカルノー図を出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> -- 対象の関数</p></li>
+<li><p><strong>var_ma</strong> -- 変数名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.karnaugh.karnaugh1">
+<span class="sig-prename descclassname"><span class="pre">logictools.karnaugh.</span></span><span class="sig-name descname"><span class="pre">karnaugh1</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.karnaugh.karnaugh1" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>1変数のカルノー図を出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> -- 対象の関数</p></li>
+<li><p><strong>var_ma</strong> -- 変数名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.karnaugh.karnaugh2">
+<span class="sig-prename descclassname"><span class="pre">logictools.karnaugh.</span></span><span class="sig-name descname"><span class="pre">karnaugh2</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.karnaugh.karnaugh2" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>2変数のカルノー図を出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> -- 対象の関数</p></li>
+<li><p><strong>var_ma</strong> -- 変数名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.karnaugh.karnaugh3">
+<span class="sig-prename descclassname"><span class="pre">logictools.karnaugh.</span></span><span class="sig-name descname"><span class="pre">karnaugh3</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.karnaugh.karnaugh3" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>3変数のカルノー図を出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> -- 対象の関数</p></li>
+<li><p><strong>var_ma</strong> -- 変数名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.karnaugh.karnaugh4">
+<span class="sig-prename descclassname"><span class="pre">logictools.karnaugh.</span></span><span class="sig-name descname"><span class="pre">karnaugh4</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.karnaugh.karnaugh4" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>4変数のカルノー図を出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>func</strong> -- 対象の関数</p></li>
+<li><p><strong>var_ma</strong> -- 変数名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-logictools.latex_karnaugh">
+<span id="logictools-latex-karnaugh-module"></span><h2>logictools.latex_karnaugh module<a class="headerlink" href="#module-logictools.latex_karnaugh" title="この見出しへのパーマリンク">¶</a></h2>
+<p>LaTeX 用のカルノー図記述を作るスクリプト</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>latex_karnaugh.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2017, 2019, 2020 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.latex_karnaugh.latex_karnaugh">
+<span class="sig-prename descclassname"><span class="pre">logictools.latex_karnaugh.</span></span><span class="sig-name descname"><span class="pre">latex_karnaugh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">implicant_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.latex_karnaugh.latex_karnaugh" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+</section>
+<section id="module-logictools.mincov">
+<span id="logictools-mincov-module"></span><h2>logictools.mincov module<a class="headerlink" href="#module-logictools.mincov" title="この見出しへのパーマリンク">¶</a></h2>
+<p>MinCov の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>mincov.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.mincov.</span></span><span class="sig-name descname"><span class="pre">MinCov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nelem</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>minimum covering を行うクラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>nelem</strong> -- 要素数</p>
+</dd>
+</dl>
+<p>最小被覆問題とは要素の集合と，
+その集合の部分集合族が与えられた時に，
+すべての部分集合族について最低１つの要素を含むような
+解集合(被覆解と呼ぶ)のなかで要素数最小のものを求める問題である．</p>
+<p>最小被覆問題はNP困難問題であり，厳密最小解を求める効率の良いアルゴリズム
+は見つかっていない．
+ここでは小さな問題に対して解を全列挙する方式で最小解を求めている．</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.add_clause">
+<span class="sig-name descname"><span class="pre">add_clause</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">clause</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.add_clause" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>被覆条件を追加する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>clause</strong> -- 追加する条件</p>
+</dd>
+</dl>
+<p>clause は要素のリストの形で与える．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.all_cover">
+<span class="sig-name descname"><span class="pre">all_cover</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.all_cover" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>被覆解をすべて求める．</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.nelem">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nelem</span></span><a class="headerlink" href="#logictools.mincov.MinCov.nelem" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>要素数を返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.print" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を表示する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fout</strong> -- 出力先のファイルオブジェクト</p>
+</dd>
+</dl>
+<p>fout が省略された時は標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.mincov.MinCov.solve">
+<span class="sig-name descname"><span class="pre">solve</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.mincov.MinCov.solve" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小被覆解をすべて求める．</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-logictools.parser">
+<span id="logictools-parser-module"></span><h2>logictools.parser module<a class="headerlink" href="#module-logictools.parser" title="この見出しへのパーマリンク">¶</a></h2>
+<p>論理式をパーズするクラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>parser.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2020 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.parser.Parser">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.parser.</span></span><span class="sig-name descname"><span class="pre">Parser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_num</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.parser.Parser" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>論理式をパーズするためのクラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_numm</strong> -- 入力数</p></li>
+<li><p><strong>var_map</strong> -- 変数の辞書</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.parser.Parser.print_emsg">
+<span class="sig-name descname"><span class="pre">print_emsg</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.parser.Parser.print_emsg" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>エラーメッセージを出力する．</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.parser.Token">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.parser.</span></span><span class="sig-name descname"><span class="pre">Token</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">token_id</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">str_rep</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.parser.Token" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>トークンを表すクラス</p>
+<dl class="field-list simple">
+<dt class="field-odd">Paramt token_id<span class="colon">:</span></dt>
+<dd class="field-odd"><p>トークンID</p>
+</dd>
+<dt class="field-even">パラメータ<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>str_rep</strong> -- 文字列表現</p></li>
+<li><p><strong>var_id</strong> -- 変数番号</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.parser.Token.id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">id</span></span><a class="headerlink" href="#logictools.parser.Token.id" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>トークンIDを返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.parser.Token.print">
+<span class="sig-name descname"><span class="pre">print</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.parser.Token.print" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を出力する</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.parser.Token.to_string">
+<span class="sig-name descname"><span class="pre">to_string</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.parser.Token.to_string" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>内容を表す文字列を返す．</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="logictools.parser.Token.var_id">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">var_id</span></span><a class="headerlink" href="#logictools.parser.Token.var_id" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>変数番号を返す．</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-logictools.qm">
+<span id="logictools-qm-module"></span><h2>logictools.qm module<a class="headerlink" href="#module-logictools.qm" title="この見出しへのパーマリンク">¶</a></h2>
+<p>Quine-McCluskey 法を実装したアルゴリズム</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>qm.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2017 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.qm.gen_minimum_cover">
+<span class="sig-prename descclassname"><span class="pre">logictools.qm.</span></span><span class="sig-name descname"><span class="pre">gen_minimum_cover</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">onset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prime_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.qm.gen_minimum_cover" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最簡積和形論理式を求める．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>onset</strong> -- オンセットの最小項のリスト</p></li>
+<li><p><strong>prime_list</strong> -- プライムインプリカントのリスト</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>最簡積和形論理式のリストを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.qm.gen_primes">
+<span class="sig-prename descclassname"><span class="pre">logictools.qm.</span></span><span class="sig-name descname"><span class="pre">gen_primes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">minterm_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.qm.gen_primes" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>全てのプライムインプリカントを求める．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>minterm_list</strong> -- 最小項のリスト</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>プライムインプリカントのリスト</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+<section id="module-logictools">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-logictools" title="この見出しへのパーマリンク">¶</a></h2>
+<p>logictools パッケージ</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>__init__.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">logictools package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-logictools.bool3">logictools.bool3 module</a><ul>
+<li><a class="reference internal" href="#logictools.bool3.Bool3"><code class="docutils literal notranslate"><span class="pre">Bool3</span></code></a></li>
+<li><a class="reference internal" href="#logictools.bool3.toBool3"><code class="docutils literal notranslate"><span class="pre">toBool3()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.boolfunc">logictools.boolfunc module</a><ul>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc"><code class="docutils literal notranslate"><span class="pre">BoolFunc</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.compose"><code class="docutils literal notranslate"><span class="pre">BoolFunc.compose()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_dpic_hypercube"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_dpic_hypercube()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_latex_karnaugh"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_latex_karnaugh()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_latex_maxterm_pos"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_latex_maxterm_pos()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_latex_minterm_sop"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_latex_minterm_sop()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_latex_table"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_latex_table()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_latex_tables"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_latex_tables()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_minimum_cover"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_minimum_cover()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_minterm_list"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_minterm_list()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.gen_primes"><code class="docutils literal notranslate"><span class="pre">BoolFunc.gen_primes()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.input_num"><code class="docutils literal notranslate"><span class="pre">BoolFunc.input_num</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_and"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_and()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_const0"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_const0()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_const1"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_const1()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_from_string"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_from_string()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_literal"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_literal()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_nand"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_nand()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_nor"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_nor()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_or"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_or()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_xnor"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_xnor()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.make_xor"><code class="docutils literal notranslate"><span class="pre">BoolFunc.make_xor()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.print_karnaugh"><code class="docutils literal notranslate"><span class="pre">BoolFunc.print_karnaugh()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.print_table"><code class="docutils literal notranslate"><span class="pre">BoolFunc.print_table()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.boolfunc.BoolFunc.val"><code class="docutils literal notranslate"><span class="pre">BoolFunc.val()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logictools.boolfunc.toBoolFunc"><code class="docutils literal notranslate"><span class="pre">toBoolFunc()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.cover">logictools.cover module</a><ul>
+<li><a class="reference internal" href="#logictools.cover.Cover"><code class="docutils literal notranslate"><span class="pre">Cover</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.cover.Cover.DeMorgan_latex_str"><code class="docutils literal notranslate"><span class="pre">Cover.DeMorgan_latex_str()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cover.Cover.add_cube"><code class="docutils literal notranslate"><span class="pre">Cover.add_cube()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cover.Cover.cube_list"><code class="docutils literal notranslate"><span class="pre">Cover.cube_list</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cover.Cover.cube_num"><code class="docutils literal notranslate"><span class="pre">Cover.cube_num</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cover.Cover.latex_str"><code class="docutils literal notranslate"><span class="pre">Cover.latex_str()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cover.Cover.literal_num"><code class="docutils literal notranslate"><span class="pre">Cover.literal_num</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cover.Cover.print"><code class="docutils literal notranslate"><span class="pre">Cover.print()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.cube">logictools.cube module</a><ul>
+<li><a class="reference internal" href="#logictools.cube.Cube"><code class="docutils literal notranslate"><span class="pre">Cube</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.cube.Cube.DeMorgan_latex_str"><code class="docutils literal notranslate"><span class="pre">Cube.DeMorgan_latex_str()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cube.Cube.clr_literal"><code class="docutils literal notranslate"><span class="pre">Cube.clr_literal()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cube.Cube.contain"><code class="docutils literal notranslate"><span class="pre">Cube.contain()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cube.Cube.input_num"><code class="docutils literal notranslate"><span class="pre">Cube.input_num</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cube.Cube.latex_str"><code class="docutils literal notranslate"><span class="pre">Cube.latex_str()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cube.Cube.literal_num"><code class="docutils literal notranslate"><span class="pre">Cube.literal_num</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cube.Cube.set_negliteral"><code class="docutils literal notranslate"><span class="pre">Cube.set_negliteral()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.cube.Cube.set_posliteral"><code class="docutils literal notranslate"><span class="pre">Cube.set_posliteral()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logictools.cube.toCube"><code class="docutils literal notranslate"><span class="pre">toCube()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.dpic_hc">logictools.dpic_hc module</a><ul>
+<li><a class="reference internal" href="#logictools.dpic_hc.dpic_hc"><code class="docutils literal notranslate"><span class="pre">dpic_hc()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.eqtable">logictools.eqtable module</a><ul>
+<li><a class="reference internal" href="#logictools.eqtable.EqTable"><code class="docutils literal notranslate"><span class="pre">EqTable</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.eqtable.EqTable.get"><code class="docutils literal notranslate"><span class="pre">EqTable.get()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.eqtable.EqTable.get_all_groups"><code class="docutils literal notranslate"><span class="pre">EqTable.get_all_groups()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.eqtable.EqTable.get_all_pairs"><code class="docutils literal notranslate"><span class="pre">EqTable.get_all_pairs()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.eqtable.EqTable.max_step"><code class="docutils literal notranslate"><span class="pre">EqTable.max_step</span></code></a></li>
+<li><a class="reference internal" href="#logictools.eqtable.EqTable.put"><code class="docutils literal notranslate"><span class="pre">EqTable.put()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.fsm">logictools.fsm module</a><ul>
+<li><a class="reference internal" href="#logictools.fsm.Fsm"><code class="docutils literal notranslate"><span class="pre">Fsm</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.add_transition"><code class="docutils literal notranslate"><span class="pre">Fsm.add_transition()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.extract_functions"><code class="docutils literal notranslate"><span class="pre">Fsm.extract_functions()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_dot_diagram"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_dot_diagram()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_diagram"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_diagram()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_eqtable"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_eqtable()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_eqtable_all"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_eqtable_all()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_table"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_table()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.get_all_eqgroups"><code class="docutils literal notranslate"><span class="pre">Fsm.get_all_eqgroups()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.get_all_eqpairs"><code class="docutils literal notranslate"><span class="pre">Fsm.get_all_eqpairs()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.get_transition"><code class="docutils literal notranslate"><span class="pre">Fsm.get_transition()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.make_eqtable"><code class="docutils literal notranslate"><span class="pre">Fsm.make_eqtable()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.minimize"><code class="docutils literal notranslate"><span class="pre">Fsm.minimize()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.print_table"><code class="docutils literal notranslate"><span class="pre">Fsm.print_table()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logictools.fsm.label_str"><code class="docutils literal notranslate"><span class="pre">label_str()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.karnaugh">logictools.karnaugh module</a><ul>
+<li><a class="reference internal" href="#logictools.karnaugh.karnaugh0"><code class="docutils literal notranslate"><span class="pre">karnaugh0()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.karnaugh.karnaugh1"><code class="docutils literal notranslate"><span class="pre">karnaugh1()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.karnaugh.karnaugh2"><code class="docutils literal notranslate"><span class="pre">karnaugh2()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.karnaugh.karnaugh3"><code class="docutils literal notranslate"><span class="pre">karnaugh3()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.karnaugh.karnaugh4"><code class="docutils literal notranslate"><span class="pre">karnaugh4()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.latex_karnaugh">logictools.latex_karnaugh module</a><ul>
+<li><a class="reference internal" href="#logictools.latex_karnaugh.latex_karnaugh"><code class="docutils literal notranslate"><span class="pre">latex_karnaugh()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.mincov">logictools.mincov module</a><ul>
+<li><a class="reference internal" href="#logictools.mincov.MinCov"><code class="docutils literal notranslate"><span class="pre">MinCov</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.mincov.MinCov.add_clause"><code class="docutils literal notranslate"><span class="pre">MinCov.add_clause()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.mincov.MinCov.all_cover"><code class="docutils literal notranslate"><span class="pre">MinCov.all_cover()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.mincov.MinCov.nelem"><code class="docutils literal notranslate"><span class="pre">MinCov.nelem</span></code></a></li>
+<li><a class="reference internal" href="#logictools.mincov.MinCov.print"><code class="docutils literal notranslate"><span class="pre">MinCov.print()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.mincov.MinCov.solve"><code class="docutils literal notranslate"><span class="pre">MinCov.solve()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.parser">logictools.parser module</a><ul>
+<li><a class="reference internal" href="#logictools.parser.Parser"><code class="docutils literal notranslate"><span class="pre">Parser</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.parser.Parser.print_emsg"><code class="docutils literal notranslate"><span class="pre">Parser.print_emsg()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logictools.parser.Token"><code class="docutils literal notranslate"><span class="pre">Token</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.parser.Token.id"><code class="docutils literal notranslate"><span class="pre">Token.id</span></code></a></li>
+<li><a class="reference internal" href="#logictools.parser.Token.print"><code class="docutils literal notranslate"><span class="pre">Token.print()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.parser.Token.to_string"><code class="docutils literal notranslate"><span class="pre">Token.to_string()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.parser.Token.var_id"><code class="docutils literal notranslate"><span class="pre">Token.var_id</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools.qm">logictools.qm module</a><ul>
+<li><a class="reference internal" href="#logictools.qm.gen_minimum_cover"><code class="docutils literal notranslate"><span class="pre">gen_minimum_cover()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.qm.gen_primes"><code class="docutils literal notranslate"><span class="pre">gen_primes()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#module-logictools">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/logictools.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">logictools package</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

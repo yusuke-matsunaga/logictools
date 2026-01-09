@@ -33,6 +33,10 @@ extensions = [
     'sphinx.ext.imgmath'
 ]
 
+source_suffix = {
+    '.rst': 'restructuredtext'
+}
+
 templates_path = ['_templates']
 exclude_patterns = ['Thumbs.db', '.DS_Store']
 
