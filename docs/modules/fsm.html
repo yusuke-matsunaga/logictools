@@ -1,0 +1,371 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fsm &#8212; logictools 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/custom.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/translations.js"></script>
+    <link rel="index" title="索引" href="../genindex.html" />
+    <link rel="search" title="検索" href="../search.html" />
+    <link rel="next" title="Karnaugh" href="karnaugh.html" />
+    <link rel="prev" title="dpic_hc" href="dpic_hc.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="karnaugh.html" title="Karnaugh"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="dpic_hc.html" title="dpic_hc"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" accesskey="U">モジュール一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Fsm</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="fsm">
+<span id="id1"></span><h1>Fsm<a class="headerlink" href="#fsm" title="この見出しへのパーマリンク">¶</a></h1>
+<span class="target" id="module-logictools.fsm"></span><p>Fsm の実装ファイル</p>
+<dl class="field-list simple">
+<dt class="field-odd">file<span class="colon">:</span></dt>
+<dd class="field-odd"><p>fsm.py</p>
+</dd>
+<dt class="field-even">author<span class="colon">:</span></dt>
+<dd class="field-even"><p>Yusuke Matsunaga (松永 裕介)</p>
+</dd>
+<dt class="field-odd">copyright<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Copyright (C) 2019 Yusuke Matsunaga, All rights reserved.</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">logictools.fsm.</span></span><span class="sig-name descname"><span class="pre">Fsm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>ベースクラス: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>有限状態機械を表すクラス</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.__dict__">
+<span class="sig-name descname"><span class="pre">__dict__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">mappingproxy({'__module__':</span> <span class="pre">'logictools.fsm',</span> <span class="pre">'__doc__':</span> <span class="pre">'有限状態機械を表すクラス',</span> <span class="pre">'__init__':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.__init__&gt;,</span> <span class="pre">'add_transition':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.add_transition&gt;,</span> <span class="pre">'_Fsm__add_transition':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.__add_transition&gt;,</span> <span class="pre">'get_transition':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.get_transition&gt;,</span> <span class="pre">'_Fsm__get_transition':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.__get_transition&gt;,</span> <span class="pre">'make_eqtable':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.make_eqtable&gt;,</span> <span class="pre">'get_all_eqpairs':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.get_all_eqpairs&gt;,</span> <span class="pre">'get_all_eqgroups':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.get_all_eqgroups&gt;,</span> <span class="pre">'minimize':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.minimize&gt;,</span> <span class="pre">'print_table':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.print_table&gt;,</span> <span class="pre">'gen_latex_table':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.gen_latex_table&gt;,</span> <span class="pre">'gen_latex_eqtable_all':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.gen_latex_eqtable_all&gt;,</span> <span class="pre">'gen_latex_eqtable':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.gen_latex_eqtable&gt;,</span> <span class="pre">'extract_functions':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.extract_functions&gt;,</span> <span class="pre">'gen_dot_diagram':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.gen_dot_diagram&gt;,</span> <span class="pre">'gen_latex_diagram':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm.gen_latex_diagram&gt;,</span> <span class="pre">'_dot_code':</span> <span class="pre">&lt;function</span> <span class="pre">Fsm._dot_code&gt;,</span> <span class="pre">'__dict__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__dict__'</span> <span class="pre">of</span> <span class="pre">'Fsm'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__weakref__':</span> <span class="pre">&lt;attribute</span> <span class="pre">'__weakref__'</span> <span class="pre">of</span> <span class="pre">'Fsm'</span> <span class="pre">objects&gt;,</span> <span class="pre">'__annotations__':</span> <span class="pre">{}})</span></em><a class="headerlink" href="#logictools.fsm.Fsm.__dict__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_list</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.__init__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>初期化</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>input_list</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) -- 入力記号のリスト</p></li>
+<li><p><strong>output_list</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) -- 出力記号のリスト</p></li>
+<li><p><strong>state_list</strong> (<em>list</em><em>[</em><em>str</em><em>]</em>) -- 状態名のリスト</p></li>
+</ul>
+</dd>
+</dl>
+<p>この時点では状態遷移をもたない．</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.__module__">
+<span class="sig-name descname"><span class="pre">__module__</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'logictools.fsm'</span></em><a class="headerlink" href="#logictools.fsm.Fsm.__module__" title="この定義へのパーマリンク">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.__weakref__">
+<span class="sig-name descname"><span class="pre">__weakref__</span></span><a class="headerlink" href="#logictools.fsm.Fsm.__weakref__" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>list of weak references to the object</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.add_transition">
+<span class="sig-name descname"><span class="pre">add_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_val</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">next_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.add_transition" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移を追加する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from_name</strong> (<em>str</em>) -- 遷移元の状態名</p></li>
+<li><p><strong>input_val</strong> (<em>str</em>) -- 入力記号</p></li>
+<li><p><strong>next_name</strong> (<em>str</em>) -- 遷移先の状態名</p></li>
+<li><p><strong>output_val</strong> (<em>str</em>) -- 出力記号</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.extract_functions">
+<span class="sig-name descname"><span class="pre">extract_functions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_map</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.extract_functions" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>符号割当を行って次状態関数，出力関数を取り出す．</p>
+<p>: param input_map: 入力の符号割当
+: param output_map: 出力の符号割当
+: param state_map: 状態の符号割当
+: return: 次状態関数，出力関数のリストを返す．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_dot_diagram">
+<span class="sig-name descname"><span class="pre">gen_dot_diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_dot_diagram" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>GraphVizを使って状態遷移図を表す dot コードを出力する．</p>
+<p>: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略された場合，標準出力が使用される．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_diagram">
+<span class="sig-name descname"><span class="pre">gen_latex_diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_diagram" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>GraphVizを使って状態遷移図を表す latex コードを出力する．</p>
+<p>: param dict[str, str] input_dict: 出力用の入力記号の辞書
+: param dict[str, str] output_dict: 出力用の出力記号の辞書
+: param dict[str, str] state_dict: 出力用の状態名の辞書
+: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略された場合，標準出力が使用される．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_eqtable">
+<span class="sig-name descname"><span class="pre">gen_latex_eqtable</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">step</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_eqtable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小化のための等価状態テーブルを LaTeX 形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>EqTable</em>) -- 等価状態対テーブル</p></li>
+<li><p><strong>step</strong> (<em>int</em>) -- 対象のステップ</p></li>
+<li><p><strong>state_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) -- 出力用の状態名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_eqtable_all">
+<span class="sig-name descname"><span class="pre">gen_latex_eqtable_all</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_eqtable_all" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小化のための等価状態テーブルを LaTeX 形式で出力する．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>table</strong> (<em>EqTable</em>) -- 等価状態対テーブル</p></li>
+<li><p><strong>state_dict</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) -- 出力用の状態名の辞書</p></li>
+<li><p><strong>fout</strong> -- 出力先のファイルオブジェクト(名前付きオプション引数)</p></li>
+</ul>
+</dd>
+</dl>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.gen_latex_table">
+<span class="sig-name descname"><span class="pre">gen_latex_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_label='states'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_label='inputs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">no_backslash=False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.gen_latex_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移表を LaTeX 形式で出力する．</p>
+<p>: param dict[str, str] input_dict: 出力用の入力記号の辞書
+: param dict[str, str] output_dict: 出力用の出力記号の辞書
+: param dict[str, str] state_dict: 出力用の状態名の辞書
+: param state_label: 左上隅の左下側のラベル
+: param input_label: 左上隅の右上側のラベル．
+: param bool no_backslash: 左上隅のラベルを表示しない時に True にするフラグ
+: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.get_all_eqgroups">
+<span class="sig-name descname"><span class="pre">get_all_eqgroups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.get_all_eqgroups" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態グループを求める．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.get_all_eqpairs">
+<span class="sig-name descname"><span class="pre">get_all_eqpairs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.get_all_eqpairs" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態対を求める．</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.get_transition">
+<span class="sig-name descname"><span class="pre">get_transition</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">from_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_val</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.get_transition" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移の情報を得る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from_name</strong> (<em>str</em>) -- 遷移元の状態名</p></li>
+<li><p><strong>input_val</strong> (<em>str</em>) -- 入力</p></li>
+</ul>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>(遷移先の状態名, 出力) のタプルを返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.make_eqtable">
+<span class="sig-name descname"><span class="pre">make_eqtable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.make_eqtable" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>等価状態のテーブルを得る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">戻り値<span class="colon">:</span></dt>
+<dd class="field-odd"><p>EqTable を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.minimize">
+<span class="sig-name descname"><span class="pre">minimize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">table</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.minimize" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>最小化を行う．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>table</strong> (<em>EqTable</em>) -- 等価状態対テーブル</p>
+</dd>
+<dt class="field-even">戻り値<span class="colon">:</span></dt>
+<dd class="field-even"><p>最小化した機械を返す．</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="logictools.fsm.Fsm.print_table">
+<span class="sig-name descname"><span class="pre">print_table</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">state_dict=None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fout=&lt;_io.TextIOWrapper</span> <span class="pre">name='&lt;stdout&gt;'</span> <span class="pre">mode='w'</span> <span class="pre">encoding='utf-8'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.Fsm.print_table" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>状態遷移表を出力する．</p>
+<p>: param dict[str, str] input_dict: 出力用の入力記号の辞書
+: param dict[str, str] output_dict: 出力用の出力記号の辞書
+: param dict[str, str] state_dict: 出力用の状態名の辞書
+: param fout: 出力先のファイルオブジェクト(名前付きオプション引数)</p>
+<p>fout が省略されば場合には標準出力を用いる．</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="logictools.fsm.label_str">
+<span class="sig-prename descclassname"><span class="pre">logictools.fsm.</span></span><span class="sig-name descname"><span class="pre">label_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_map</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#logictools.fsm.label_str" title="この定義へのパーマリンク">¶</a></dt>
+<dd><p>出力用のラベル文字列を得る．</p>
+<dl class="field-list simple">
+<dt class="field-odd">パラメータ<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src</strong> (<em>str</em>) -- 元の文字列</p></li>
+<li><p><strong>label_map</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>str</em><em>]</em>) -- 変換用の辞書</p></li>
+</ul>
+</dd>
+</dl>
+<p>label_map が None の場合は src を返す．</p>
+</dd></dl>
+
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="../index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">Fsm</a><ul>
+<li><a class="reference internal" href="#logictools.fsm.Fsm"><code class="docutils literal notranslate"><span class="pre">Fsm</span></code></a><ul>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.__dict__"><code class="docutils literal notranslate"><span class="pre">Fsm.__dict__</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.__init__"><code class="docutils literal notranslate"><span class="pre">Fsm.__init__()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.__module__"><code class="docutils literal notranslate"><span class="pre">Fsm.__module__</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.__weakref__"><code class="docutils literal notranslate"><span class="pre">Fsm.__weakref__</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.add_transition"><code class="docutils literal notranslate"><span class="pre">Fsm.add_transition()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.extract_functions"><code class="docutils literal notranslate"><span class="pre">Fsm.extract_functions()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_dot_diagram"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_dot_diagram()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_diagram"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_diagram()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_eqtable"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_eqtable()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_eqtable_all"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_eqtable_all()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.gen_latex_table"><code class="docutils literal notranslate"><span class="pre">Fsm.gen_latex_table()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.get_all_eqgroups"><code class="docutils literal notranslate"><span class="pre">Fsm.get_all_eqgroups()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.get_all_eqpairs"><code class="docutils literal notranslate"><span class="pre">Fsm.get_all_eqpairs()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.get_transition"><code class="docutils literal notranslate"><span class="pre">Fsm.get_transition()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.make_eqtable"><code class="docutils literal notranslate"><span class="pre">Fsm.make_eqtable()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.minimize"><code class="docutils literal notranslate"><span class="pre">Fsm.minimize()</span></code></a></li>
+<li><a class="reference internal" href="#logictools.fsm.Fsm.print_table"><code class="docutils literal notranslate"><span class="pre">Fsm.print_table()</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#logictools.fsm.label_str"><code class="docutils literal notranslate"><span class="pre">label_str()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="dpic_hc.html"
+                          title="前の章へ">dpic_hc</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="karnaugh.html"
+                          title="次の章へ">Karnaugh</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/modules/fsm.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="karnaugh.html" title="Karnaugh"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="dpic_hc.html" title="dpic_hc"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="modules.html" >モジュール一覧</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">Fsm</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>

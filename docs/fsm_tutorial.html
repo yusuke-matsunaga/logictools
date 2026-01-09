@@ -1,0 +1,249 @@
+
+<!DOCTYPE html>
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>有限状態機械に関する処理 &#8212; logictools 1.0 ドキュメント</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinxdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <script src="_static/translations.js"></script>
+    <link rel="index" title="索引" href="genindex.html" />
+    <link rel="search" title="検索" href="search.html" />
+    <link rel="next" title="モジュール一覧" href="modules/modules.html" />
+    <link rel="prev" title="論理関数と積和形論理式を用いた処理" href="mincov_tutorial.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             accesskey="I">索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="modules/modules.html" title="モジュール一覧"
+             accesskey="N">次へ</a> |</li>
+        <li class="right" >
+          <a href="mincov_tutorial.html" title="論理関数と積和形論理式を用いた処理"
+             accesskey="P">前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">有限状態機械に関する処理</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <section id="id1">
+<h1>有限状態機械に関する処理<a class="headerlink" href="#id1" title="この見出しへのパーマリンク">¶</a></h1>
+<section id="id2">
+<h2>有限状態機械の生成<a class="headerlink" href="#id2" title="この見出しへのパーマリンク">¶</a></h2>
+<p>有限状態機械は <cite>lctools.Fsm</cite> を用いて表す．
+有限状態機械を生成するするためには入力記号と出力記号
+および状態名のリストを名前付き引数として与える．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">lctools</span><span class="w"> </span><span class="kn">import</span> <span class="n">Fsm</span>
+
+<span class="n">i_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">,</span> <span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="s1">&#39;c&#39;</span><span class="p">]</span>
+<span class="n">o_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">]</span>
+<span class="n">s_list</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;S0&#39;</span><span class="p">,</span> <span class="s1">&#39;S1&#39;</span><span class="p">,</span> <span class="s1">&#39;S2&#39;</span><span class="p">]</span>
+
+<span class="n">fsm</span> <span class="o">=</span> <span class="n">Fsm</span><span class="p">(</span><span class="n">input_list</span><span class="o">=</span><span class="n">i_list</span><span class="p">,</span>
+          <span class="n">output_list</span><span class="o">=</span><span class="n">o_list</span><span class="p">,</span>
+          <span class="n">state_list</span><span class="o">=</span><span class="n">s_list</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>この時点では <cite>fsm</cite> は状態遷移を一つも持たない．
+入力記号と出力記号，状態名は通常は文字列を用いるが，
+実際には辞書のキーに用いることができるものであれば
+どのようなデータ型でも用いることができる．
+LaTeX 用の出力時には別の文字列を指定することができるので，
+ここではただ単に他と区別可能な文字列を用いるのがよい．</p>
+</section>
+<section id="id3">
+<h2>状態遷移の追加<a class="headerlink" href="#id3" title="この見出しへのパーマリンク">¶</a></h2>
+<p>状態遷移の追加は <cite>Fsm.add_transition(from_name, input_val, next_name, output_val)</cite>
+を用いる．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fsm</span><span class="o">.</span><span class="n">add_transition</span><span class="p">(</span><span class="n">from_name</span><span class="p">,</span> <span class="n">input_val</span><span class="p">,</span> <span class="n">next_name</span><span class="p">,</span> <span class="n">output_val</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>from_name</cite> は遷移元の状態名，<cite>input_val</cite> は遷移を引き起こす入力記号，
+<cite>next_name</cite> は遷移先の状態名，<cite>output_val</cite> はそのときの出力記号を指定
+する．
+<cite>from_name</cite> や <cite>next_name</cite> が存在しない場合にはエラーとなる．
+<cite>from_name</cite> の <cite>input_val</cite> による遷移がすでに存在する場合にもエラーと
+なる．</p>
+</section>
+<section id="id4">
+<h2>状態遷移情報の取得<a class="headerlink" href="#id4" title="この見出しへのパーマリンク">¶</a></h2>
+<p>状態遷移情報の取得は <cite>Fsm.get_transition(from_name, input_val)</cite>
+を用いる．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">next_name</span><span class="p">,</span> <span class="n">output_val</span> <span class="o">=</span> <span class="n">fsm</span><span class="o">.</span><span class="n">get_transition</span><span class="p">(</span><span class="n">from_name</span><span class="p">,</span> <span class="n">input_val</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>from_name</cite> と <cite>input_val</cite> にそれぞれ遷移元の状態名，入力値を指定する．
+結果として遷移先の状態名と出力値のタプルが返される．</p>
+</section>
+<section id="id5">
+<h2>状態数の最小化<a class="headerlink" href="#id5" title="この見出しへのパーマリンク">¶</a></h2>
+<p>等価状態を求めることで状態数の最小化を行う．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new_fsm</span> <span class="o">=</span> <span class="n">fsm</span><span class="o">.</span><span class="n">minimize</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><cite>new_fsm</cite> には <cite>fsm</cite> と等価で状態数が最小の有限状態機械が返される．</p>
+</section>
+<section id="id6">
+<h2>符号化<a class="headerlink" href="#id6" title="この見出しへのパーマリンク">¶</a></h2>
+<p>有限状態機械の入力記号，出力記号，状態名を2値符号化するには
+<cite>Fsm.encode()</cite> を用いる．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">new_fsm</span> <span class="o">=</span> <span class="n">fsm</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">input_map</span><span class="o">=</span><span class="n">imap</span><span class="p">,</span>
+                     <span class="n">output_map</span><span class="o">=</span><span class="n">omap</span><span class="p">,</span>
+                     <span class="n">state_map</span><span class="o">=</span><span class="n">smap</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>input_map</cite>, <cite>output_map</cite>, <cite>state_map</cite> にはそれぞれ入力記号，出力記号，
+状態名をキーにして <cite>0</cite>, <cite>1</cite> のリストで表された2値ベクタを指定する．
+この引数は省略不可の名前付き引数なので常に明示的に指定する必要がある．
+結果として符号化した有限状態機械が返される．
+この場合の入力記号，出力記号，状態名はすべて2値ベクタとなる．</p>
+</section>
+<section id="id7">
+<h2>状態遷移関数，出力関数の抽出<a class="headerlink" href="#id7" title="この見出しへのパーマリンク">¶</a></h2>
+<p>2値符号化した有限状態機械の状態遷移関数，出力関数を取り出すには以下の
+メソッドを用いる．</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">delta_list</span><span class="p">,</span> <span class="n">lambda_list</span> <span class="o">=</span> <span class="n">fsm</span><span class="o">.</span><span class="n">extract_functions</span><span class="p">(</span><span class="n">input_map</span><span class="o">=</span><span class="n">imap</span><span class="p">,</span>
+                                                <span class="n">output_map</span><span class="o">=</span><span class="n">omap</span><span class="p">,</span>
+                                                <span class="n">state_map</span><span class="o">=</span><span class="n">smap</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><cite>input_map</cite>, <cite>output_map</cite>, <cite>state_map</cite> にはそれぞれ入力記号，出力記号，
+状態名をキーにして <cite>0</cite>, <cite>1</cite> のリストで表された2値ベクタを指定する．
+この引数は省略不可の名前付き引数なので常に明示的に指定する必要がある．
+結果として状態遷移関数と出力関数のリストがそれぞれ <cite>delta_list</cite> と
+<cite>lambda_list</cite> に返される．
+これらの関数は <cite>BoolFunc</cite> の形で表されている．</p>
+</section>
+<section id="id8">
+<h2>内容の出力<a class="headerlink" href="#id8" title="この見出しへのパーマリンク">¶</a></h2>
+<p>有限状態機械の内容を出力するメソッドは以下の通り．</p>
+<table class="docutils align-left">
+<thead>
+<tr class="row-odd"><th class="head"><p>関数名</p></th>
+<th class="head"><p>説明</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>print_table()</p></td>
+<td><p>内容を状態遷移表の形式で出力する．</p></td>
+</tr>
+<tr class="row-odd"><td><p>gen_latex_table()</p></td>
+<td><p>状態遷移表を LaTeX 形式で出力する．</p></td>
+</tr>
+<tr class="row-even"><td><p>gen_latex_encoded_table()</p></td>
+<td><p>2値符号化した状態遷移表を LaTeX 形式で出力する．</p></td>
+</tr>
+<tr class="row-odd"><td><p>gen_latex_compatible_table()</p></td>
+<td><p>等価状態の表を表す LaTeX 形式で出力する．</p></td>
+</tr>
+<tr class="row-even"><td><p>gen_dot_diagram()</p></td>
+<td><p>状態遷移図を <cite>dot</cite> 形式で出力する．</p></td>
+</tr>
+<tr class="row-odd"><td><p>gen_latex_diagram()</p></td>
+<td><p>状態遷移図を LaTeX 形式で出力する．</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">目次</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">有限状態機械に関する処理</a><ul>
+<li><a class="reference internal" href="#id2">有限状態機械の生成</a></li>
+<li><a class="reference internal" href="#id3">状態遷移の追加</a></li>
+<li><a class="reference internal" href="#id4">状態遷移情報の取得</a></li>
+<li><a class="reference internal" href="#id5">状態数の最小化</a></li>
+<li><a class="reference internal" href="#id6">符号化</a></li>
+<li><a class="reference internal" href="#id7">状態遷移関数，出力関数の抽出</a></li>
+<li><a class="reference internal" href="#id8">内容の出力</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div>
+    <h4>前のトピックへ</h4>
+    <p class="topless"><a href="mincov_tutorial.html"
+                          title="前の章へ">論理関数と積和形論理式を用いた処理</a></p>
+  </div>
+  <div>
+    <h4>次のトピックへ</h4>
+    <p class="topless"><a href="modules/modules.html"
+                          title="次の章へ">モジュール一覧</a></p>
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>このページ</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/fsm_tutorial.rst.txt"
+            rel="nofollow">ソースコードを表示</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">クイック検索</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="検索" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>ナビゲーション</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="総合索引"
+             >索引</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Pythonモジュール索引"
+             >モジュール</a> |</li>
+        <li class="right" >
+          <a href="modules/modules.html" title="モジュール一覧"
+             >次へ</a> |</li>
+        <li class="right" >
+          <a href="mincov_tutorial.html" title="論理関数と積和形論理式を用いた処理"
+             >前へ</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">logictools 1.0 ドキュメント</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">有限状態機械に関する処理</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2023, Yusuke Matsunaga(松永 裕介).
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    </div>
+  </body>
+</html>
